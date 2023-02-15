@@ -1,14 +1,33 @@
 import os
+import json
+
 class tools:
-    def __init__ (self, ruta_proyecto = None):
-        # Ruta del directorio a listar
+    """
+    Clase que proporciona herramientas útiles para el proyecto.
+    """
+
+    def __init__(self, ruta_proyecto=None):
+        """
+        Constructor de la clase.
+
+        :param ruta_proyecto: La ruta del directorio raíz del proyecto.
+        """
         self.ruta_proyecto = self.get_project_path()
-    
+
     @staticmethod
     def get_project_path():
+        """
+        Método que obtiene la ruta del directorio raíz del proyecto.
+
+        :return: La ruta del directorio raíz del proyecto.
+        """
         return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
     def listar_directorios_archivos(self):
+        """
+        Método que imprime una lista de todos los archivos y directorios dentro del directorio raíz del proyecto,
+        excluyendo la carpeta "env", archivos ocultos y la carpeta ".git".
+        """
         for root, dirnames, filenames in os.walk(self.ruta_proyecto):
             # Ignorar la carpeta "env"
             if 'env' in dirnames:
@@ -26,9 +45,18 @@ class tools:
                 if not f.startswith('.'):
                     print(f"{subindent}{f}")
 
+    def read_path_file(self, file):
+        """
+        Método que lee la ruta de un archivo de configuración desde un archivo JSON.
 
-
-
-# Llamada a la función para listar los directorios y archivos del proyecto
-ayuda = tools()
-#ayuda.listar_directorios_archivos()
+        :param file: El nombre del archivo de configuración.
+        :return: La ruta del archivo de configuración.
+        """
+        json_path = r'Config\config_files\settings_path_files.json'
+        try:
+            with open(json_path) as f:
+                data = json.load(f)
+                return data['path_files'][0]['config_files'][0][file]
+        except FileNotFoundError:
+            print(f"El archivo '{json_path}' no se pudo abrir.")
+            return None
