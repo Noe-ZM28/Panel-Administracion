@@ -1,5 +1,23 @@
+# -*- coding: utf-8 -*-
 import pymysql
 import json
+
+#from Config.config_database import DatabaseConfig
+
+import sys
+import os
+
+# Obtener la ruta del directorio que contiene el archivo actual
+dir_path = os.path.dirname(os.path.abspath(__file__))
+
+
+def get_project_path():
+    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Agregar el directorio 'Panel-Administracion' a la ruta de búsqueda de módulos de Python
+sys.path.append(os.path.join(dir_path, '..', r'C:\Users\brink\Downloads\#Z\WORKSPACE\Panel-Administracion'))
+
+# Ahora deberías poder importar la clase DatabaseConfig
+from Config.config_database import DatabaseConfig
 
 
 class database_connection:
@@ -8,37 +26,31 @@ class database_connection:
     Incluye métodos para conectarse a la base de datos, cerrar la conexión y ejecutar consultas en la base de datos.
     """
 
-    def __init__ (self):
+    def __init__ (self, config_db = None):
+        self.config_db = DatabaseConfig()
+
         self.connection = None
         self.connect()
-
 
     def connect(self, name_config="Configuracion 1"):
         """
         Realiza la conexión a la base de datos de MySQL con los parámetros especificados en el archivo de configuración.
         Asigna el objeto de conexión a una variable de instancia `connection`.
         """
-        with open("Config\config_files\configuracion_database.json", "r") as f:
-            data = json.load(f)
+        configuracion = self.config_db.obtener_configuracion(name_config = "Configuracion 1")
 
-        # Obtiene la configuración seleccionada
-        configuracion = None
-        for config in data["settings"]:
-            if config["name_config"] == name_config:
-                configuracion = config
-                break
 
-        if configuracion is None:
-            raise ValueError("No se encontró la configuración especificada.")
-
-        # Realiza la conexión a la base de datos
-        self.connection = pymysql.connect(
-            host=configuracion["host"],
-            user=configuracion["user"],
-            password=configuracion["password"],
-            database=configuracion["database"]
-        )
-
+        try:
+            # Realiza la conexión a la base de datos
+            self.connection = pymysql.connect(
+                host=configuracion["host"],
+                user=configuracion["user"],
+                password=configuracion["password"],
+                database=configuracion["database"]
+            )
+            
+        except pymysql.err.OperationalError as e:
+                print(f"Error: {e}")
 
     def close_connection(self):
         """
