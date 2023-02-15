@@ -1,0 +1,25 @@
+{
+    "settings": [
+        {
+            "name_config": "Configuracion 1",
+            "host": "localhost",
+            "user": "root",
+            "password": "",
+            "database": "db"
+        },
+        {
+            "name_config": "Configuracion 2",
+            "host": "187.131.147.109",
+            "user": "Aurelio",
+            "password": "RG980320",
+            "database": "Parqueadero1"
+        },
+        {
+            "name_config": "Configuracion 3",
+            "host": "192.168.0.1",
+            "user": "",
+            "password": "",
+            "database": ""
+        }
+    ]
+}
