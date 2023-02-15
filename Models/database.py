@@ -1,4 +1,6 @@
 import pymysql
+import json
+
 
 class database_connection:
     """
@@ -6,33 +8,37 @@ class database_connection:
     Incluye métodos para conectarse a la base de datos, cerrar la conexión y ejecutar consultas en la base de datos.
     """
 
-    def __init__ (self, host: str, user: str, password: str, database: str):
-        """
-        Inicializa los atributos para la conexión a la base de datos.
-
-        :param host: La dirección del host donde se encuentra la base de datos.
-        :param user: El nombre de usuario con permisos para conectarse a la base de datos.
-        :param password: La contraseña del usuario.
-        :param database: El nombre de la base de datos a la que se desea conectar.
-        """
-
-        self.host = host
-        self.user = user
-        self.password = password
-        self.database = database
+    def __init__ (self):
         self.connection = None
         self.connect()
 
-    def connect(self):
+
+    def connect(self, name_config="Configuracion 1"):
         """
-        Realiza la conexión a la base de datos de MySQL con los parámetros especificados en el inicio de la clase.
+        Realiza la conexión a la base de datos de MySQL con los parámetros especificados en el archivo de configuración.
         Asigna el objeto de conexión a una variable de instancia `connection`.
         """
+        with open("Config\config_files\configuracion_database.json", "r") as f:
+            data = json.load(f)
+
+        # Obtiene la configuración seleccionada
+        configuracion = None
+        for config in data["settings"]:
+            if config["name_config"] == name_config:
+                configuracion = config
+                break
+
+        if configuracion is None:
+            raise ValueError("No se encontró la configuración especificada.")
+
+        # Realiza la conexión a la base de datos
         self.connection = pymysql.connect(
-                                            host=self.host,
-                                            user=self.user,
-                                            password=self.password,
-                                            database=self.database)
+            host=configuracion["host"],
+            user=configuracion["user"],
+            password=configuracion["password"],
+            database=configuracion["database"]
+        )
+
 
     def close_connection(self):
         """
@@ -63,4 +69,3 @@ class database_connection:
         #self.close_connection()
 
         return result
-
