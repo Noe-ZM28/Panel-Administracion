@@ -3,10 +3,17 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 
+import sys
+import os
+
+# Ahora deberías poder importar la clase DatabaseConfig
+from Models.querys import Querys
+
 class Aplicacion:
-    def __init__(self):
+    def __init__(self, ver_tabla):
+        self.ver_tabla = ver_tabla
         self.panel=tk.Tk()
-        self.panel.geometry("800x300")
+        self.panel.geometry("1200x400")
         self.panel.title("Panel de administración")
 
         self.tabla()
@@ -19,37 +26,58 @@ class Aplicacion:
 
 
     def tabla(self):
-        seccion_tabla = ttk.LabelFrame(self.panel, text="Tabla")
-        seccion_tabla.grid(row=0, column=0)
+        seccion_tabla = ttk.LabelFrame(self.panel, text=f"Tabla - {self.ver_tabla}")
+        seccion_tabla.columnconfigure(0, weight=1, uniform="tabla")
+        seccion_tabla.grid_propagate(True)
 
-        # Crea un Treeview con 3 columnas
-        tabla = ttk.Treeview(seccion_tabla, columns=("Nombre", "Apellido", "Edad"))
+        seccion_tabla.grid(row=0, column=0, sticky="nsew")
+        
+
+
+        query = Querys()
+        campos = query.obtener_campos_tabla(self.ver_tabla)
+
+        # Crea un Treeview con una columna por cada campo de la tabla
+        tabla = ttk.Treeview(seccion_tabla, columns=(campos))
+        tabla.config(height=15)
+
 
         # Define los encabezados de columna
-        tabla.heading("#0", text="ID")
-        tabla.heading("Nombre", text="Nombre")
-        tabla.heading("Apellido", text="Apellido")
-        tabla.heading("Edad", text="Edad")
+        i = 1
+        for headd in (campos):
+            tabla.heading(f"#{i}", text=headd)
+            tabla.column(f"#{i}", width=100)
+            i = i + 1
+        tabla.column("#0", width=5, stretch=False)
+        tabla.column("#1", width=50, stretch=False)
 
-        # Inserta datos de ejemplo
-        tabla.insert("", "end", text="1", values=("Juan", "Pérez", 25))
-        tabla.insert("", "end", text="2", values=("María", "González", 30))
-        tabla.insert("", "end", text="3", values=("Pedro", "García", 35))
-        tabla.insert("", "end", text="1", values=("Juan", "Pérez", 25))
-
-        # Ajusta el ancho de cada columna
-        tabla.column("#0", width=50, stretch = True)
-        tabla.column("Nombre", width=100)
-        tabla.column("Apellido", width=100)
-        tabla.column("Edad", width=50)
+        # Inserta datos
+        registros = query.obtener_registros(self.ver_tabla)
+        for registro in registros:
+            tabla.insert("", "end", values=registro)
 
         # Crea un Scrollbar vertical y lo asocia con el Treeview
-        scrollbar = ttk.Scrollbar(seccion_tabla, orient="vertical", command=tabla.yview)
-        tabla.configure(yscroll=scrollbar.set)
-        scrollbar.pack(side="right", fill="y")
+        scrollbar_Y = ttk.Scrollbar(seccion_tabla, orient="vertical", command=tabla.yview)
+        tabla.configure(yscroll=scrollbar_Y.set)
+        scrollbar_Y.grid(row=0, column=1, sticky="NS")
+
+        # Crea un Scrollbar horizontal y lo asocia con el Treeview
+        scrollbar_X = ttk.Scrollbar(seccion_tabla, orient="horizontal", command=tabla.xview)
+        tabla.configure(xscroll=scrollbar_X.set)
+        scrollbar_X.grid(row=1, column=0, sticky="EW")
+
+
+
 
         # Empaqueta el Treeview en la ventana
-        tabla.pack(anchor='n', fill="both", expand=True)
+        tabla.grid(row=0, column=0, sticky="NESW")
+
+
+
+    def llenar_tabla(self):
+        pass
+        
+
 
     def campos_consulta(self):
         # Crear un seccion_campos_consulta para los campos de texto
@@ -99,5 +127,3 @@ class Aplicacion:
         """Muestra un mensaje en una ventana emergente."""
         mensaje = tk.messagebox.showinfo("Mensaje", "Boton presionado")
 
-if __name__ == "__main__":
-    app = Aplicacion()
