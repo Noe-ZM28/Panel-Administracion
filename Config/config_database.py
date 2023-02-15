@@ -2,7 +2,7 @@ import json
 
 class DatabaseConfig:
     """
-    Clase que representa una configuración de base de datos.
+    Clase que representa la configuración de la base de datos.
     """
 
     def guardar_configuracion(self, name_config, host, user, password, database):
@@ -23,7 +23,7 @@ class DatabaseConfig:
 
         try:
             # Intenta abrir el archivo de configuración existente
-            with open("Config\config_files\configuracion_database.json", "r") as f:
+            with open(r"Config/config_files/settings_database.json", "r") as f:
                 settings = json.load(f)
         except FileNotFoundError:
             settings = {"settings": []}
@@ -32,8 +32,26 @@ class DatabaseConfig:
         settings['settings'].append(configuracion)
 
         # Guarda el diccionario de configuraciones en el archivo JSON
-        with open("Config\config_files\configuracion_database.json", "w") as f:
+        with open(r"Config/config_files/settings_database.json", "w") as f:
             json.dump(settings, f, indent=4)
+
+
+    def obtener_configuracion(self, name_config):
+        with open(r"Config/config_files/settings_database.json", "r") as f:
+            data = json.load(f)
+
+        # Obtiene la configuración seleccionada
+        configuracion = None
+        for config in data["settings"]:
+            if config["name_config"] == name_config:
+                configuracion = config
+                break
+
+        if configuracion is None:
+            raise ValueError("No se encontró la configuración especificada.")
+            
+        return configuracion
+
 
 
 # configuracion = DatabaseConfig()
