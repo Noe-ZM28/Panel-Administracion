@@ -12,7 +12,7 @@ from Config.config_database import DatabaseConfig
 
 
 #Ejemplo para correr el panel
-app = Aplicacion("cortes")
+app = Aplicacion("Entradas")
 
 
 
@@ -21,10 +21,10 @@ app = Aplicacion("cortes")
 # configuracion = DatabaseConfig()
 # configuracion.guardar_configuracion("aaaaaaa", "localhost", "usuario1", "clave1", "basedatos1")
 
-
-
-
-
-
 # if __name__ == "__main__":
 #     app = Aplicacion("cortes")
+
+
+# Entrada = 3
+# Cortes = 2
+
