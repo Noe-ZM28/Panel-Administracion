@@ -31,3 +31,25 @@ class Querys:
         query = f"select * from {table};"
         registros = self.data_base.execute_query(query)
         return registros
+
+
+    def obtener_registros_corte_numero(self, table, corte):
+        query = f"select * from {table} WHERE CorteInc = {corte};"
+        registros = self.data_base.execute_query(query)
+        return registros
+
+    # def obtener_registros_entre_fechas(self, table, fecha_inicio, fecha_fin):
+    #     """
+    #     Obtiene todos los registros de una tabla especificada.
+
+    #     :param table: Nombre de la tabla.
+    #     :return: Todos los registros de la tabla.
+    #     """
+    #     query = f"select * from {table} WHERE FechaIni = {fecha_1};"
+
+    #     SELECT * FROM {table} WHERE FechaIni
+    #     BETWEEN {fecha_1} AND {fecha_1};
+
+    #     registros = self.data_base.execute_query(query)
+    #     return registros
+
