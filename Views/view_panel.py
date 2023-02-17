@@ -2,9 +2,10 @@ from tkinter import *
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+from tkinter import TclError
 import sys
 import os
-from Models.querys import Querys
+from Models.queries import Queries
 
 
 class Aplicacion:
@@ -30,7 +31,7 @@ class Aplicacion:
         self.variable_fecha_fin = BooleanVar(value = 0)        
         self.variable_folio = IntVar(value = 0)
 
-        self.query = Querys()
+        self.query = Queries()
         self.message = None
         self.tabla = None
 
@@ -40,7 +41,6 @@ class Aplicacion:
         self.campos_consulta()
 
         self.panel.mainloop()
-
 
 
     def view_tabla(self):
@@ -129,11 +129,25 @@ class Aplicacion:
 
         boton_generar_reporte = tk.Button(seccion_campos_consulta, text="Generar reporte")
         boton_generar_reporte.grid(row=6, column=1)
+
+        boton_desconectar = tk.Button(seccion_campos_consulta, text="Desconectar")
+        boton_desconectar.grid(row=8, column=1)
+
+        boton_salir = tk.Button(seccion_campos_consulta, text="Salir", command = self.salir)
+        boton_salir.grid(row=10, column=1)
     
     def hacer_consulta(self):
-        registros = self.query.obtener_registros_corte_numero(self.ver_tabla, self.variable_corte_numero.get())
+        try:
+            registros = self.query.obtener_registros_corte_numero(self.ver_tabla, int(self.variable_corte_numero.get()))
 
-        self.llenar_tabla(registros)
+            self.llenar_tabla(registros)
+
+        except TclError:
+            messagebox.showerror("Error", "Por favor introduzca un dato valido para realizar la consulta.")
+
+    def salir(self):
+        messagebox.showinfo("Salida", "Hasta pronto.")
+        self.panel.destroy()
     
     def ver_tabla_completa(self):
         # Inserta datos
@@ -151,8 +165,4 @@ class Aplicacion:
     def vaciar_tabla(self):
         self.tabla.delete(*self.tabla.get_children())
 
-
-    def mostrar_mensaje(self, message):
-        """Muestra un mensaje en una ventana emergente."""
-        messagebox.showinfo(self.message)
 

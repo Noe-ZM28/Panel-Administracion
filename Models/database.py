@@ -1,5 +1,7 @@
 import pymysql
 import json
+from tkinter import messagebox
+
 
 from Config.config_database import DatabaseConfig
 
@@ -24,6 +26,7 @@ class database_connection:
 
         # Inicializa el objeto de conexión a la base de datos
         self.connection = None
+        self.cursor = None
 
         # Establece la conexión a la base de datos
         self.connect()
@@ -47,9 +50,13 @@ class database_connection:
                 database=configuracion["database"]
             )
 
-        except pymysql.err.OperationalError as e:
+            # Crea un objeto cursor para ejecutar la consulta
+
             # Si ocurre un error al conectarse a la base de datos, se muestra un mensaje de error en la consola
-            print(f"Error: {e}")
+        except pymysql.err.OperationalError as e:
+            messagebox.showwarning("Error",f"Error al conectarse a la base de datos, por favor asegusere de que introdujo un Host valido o que el Host al que se intenta conectar se encuentra activo.")
+            raise SystemExit
+
 
     def close_connection(self):
         """
@@ -70,27 +77,26 @@ class database_connection:
         """
         try:
             # Crea un objeto cursor para ejecutar la consulta
-            cursor = self.connection.cursor()
-
+            self.cursor = self.connection.cursor()
             # Si se pasaron valores, se ejecuta la consulta con esos valores
             if values is not None:
-                cursor.execute(query, values)
+                self.cursor.execute(query, values)
             # Si no se pasaron valores, se ejecuta la consulta sin ellos
             else:
-                cursor.execute(query)
+                self.cursor.execute(query)
 
             # Obtiene los resultados de la consulta
-            result = cursor.fetchall()
+            result = self.cursor.fetchall()
 
             # Confirma los cambios en la base de datos
             self.connection.commit()
 
             # Cierra el cursor
-            cursor.close()
+            self.cursor.close()
 
             # Retorna los resultados de la consulta
             return result
 
         except Exception as e:
-            print(f"Error en execute_query: {e}")
+            messagebox.showwarning("Error", f"Error al realizar la consulta, por favor contacte con un administrador y muestre el siguiente error:\n Error: {str(e)} ")
             return []
