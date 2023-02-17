@@ -9,11 +9,15 @@ sys.path.append(proyecto_dir)
 
 from Views.view_panel import Aplicacion
 from Config.config_database import DatabaseConfig
+from Models.database import Queries
+
+
+consulta = Queries()
+consulta.crear_consulta_sql(co)
 
 
 #Ejemplo para correr el panel
-app = Aplicacion("Entradas")
-
+#app = Aplicacion("Entradas")
 
 
 

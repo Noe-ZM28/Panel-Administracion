@@ -18,9 +18,10 @@ class Aplicacion:
         Args:
         ver_tabla (str): nombre de la tabla que se va a visualizar en la interfaz.
         """
-
-        self.ver_tabla = ver_tabla
         self.panel = tk.Tk()
+        self.ver_tabla = ver_tabla
+        
+
         self.panel.geometry("1200x400")
         self.panel.title("Panel de administración")
         self.panel.columnconfigure(0, weight=1)  # Configurar la columna principal del panel
@@ -31,6 +32,7 @@ class Aplicacion:
         self.variable_fecha_fin = BooleanVar(value = 0)        
         self.variable_folio = IntVar(value = 0)
 
+
         self.query = Queries()
         self.message = None
         self.tabla = None
@@ -39,6 +41,8 @@ class Aplicacion:
         self.view_tabla()
 
         self.campos_consulta()
+
+
 
         self.panel.mainloop()
 
@@ -119,11 +123,11 @@ class Aplicacion:
         leyenda_fecha_fin.grid(row=2, column=0, padx=5, pady=5, sticky="W")
         leyenda_folio.grid(row=3, column=0, padx=5, pady=5, sticky="W")
 
-        # Crea un botón y lo empaqueta en el seccion_campos_consulta
+        # Crea un botón y lo empaqueta en la seccion_campos_consulta
         boton_consulta = tk.Button(seccion_campos_consulta, text="Consulta", command=self.hacer_consulta)
         boton_consulta.grid(row=4, column=1)
 
-        # Crea un botón y lo empaqueta en el seccion_campos_consulta
+        # Crea un botón y lo empaqueta en la seccion_campos_consulta
         boton_ver_todo = tk.Button(seccion_campos_consulta, text="Ver todo", command=self.ver_tabla_completa)
         boton_ver_todo.grid(row=5, column=1)
 
