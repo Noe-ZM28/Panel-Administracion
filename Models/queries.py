@@ -42,7 +42,7 @@ class Queries:
         return registros
 
 
-    def crear_consulta_sql_entradas(self, fecha_inicio_entrada=None, fecha_fin_entrada=None, fecha_inicio_salida=None, fecha_fin_salida=None, corte_numero=None, id=None):
+    def crear_consulta_sql_entradas(self, fecha_inicio_entrada = None, fecha_fin_entrada = None, fecha_inicio_salida = None, fecha_fin_salida = None, corte_numero = None, id = None):
         """
         Crea una consulta SQL dependiendo de los valores de los campos de consulta.
 
