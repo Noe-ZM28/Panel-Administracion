@@ -7,17 +7,18 @@ proyecto_dir = os.getcwd()
 # Agregar el directorio raíz del proyecto al path de Python
 sys.path.append(proyecto_dir)
 
-from Views.view_panel import Aplicacion
+from Views.view_panel_entradas import Panel_Entradas
 from Config.config_database import DatabaseConfig
-from Models.database import Queries
+from Models.queries import Queries
 
 
-consulta = Queries()
-consulta.crear_consulta_sql(co)
+
+# consulta = Queries()
+# consulta.crear_consulta_sql_entradas(id=1)
 
 
 #Ejemplo para correr el panel
-#app = Aplicacion("Entradas")
+app = Panel_Entradas()
 
 
 
