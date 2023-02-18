@@ -4,7 +4,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from tkinter import TclError
 from Models.queries import Queries
-from Views.Calendario import Fecha_Hora
+from Views.views_tools import Fecha_Hora
 
 
 
