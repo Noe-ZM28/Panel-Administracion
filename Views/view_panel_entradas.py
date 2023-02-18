@@ -34,11 +34,11 @@ class Panel_Entradas:
         self.variable_folio = StringVar()
 
 
-        self.variable_entrada_fecha_inicio = StringVar()
-        self.variable_entrada_fecha_fin = StringVar()
+        self.variable_fecha_inicio_entrada = StringVar()
+        self.variable_fecha_fin_entrada = StringVar()
 
-        self.variable_salida_fecha_inicio = StringVar()
-        self.variable_salida_fecha_fin = StringVar()      
+        self.variable_fecha_inicio_salida = StringVar()
+        self.variable_fecha_fin_salida = StringVar()      
 
 
         self.query = Queries()
@@ -142,8 +142,8 @@ class Panel_Entradas:
         seccion_entrada.grid(row=1, column=0, padx=5, pady=5, sticky='w')
 
         # Crear los campos de texto para las entradas
-        self.campo_texto_entrada_fecha_inicio = tk.Entry(seccion_entrada, textvariable=self.variable_entrada_fecha_inicio)
-        self.campo_texto_entrada_fecha_fin = tk.Entry(seccion_entrada, textvariable=self.variable_entrada_fecha_fin)
+        self.campo_texto_entrada_fecha_inicio = tk.Entry(seccion_entrada, textvariable=self.variable_fecha_inicio_entrada)
+        self.campo_texto_entrada_fecha_fin = tk.Entry(seccion_entrada, textvariable=self.variable_fecha_fin_entrada)
 
         # Crear las leyendas para los campos de texto de las entradas
         leyenda_fecha_inicio = ttk.Label(seccion_entrada, text="Fecha inicio:")
@@ -162,8 +162,8 @@ class Panel_Entradas:
 
 
         # Crear los campos de texto para las salidas
-        self.campo_texto_salida_fecha_inicio = tk.Entry(seccion_salida, textvariable=self.variable_salida_fecha_inicio)
-        self.campo_texto_salida_fecha_fin = tk.Entry(seccion_salida, textvariable=self.variable_salida_fecha_fin)
+        self.campo_texto_salida_fecha_inicio = tk.Entry(seccion_salida, textvariable=self.variable_fecha_inicio_salida)
+        self.campo_texto_salida_fecha_fin = tk.Entry(seccion_salida, textvariable=self.variable_fecha_fin_salida)
 
         # Crear las leyendas para los campos de texto de las salidas
         leyenda_fecha_inicio = ttk.Label(seccion_salida, text="Fecha inicio:")
@@ -208,15 +208,32 @@ class Panel_Entradas:
 
     def hacer_consulta(self):
         try:
-            # if self.variable_corte_numero.get() == "": 
-            #     raise Exception("Datos no validos")
-            #     
             registros = self.query.obtener_registros_corte_numero(
                 self.ver_tabla,
                 int(self.variable_corte_numero.get()))
 
             #registros = self.query.hacer_consulta_sql_entradas()
             
+
+        # Obtener los valores de los campos de consulta
+            fecha_inicio_entrada = self.variable_fecha_inicio_entrada.get()
+            fecha_fin_entrada = self.variable_fecha_fin_entrada.get()
+            fecha_inicio_salida = self.variable_fecha_inicio_salida.get()
+            fecha_fin_salida = self.variable_fecha_fin_salida.get()
+            corte_numero = self.variable_corte_numero.get()
+            id = self.variable_folio.get()
+
+
+
+
+
+
+
+
+
+
+
+
 
             self.llenar_tabla(registros)
         # except TclError:
