@@ -35,14 +35,13 @@ class Queries:
         registros = self.data_base.execute_query(query)
         return registros
 
-
     def obtener_registros_corte_numero(self, table, corte):
         query = f"select * from {table} WHERE CorteInc = {corte};"
         registros = self.data_base.execute_query(query)
         return registros
 
 
-    def crear_consulta_sql_entradas(self, fecha_inicio_entrada = None, fecha_fin_entrada = None, fecha_inicio_salida = None, fecha_fin_salida = None, corte_numero = None, id = None):
+    def hacer_consulta_sql_entradas(self, parametros):#self, fecha_inicio_entrada = None, fecha_fin_entrada = None, fecha_inicio_salida = None, fecha_fin_salida = None, corte_numero = None, id = None):
         """
         Crea una consulta SQL dependiendo de los valores de los campos de consulta.
 
@@ -62,32 +61,35 @@ class Queries:
         where = []
 
         # Si se especifica el número de corte, agregamos una cláusula WHERE a la lista
-        if corte_numero:
-            where.append(f"CorteInc = {corte_numero}")
+        if 'corte_numero' in parametros:
+            where.append(f"CorteInc = {parametros['corte_numero']}")
 
         # Si se especifica una fecha de inicio y una fecha de fin para entradas, agregamos una cláusula WHERE que seleccione
         # todas las entradas entre esas dos fechas. Si solo se especifica una fecha de inicio o una fecha de fin para entradas,
         # seleccionamos todas las entradas a partir de la fecha de inicio o hasta la fecha de fin, respectivamente.
-        if fecha_inicio_entrada and fecha_fin_entrada:
-            where.append(f"Entrada BETWEEN '{fecha_inicio_entrada}' AND '{fecha_fin_entrada}'")
-        elif fecha_inicio_entrada:
-            where.append(f"Entrada >= '{fecha_inicio_entrada}'")
-        elif fecha_fin_entrada:
-            where.append(f"Entrada <= '{fecha_fin_entrada}'")
+        if 'fecha_inicio_entrada' in parametros and 'fecha_fin_entrada' in parametros:
+            where.append(f"Entrada BETWEEN '{parametros['fecha_inicio_entrada']}' AND '{parametros['fecha_fin_entrada']}'")
+
+        elif 'fecha_inicio_entrada' in parametros:
+            where.append(f"Entrada >= '{parametros['fecha_inicio_entrada']}'")
+
+        elif 'fecha_fin_entrada' in parametros:
+            where.append(f"Entrada <= '{parametros['fecha_fin_entrada']}'")
 
         # Si se especifica una fecha de inicio y una fecha de fin para salidas, agregamos una cláusula WHERE que seleccione
         # todas las salidas entre esas dos fechas. Si solo se especifica una fecha de inicio o una fecha de fin para salidas,
         # seleccionamos todas las salidas a partir de la fecha de inicio o hasta la fecha de fin, respectivamente.
-        if fecha_inicio_salida and fecha_fin_salida:
-            where.append(f"Salida BETWEEN '{fecha_inicio_salida}' AND '{fecha_fin_salida}'")
-        elif fecha_inicio_salida:
-            where.append(f"Salida >= '{fecha_inicio_salida}'")
-        elif fecha_fin_salida:
-            where.append(f"Salida <= '{fecha_fin_salida}'")
+        if 'fecha_inicio_salida' in parametros and 'fecha_fin_salida' in parametros:
+            where.append(f"Salida BETWEEN '{parametros['fecha_inicio_salida']}' AND '{parametros['fecha_fin_salida']}'")
+
+        elif 'fecha_inicio_salida' in parametros:
+            where.append(f"Salida >= '{parametros['fecha_inicio_salida']}'")
+        elif  'fecha_fin_salida' in parametros:
+            where.append(f"Salida <= '{parametros['fecha_fin_salida']}'")
 
         # Si se especifica un número de ID, agregamos una cláusula WHERE a la lista
-        if id:
-            where.append(f"id = {id}")
+        if 'id' in parametros:
+            where.append(f"id = {parametros['id']}")
 
         # Si tenemos al menos una cláusula WHERE, las unimos con el operador AND y agregamos la cláusula WHERE
         # completa a nuestra consulta SQL. De lo contrario, simplemente dejamos la cláusula WHERE vacía.
@@ -97,9 +99,10 @@ class Queries:
             where_clause = ""
 
         # Devolvemos la consulta SQL completa
-        return print(f"SELECT * FROM Entradas {where_clause};")
-
-
+        query =  f"SELECT * FROM Entradas {where_clause};"
+        print(query)
+        registros = self.data_base.execute_query(query)
+        return registros
 
 
         # if corte_numero == "" or 0: corte_numero == None
