@@ -3,9 +3,9 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import TclError
-import sys
-import os
 from Models.queries import Queries
+from Views.Calendario import Fecha_Hora
+
 
 
 class Panel_Entradas:
@@ -228,7 +228,7 @@ class Panel_Entradas:
             if fecha_fin_salida != '': parametros['fecha_fin_salida'] = str(fecha_fin_salida)
 
             if corte_numero != '': parametros['corte_numero'] = int(corte_numero)
-            
+
             if id != '': parametros['id'] = int(id)
 
             print("\n")

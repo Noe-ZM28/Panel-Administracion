@@ -132,3 +132,15 @@ class Fecha_Hora:
 
         # Destruir la ventana principal
         self.master.destroy()
+
+from fontawesome import icons
+
+class CalendarButton(ttk.Button):
+    def __init__(self, parent, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+        
+        self.calendar_icon = calendar(scale=0.4, color='#000000')
+        self.calendar_font = Font(family='FontAwesome', size=14)
+        
+        self.configure(text=self.calendar_icon, font=self.calendar_font)
+
