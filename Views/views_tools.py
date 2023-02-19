@@ -43,32 +43,10 @@ class Fecha_Hora:
         self.cal.pack()
 
         # Creamos tres cuadros de entrada de tipo Spinbox para seleccionar la hora, minutos y segundos
-        self.min_sb = Spinbox(self.ftwo,
-                              from_=0,
-                              to=23,
-                              wrap=True,
-                              textvariable=self.hour_string,
-                              width=2,
-                              state="readonly",
-                              font=f,
-                              justify=CENTER)
-        self.sec_hour = Spinbox(self.ftwo,
-                                from_=0,
-                                to=59,
-                                wrap=True,
-                                textvariable=self.min_string,
-                                font=f,
-                                width=2,
-                                justify=CENTER)
+        self.min_sb = Spinbox(self.ftwo, from_=0, to=23, wrap=True, textvariable=self.hour_string, width=2, state="readonly", font=f, justify=CENTER)
+        self.sec_hour = Spinbox(self.ftwo, from_=0, to=59, wrap=True, textvariable=self.min_string, font=f, width=2, justify=CENTER)
 
-        self.sec = Spinbox(self.ftwo,
-                           from_=0,
-                           to=59,
-                           wrap=True,
-                           textvariable=self.sec_string,
-                           width=2,
-                           font=f,
-                           justify=CENTER)
+        self.sec = Spinbox(self.ftwo,from_=0, to=59, wrap=True, textvariable=self.sec_string, width=2, font=f, justify=CENTER)
 
         # Añadimos los cuadros de entrada a la ventana
         self.min_sb.pack(side=LEFT, fill=X, expand=True)
@@ -76,17 +54,11 @@ class Fecha_Hora:
         self.sec.pack(side=LEFT, fill=X, expand=True)
 
         # Etiqueta que indica la función de los cuadros de entrada
-        self.msg = Label(self.master,
-                         text="Hora  Minuto  Segundo",
-                         font=("Times", 12))
+        self.msg = Label(self.master, text="Hora  Minuto  Segundo", font=("Times", 12))
         self.msg.pack(side=TOP)
 
         # Botón que llama a la función select_datetime() al hacer clic
-        self.actionBtn = Button(self.master,
-                                text="Selecciona fecha y hora",
-                                padx=10,
-                                pady=10,
-                                command=self.select_datetime)
+        self.actionBtn = Button(self.master, text="Selecciona fecha y hora", padx=10, pady=10, command=self.select_datetime)
         self.actionBtn.pack(pady=10)
 
         self.master.mainloop()
@@ -129,18 +101,7 @@ class Fecha_Hora:
 
         # Dar formato a la fecha y hora seleccionada
         self.selected_datetime = self.format_datetime(date, hour, minute, second)
+        #print(self.selected_datetime)
 
         # Destruir la ventana principal
         self.master.destroy()
-
-from fontawesome import icons
-
-class CalendarButton(ttk.Button):
-    def __init__(self, parent, *args, **kwargs):
-        super().__init__(parent, *args, **kwargs)
-        
-        self.calendar_icon = calendar(scale=0.4, color='#000000')
-        self.calendar_font = Font(family='FontAwesome', size=14)
-        
-        self.configure(text=self.calendar_icon, font=self.calendar_font)
-

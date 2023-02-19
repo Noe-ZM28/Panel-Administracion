@@ -38,8 +38,11 @@ class Panel_Entradas:
         self.variable_fecha_fin_entrada = StringVar()
 
         self.variable_fecha_inicio_salida = StringVar()
-        self.variable_fecha_fin_salida = StringVar()      
+        self.variable_fecha_fin_salida = StringVar()
 
+        self.icono_calendario = PhotoImage(file='Public\Imagenes\icono_calendario.png').subsample(25)
+
+        self.calendario_fecha_inicio_entrada = None
 
         self.query = Queries()
         self.message = None
@@ -137,6 +140,16 @@ class Panel_Entradas:
         leyenda_folio.grid(row=3, column=0, padx=5, pady=5, sticky='W')
 
 
+
+
+
+
+
+
+
+
+
+
         # Crear un LabelFrame para las entradas
         seccion_entrada = ttk.LabelFrame(seccion_campos_consulta, text='Entradas')
         seccion_entrada.grid(row=1, column=0, padx=5, pady=5, sticky='w')
@@ -148,6 +161,12 @@ class Panel_Entradas:
         # Crear las leyendas para los campos de texto de las entradas
         leyenda_fecha_inicio = ttk.Label(seccion_entrada, text='Fecha inicio:')
         leyenda_fecha_inicio.grid(row=0, column=0, padx=5, pady=5, sticky='W')
+
+
+
+        boton_calendario_inicio_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, width=5, command= lambda:self.calendario_fecha_inicio_entrada == Fecha_Hora())
+        boton_calendario_inicio_entrada.grid(row=0, column=0)
+
 
         leyenda_fecha_fin = ttk.Label(seccion_entrada, text='Fecha fin:')
         leyenda_fecha_fin.grid(row=1, column=0, padx=5, pady=5, sticky='W')
@@ -175,6 +194,20 @@ class Panel_Entradas:
         # Empaqueta los campos de texto y las leyendas en el LabelFrame de las salidas
         self.campo_texto_salida_fecha_inicio.grid(row=0, column=1, padx=5, pady=5)
         self.campo_texto_salida_fecha_fin.grid(row=1, column=1, padx=5, pady=5)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
