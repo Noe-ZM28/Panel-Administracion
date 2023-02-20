@@ -1,4 +1,5 @@
 import pymysql
+from pymysql import err
 import json
 from tkinter import messagebox
 
@@ -96,6 +97,9 @@ class database_connection:
 
             # Retorna los resultados de la consulta
             return result
+
+        except err.ProgrammingError:
+            messagebox.showwarning("Error", f"Has ingresado un valor invalido para realizar la consulta, favor de revisar")
 
         except Exception as e:
             messagebox.showwarning("Error", f"Error al realizar la consulta, por favor contacte con un administrador y muestre el siguiente error:\n Error: {str(e)} ")

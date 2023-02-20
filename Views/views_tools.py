@@ -86,7 +86,7 @@ class Fecha_Hora:
 
         Returns:
             str: Cadena que representa la fecha y hora seleccionada en formato
-            YYYY-MM-DD hh:mm:ss.
+            YYYY-MM-DD HH:MM:SS.
         """
         date_obj = datetime.strptime(date, "%d/%m/%y")
         date_str = date_obj.strftime("%Y-%m-%d")

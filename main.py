@@ -8,7 +8,6 @@ sys.path.append(proyecto_dir)
 
 
 from Views.view_panel_entradas import Panel_Entradas
-from Views.views_tools import Fecha_Hora
 
 
 #Ejemplo para correr el panel
