@@ -6,6 +6,9 @@ from tkinter import TclError
 from Models.queries import Queries
 from Views.views_tools import Fecha_Hora
 
+import threading
+
+
 
 
 class Panel_Entradas:
@@ -42,7 +45,21 @@ class Panel_Entradas:
 
         self.icono_calendario = PhotoImage(file='Public\Imagenes\icono_calendario.png').subsample(25)
 
+
         self.calendario_fecha_inicio_entrada = None
+        self.fecha_hora_inicio_entrada = None
+
+        self.calendario_fecha_fin_entrada = None
+        self.fecha_hora_fin_entrada = None
+
+
+        self.calendario_fecha_inicio_salida = None
+        self.fecha_hora_inicio_salida = None
+
+
+        self.calendario_fecha_fin_salida = None
+        self.fecha_hora_fin_salida = None
+
 
         self.query = Queries()
         self.message = None
@@ -154,18 +171,34 @@ class Panel_Entradas:
         seccion_entrada = ttk.LabelFrame(seccion_campos_consulta, text='Entradas')
         seccion_entrada.grid(row=1, column=0, padx=5, pady=5, sticky='w')
 
-        # Crear los campos de texto para las entradas
-        self.campo_texto_entrada_fecha_inicio = tk.Entry(seccion_entrada, textvariable=self.variable_fecha_inicio_entrada)
-        self.campo_texto_entrada_fecha_fin = tk.Entry(seccion_entrada, textvariable=self.variable_fecha_fin_entrada)
+
+        #######################################################################
+
+        boton_calendario_inicio_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, width=5, command= self.actualizar_fecha_inicio)
+
+
+        boton_calendario_inicio_entrada.grid(row=0, column=0)
+
+
 
         # Crear las leyendas para los campos de texto de las entradas
         leyenda_fecha_inicio = ttk.Label(seccion_entrada, text='Fecha inicio:')
         leyenda_fecha_inicio.grid(row=0, column=0, padx=5, pady=5, sticky='W')
 
 
+        
+        # Crear los campos de texto para las entradas
+        self.campo_texto_entrada_fecha_inicio = ttk.Label(seccion_entrada, text='')
 
-        boton_calendario_inicio_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, width=5, command= lambda:self.calendario_fecha_inicio_entrada == Fecha_Hora())
-        boton_calendario_inicio_entrada.grid(row=0, column=0)
+        self.campo_texto_entrada_fecha_fin = tk.Entry(seccion_entrada, textvariable=self.variable_fecha_fin_entrada)
+
+
+
+
+        #######################################################################
+
+        boton_calendario_fin_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, width=5, command=self.abrir_calendario_fin_entrada)
+        boton_calendario_fin_entrada.grid(row=1, column=0)
 
 
         leyenda_fecha_fin = ttk.Label(seccion_entrada, text='Fecha fin:')
@@ -175,12 +208,28 @@ class Panel_Entradas:
         self.campo_texto_entrada_fecha_inicio.grid(row=0, column=1, padx=5, pady=5)
         self.campo_texto_entrada_fecha_fin.grid(row=1, column=1, padx=5, pady=5)
 
+
+
+
+
+
+
+
+
         # Crear un LabelFrame para las salidas
         seccion_salida = ttk.LabelFrame(seccion_campos_consulta, text='Salidas')
         seccion_salida.grid(row=3, column=0, padx=5, pady=5, sticky='w')
 
 
+
+        boton_calendario_inicio_salida = ttk.Button(seccion_salida, image=self.icono_calendario, width=5, command=self.abrir_calendario_inicio_salida)
+        boton_calendario_inicio_salida.grid(row=0, column=0)
         # Crear los campos de texto para las salidas
+
+        boton_calendario_fin_salida = ttk.Button(seccion_salida, image=self.icono_calendario, width=5, command=self.abrir_calendario_fin_salida)
+        boton_calendario_fin_salida.grid(row=1, column=0)
+
+
         self.campo_texto_salida_fecha_inicio = tk.Entry(seccion_salida, textvariable=self.variable_fecha_inicio_salida)
         self.campo_texto_salida_fecha_fin = tk.Entry(seccion_salida, textvariable=self.variable_fecha_fin_salida)
 
@@ -264,19 +313,7 @@ class Panel_Entradas:
 
             if id != '': parametros['id'] = int(id)
 
-            print("\n")
-            for key in parametros:
-                print (f'[{key}]:{parametros[key]}') # for the values
-            print('---------------------------------')
-
             registros = self.query.hacer_consulta_sql_entradas(parametros)
-
-
-
-
-
-
-
 
             self.llenar_tabla(registros)
         # except TclError:
@@ -306,3 +343,59 @@ class Panel_Entradas:
         self.tabla.delete(*self.tabla.get_children())
 
 
+
+    def actualizar_fecha_inicio(self):
+        def obtener_fecha():
+            self.calendario_fecha_inicio_entrada = Fecha_Hora()
+            self.calendario_fecha_inicio_entrada.mostrar_calendario()
+
+            self.fecha_hora_inicio_entrada = self.calendario_fecha_inicio_entrada.selected_datetime
+
+            self.variable_fecha_inicio_entrada.set(self.fecha_hora_inicio_entrada)
+
+            # Elimina cualquier texto existente en la caja de texto
+            self.campo_texto_entrada_fecha_inicio.config(text="")
+
+            # Inserta el nuevo valor en la caja de texto
+            self.campo_texto_entrada_fecha_inicio.config(text=self.fecha_hora_inicio_entrada)
+
+        
+        t = threading.Thread(target=obtener_fecha)
+        t.start()
+
+
+
+
+    def abrir_calendario_inicio_entrada(self):
+
+        print('se llama la función para llamar el calendario'),
+        self.calendario_fecha_inicio_entrada = Fecha_Hora()
+        self.calendario_fecha_inicio_entrada.mostrar()
+
+        print('se asigna variable')
+        self.fecha_hora_inicio_entrada == self.calendario_fecha_inicio.get_selected_datetime()
+        print('valor asignado: ' + self.fecha_hora_inicio_entrada)
+
+        print('se asigna variable', +self.variable_fecha_inicio_entrada)
+        self.variable_fecha_inicio_entrada.set(self.fecha_hora_inicio_entrada)
+
+        # Elimina cualquier texto existente en la caja de texto
+        self.campo_texto_entrada_fecha_inicio.config(text="")
+
+        # Inserta el nuevo valor en la caja de texto
+        self.campo_texto_entrada_fecha_inicio.config(text=self.fecha_hora_inicio_entrada)
+
+
+    def abrir_calendario_fin_entrada(self):
+        self.calendario_fecha_fin_entrada = Fecha_Hora()
+        self.fecha_hora_fin_entrada = self.calendario_fecha_fin_entrada.selected_datetime
+
+
+    def abrir_calendario_inicio_salida(self):
+        self.calendario_fecha_inicio_salida = Fecha_Hora()
+        self.fecha_hora_inicio_salida = self.calendario_fecha_inicio_salida.selected_datetime
+        
+
+    def abrir_calendario_fin_salida(self):
+        self.calendario_fecha_fin_salida = Fecha_Hora()
+        self.fecha_hora_fin_salida = self.calendario_fecha_fin_salida.selected_datetime

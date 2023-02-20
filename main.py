@@ -13,8 +13,3 @@ from Views.views_tools import Fecha_Hora
 
 #Ejemplo para correr el panel
 app = Panel_Entradas()
-
-# app = Fecha_Hora()
-# app.selected_datetime
-
-

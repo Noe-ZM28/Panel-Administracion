@@ -3,6 +3,7 @@ from tkcalendar import *
 from datetime import datetime
 from datetime import date
 
+
 class Fecha_Hora:
 
     def __init__(self):
@@ -16,9 +17,9 @@ class Fecha_Hora:
         self.master.resizable(width=False, height=False)
 
         # Creamos variables de cadena para los campos de hora, minutos y segundos
-        self.hour_string = StringVar()
-        self.min_string = StringVar()
-        self.sec_string = StringVar()
+        self.hour = IntVar()
+        self.min = IntVar()
+        self.sec = IntVar()
 
         # Almacena la fecha y hora seleccionada
         self.selected_datetime = ""
@@ -43,14 +44,15 @@ class Fecha_Hora:
         self.cal.pack()
 
         # Creamos tres cuadros de entrada de tipo Spinbox para seleccionar la hora, minutos y segundos
-        self.min_sb = Spinbox(self.ftwo, from_=0, to=23, wrap=True, textvariable=self.hour_string, width=2, state="readonly", font=f, justify=CENTER)
-        self.sec_hour = Spinbox(self.ftwo, from_=0, to=59, wrap=True, textvariable=self.min_string, font=f, width=2, justify=CENTER)
+        self.hour = Spinbox(self.ftwo, from_=0, to=23, wrap=True, textvariable=self.hour, width=2, state="readonly", font=f, justify=CENTER)
 
-        self.sec = Spinbox(self.ftwo,from_=0, to=59, wrap=True, textvariable=self.sec_string, width=2, font=f, justify=CENTER)
+        self.min = Spinbox(self.ftwo, from_=0, to=59, wrap=True, textvariable=self.min, font=f, width=2, justify=CENTER)
+
+        self.sec = Spinbox(self.ftwo,from_=0, to=59, wrap=True, textvariable=self.sec, width=2, font=f, justify=CENTER)
 
         # Añadimos los cuadros de entrada a la ventana
-        self.min_sb.pack(side=LEFT, fill=X, expand=True)
-        self.sec_hour.pack(side=LEFT, fill=X, expand=True)
+        self.hour.pack(side=LEFT, fill=X, expand=True)
+        self.min.pack(side=LEFT, fill=X, expand=True)
         self.sec.pack(side=LEFT, fill=X, expand=True)
 
         # Etiqueta que indica la función de los cuadros de entrada
@@ -61,7 +63,14 @@ class Fecha_Hora:
         self.actionBtn = Button(self.master, text="Selecciona fecha y hora", padx=10, pady=10, command=self.select_datetime)
         self.actionBtn.pack(pady=10)
 
+    def mostrar_calendario(self):
         self.master.mainloop()
+
+    def salir_calendario(self):
+        self.master.destroy()
+
+    def get_selected_datetime(self):
+        return self.selected_datetime
 
     def format_datetime(self, date, hour, minute, second):
         """
@@ -75,12 +84,12 @@ class Fecha_Hora:
 
         Returns:
             str: Cadena que representa la fecha y hora seleccionada en formato
-            dd-mm-aaaa hh:mm:ss.
+            YYYY-MM-DD hh:mm:ss.
         """
         date_obj = datetime.strptime(date, "%d/%m/%y")
-        date_str = date_obj.strftime("%d-%m-%Y")
+        date_str = date_obj.strftime("%Y-%m-%d")
 
-        time_str = f"{hour:02d}:{minute:02d}:{second:02d}"
+        time_str = f"{hour:02}:{minute:02}:{second:02}"
         return f"{date_str} {time_str}"
 
 
@@ -95,13 +104,14 @@ class Fecha_Hora:
 
         """
         date = self.cal.get_date()
-        hour = int(self.hour_string.get())
-        minute = int(self.min_string.get())
-        second = int(self.sec_string.get())
+        hour = int(self.hour.get())
+        minute = int(self.min.get())
+        second = int(self.sec.get())
 
         # Dar formato a la fecha y hora seleccionada
         self.selected_datetime = self.format_datetime(date, hour, minute, second)
-        #print(self.selected_datetime)
+        # print("------------------------------------------------------")
+        # print(self.selected_datetime)
 
         # Destruir la ventana principal
         self.master.destroy()
