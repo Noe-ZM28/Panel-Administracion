@@ -64,10 +64,12 @@ class Fecha_Hora:
         self.actionBtn.pack(pady=10)
 
     def mostrar_calendario(self):
-        self.master.mainloop()
+        #self.master.mainloop()
+        self.master.wait_window()
 
     def salir_calendario(self):
-        self.master.destroy()
+        #self.master.destroy()
+        self.master.quit()
 
     def get_selected_datetime(self):
         return self.selected_datetime
