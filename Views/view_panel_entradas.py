@@ -1,10 +1,12 @@
-from tkinter import *
 import tkinter as tk
-import tkinter
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import TclError
+from tkinter import filedialog
+from tkinter import StringVar
+from tkinter import PhotoImage
 
+from Config.config_tools import tools
 from Models.queries import Queries
 from Views.views_tools import Fecha_Hora
 
@@ -15,7 +17,7 @@ from xlsxwriter import exceptions
 
 from datetime import datetime
 
-from tkinter import filedialog
+
 
 
 class Panel_Entradas:
@@ -47,8 +49,14 @@ class Panel_Entradas:
         self.variable_fecha_inicio_salida = StringVar()
         self.variable_fecha_fin_salida = StringVar()
 
-        # Crea las variables para los iconos de calendario
-        self.icono_calendario = PhotoImage(file='Public\Imagenes\icono_calendario.png').subsample(25)
+        #instancia de la clase de herramientas
+        tools_instance = tools()
+        icono_calendario = tools_instance.read_path_config_file('images', 'icono_calendario')
+
+        # Crea las variables para el icono de calendario
+        self.icono_calendario = PhotoImage(file=icono_calendario).subsample(25)
+
+        # Crea las variables para el manejo de calendario
         self.calendario_fecha_inicio_entrada = None
         self.fecha_hora_inicio_entrada = None
         self.calendario_fecha_fin_entrada = None
@@ -536,7 +544,7 @@ class Panel_Entradas:
             self.campo_texto_entrada_fecha_inicio.config(text=self.fecha_hora_inicio_entrada)
 
         # Se inicia un hilo para mostrar el calendario y obtener la fecha seleccionada por el usuario
-        t = threading.Thread(target=obtener_fecha)
+        t = threading.Thread(name='Calendario',target=obtener_fecha)
         t.start()
 
 

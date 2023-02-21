@@ -9,7 +9,7 @@
                 "file5": ""
             }],
             "images":[{
-                "image1":"Public/Imagenes/icono_calendario.png",
+                "icono_calendario":"Public/Imagenes/icono_calendario.png",
                 "image2": "",
                 "image3": "",
                 "image4": "",

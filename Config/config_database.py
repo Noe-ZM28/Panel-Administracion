@@ -15,7 +15,7 @@ class DatabaseConfig:
         Inicializa una instancia de la clase DatabaseConfig.
         """
         self.tools_instance = tools()
-        self.database_config_file = self.tools_instance.read_path_file("database_config_file")
+        self.database_config_file = self.tools_instance.read_path_config_file('config_files',"database_config_file")
 
     def guardar_configuracion(self, name_config, host, user, password, database):
         """

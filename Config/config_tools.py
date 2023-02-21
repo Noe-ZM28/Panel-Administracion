@@ -45,7 +45,7 @@ class tools:
                 if not f.startswith('.'):
                     print(f"{subindent}{f}")
 
-    def read_path_file(self, file):
+    def read_path_config_file(self, type_file, file_path):
         """
         Método que lee la ruta de un archivo de configuración desde un archivo JSON.
 
@@ -56,7 +56,7 @@ class tools:
         try:
             with open(json_path) as f:
                 data = json.load(f)
-                return data['path_files'][0]['config_files'][0][file]
+                return data['path_files'][0][type_file][0][file_path]
         except FileNotFoundError:
             print(f"El archivo '{json_path}' no se pudo abrir.")
             return None
