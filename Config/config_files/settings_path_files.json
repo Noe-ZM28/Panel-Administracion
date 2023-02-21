@@ -2,8 +2,7 @@
     "path_files": [
         {
             "config_files":[{
-                "database_config_file":
-                "Config/config_files/settings_database.json",
+                "database_config_file":"Config/config_files/settings_database.json",
                 "file2": "",
                 "file3": "",
                 "file4": "",

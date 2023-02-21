@@ -11,8 +11,11 @@ from Views.views_tools import Fecha_Hora
 import threading
 
 import xlsxwriter
+from xlsxwriter import exceptions
+
 from datetime import datetime
 
+from tkinter import filedialog
 
 
 class Panel_Entradas:
@@ -118,7 +121,7 @@ class Panel_Entradas:
         self.tabla.column('#11', width=75, stretch=False)
 
         # Inserta datos
-        self.ver_tabla_completa()
+        #self.ver_tabla_completa()
 
         # Crea un Scrollbar vertical y lo asocia con el Treeview
         scrollbar_Y = ttk.Scrollbar(seccion_tabla, orient='vertical', command=self.tabla.yview)
@@ -207,7 +210,7 @@ class Panel_Entradas:
        
         # Crear los campos de texto para las entradas
         self.campo_texto_entrada_fecha_inicio = ttk.Label(seccion_entrada, text='')
-        self.campo_texto_entrada_fecha_fin = tk.Entry(seccion_entrada, textvariable=self.variable_fecha_fin_entrada)
+        self.campo_texto_entrada_fecha_fin = tk.Label(seccion_entrada, text='')
 
 
 
@@ -240,8 +243,8 @@ class Panel_Entradas:
 
 
         # Crear los campos de texto para las salidas
-        self.campo_texto_salida_fecha_inicio = tk.Entry(seccion_salida, textvariable=self.variable_fecha_inicio_salida)
-        self.campo_texto_salida_fecha_fin = tk.Entry(seccion_salida, textvariable=self.variable_fecha_fin_salida)
+        self.campo_texto_salida_fecha_inicio = tk.Label(seccion_salida, text='')
+        self.campo_texto_salida_fecha_fin = tk.Label(seccion_salida, text='')
 
         # Crear las leyendas para los campos de texto de las salidas
         etiqueta_fecha_inicio_salida = ttk.Label(seccion_salida, text='Fecha inicio:')
@@ -338,8 +341,7 @@ class Panel_Entradas:
                 parametros['id'] = int(id)
 
             # Validar que se hayan proporcionado parámetros para la consulta
-            if parametros == {}:
-                raise ValueError('Error: los campos están vacíos')
+            if parametros == {}:raise ValueError('Error: los campos están vacíos')
 
             # Realizar la consulta y llenar la tabla con los resultados
             self.registros = self.query.hacer_consulta_sql_entradas(parametros)
@@ -363,11 +365,12 @@ class Panel_Entradas:
     
     def ver_tabla_completa(self):
         '''Método para visualizar la tabla completa sin restricciones.'''
+        if messagebox.askokcancel(title='Advertencia',message='Para ver todos los registros de la tabla, debe considerar que para reaizar esta consulta el tiempo de respuesta puede variar desde unos segundos hasta minutos, pasaria lo mismo si quiere realizar un reporte de esta tabla.\n\n\t\t ¿Quiere continuar?'):
         # Obtiene todos los registros
-        registros = self.query.obtener_registros(self.ver_tabla)
-        
-        # Llena la tabla con los registros
-        self.llenar_tabla(registros)
+            registros = self.query.obtener_registros_completos(self.ver_tabla)
+            
+            # Llena la tabla con los registros
+            self.llenar_tabla(registros)
 
 
     def llenar_tabla(self, registros):
@@ -409,10 +412,8 @@ class Panel_Entradas:
 
         try:
             # Verificar que se haya realizado una consulta antes de generar un reporte
-            if self.registros == None:
-                raise TypeError('Error: no se ha realizado una consulta antes de generar un reporte')
-            if len(self.registros) == 0:
-                raise ValueError('Error: la consulta esta vacia y no se puede generar un reporte')
+            if self.registros == None:raise TypeError('Error: no se ha realizado una consulta antes de generar un reporte')
+            if len(self.registros) == 0:raise ValueError('Error: la consulta esta vacia y no se puede generar un reporte')
 
             # Obtener los valores de los campos de entrada y salida, corte_numero e id
             fecha_inicio_entrada = self.variable_fecha_inicio_entrada.get()
@@ -422,8 +423,11 @@ class Panel_Entradas:
             corte_numero = self.variable_corte_numero.get()
             id = self.variable_folio.get()
 
+            # Obtener la ruta y el nombre del archivo donde se guardará el reporte
+            ruta_archivo = filedialog.asksaveasfilename(defaultextension='.xlsx', initialfile=f'reporte_')
+
             # Crear un archivo de Excel y escribir los registros
-            workbook = xlsxwriter.Workbook('Public/Reportes/reporte.xlsx')
+            workbook = xlsxwriter.Workbook(ruta_archivo)
             worksheet = workbook.add_worksheet()
 
             # Obtener las columnas de la tabla
@@ -458,12 +462,14 @@ class Panel_Entradas:
 
             # Cerrar el archivo de Excel
             workbook.close()
-            messagebox.showinfo('Error', 'El reporte fue generado con exito')
+            messagebox.showinfo('Mensaje', 'El reporte fue generado con exito')
+            self.vaciar_campos()
 
         #Manejo de errores
         except TypeError:messagebox.showerror('Error', 'Para realizar un reporte primero tiene que realizar una consulta')
         except ValueError:messagebox.showerror('Error', 'Para realizar un reporte primero tiene que realizar una consulta que contenga registros')
         except AttributeError:messagebox.showerror('Error', 'El reporte no se puede generar ya que en los campos Entrada o Salida hay valores invalidos para realizar la consulta, favor de revisar y volver a intentar')
+        except exceptions.FileCreateError:messagebox.showerror('Error', 'El reporte no se puede generar, seleccione el directorio para guardar el reporte y vuelva a intentar')
 
 
     def vaciar_campos(self):
@@ -491,12 +497,11 @@ class Panel_Entradas:
 
 
         self.campo_texto_entrada_fecha_inicio.config(text="")
+        self.campo_texto_entrada_fecha_fin.config(text="")
 
-        self.campo_texto_entrada_fecha_fin.delete(0, 'end')
 
-
-        self.campo_texto_salida_fecha_fin.delete(0, 'end')
-        self.campo_texto_salida_fecha_inicio.delete(0, 'end')
+        self.campo_texto_salida_fecha_fin.config(text="")
+        self.campo_texto_salida_fecha_inicio.config(text="")
 
         # Limpia las variables de control
         self.variable_corte_numero.set('')

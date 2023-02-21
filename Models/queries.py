@@ -24,7 +24,7 @@ class Queries:
         campos = [r[0] for r in resultado]
         return list(campos)
 
-    def obtener_registros(self, table):
+    def obtener_registros_completos(self, table):
         """
         Obtiene todos los registros de una tabla especificada.
 
@@ -34,12 +34,6 @@ class Queries:
         query = f"select * from {table};"
         registros = self.data_base.execute_query(query)
         return registros
-
-    def obtener_registros_corte_numero(self, table, corte):
-        query = f"select * from {table} WHERE CorteInc = {corte};"
-        registros = self.data_base.execute_query(query)
-        return registros
-
 
     def hacer_consulta_sql_entradas(self, parametros):#self, fecha_inicio_entrada = None, fecha_fin_entrada = None, fecha_inicio_salida = None, fecha_fin_salida = None, corte_numero = None, id = None):
         """
@@ -99,9 +93,10 @@ class Queries:
             where_clause = ""
 
         # Devolvemos la consulta SQL completa
-        query =  f"SELECT * FROM Entradas {where_clause};"
+        query =  f"SELECT * FROM Entradas {where_clause}"
         print(query)
         registros = self.data_base.execute_query(query)
+
         return registros
 
 

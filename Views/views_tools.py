@@ -64,8 +64,8 @@ class Fecha_Hora:
         self.actionBtn.pack(pady=10)
 
     def mostrar_calendario(self):
-        #self.master.mainloop()
-        self.master.wait_window()
+        self.master.mainloop()
+        #self.master.wait_window()
 
     def salir_calendario(self):
         #self.master.destroy()
