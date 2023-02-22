@@ -17,6 +17,8 @@ from xlsxwriter import exceptions
 
 from datetime import datetime
 
+from ttkthemes import ThemedStyle
+
 
 
 
@@ -33,6 +35,25 @@ class Panel_Entradas:
 
         # Crea la ventana principal
         self.panel = tk.Tk()
+
+        #temas xd
+        style = ThemedStyle(self.panel)
+        #style.theme_use('aquativo')
+        #style.theme_use('arc')
+        #style.theme_use('black')
+        #style.theme_use('blue')
+        #style.theme_use('breeze')
+        #style.theme_use('clearlooks')
+        #style.theme_use('elegance')
+        #style.theme_use('equilux')
+        #style.theme_use('itft1')
+        #style.theme_use('kroc')
+        #style.theme_use('plastik')
+        #style.theme_use('radiance')
+        #style.theme_use('scidblue')
+        #style.theme_use('smog')
+        #style.theme_use('ubuntu')
+        #style.theme_use('winxpblue')
 
         # Establece el tamaño de la ventana y su título
         self.panel.geometry('1230x610')
@@ -163,7 +184,7 @@ class Panel_Entradas:
         boton_vaciar_campos.grid(row=0, column=0, sticky='')
 
         # Crea un botón para ver todos los registros
-        boton_ver_todo = tk.Button(seccion_botones_ayuda, text='Ver todo', command=self.ver_tabla_completa)
+        boton_ver_todo = ttk.Button(seccion_botones_ayuda, text='Ver todo', command=self.ver_tabla_completa)
         boton_ver_todo.grid(row=1, column=0, sticky='')
         #######################################################################---
 
@@ -213,7 +234,6 @@ class Panel_Entradas:
 
         # Crear las leyendas para los campos de texto de las entradas
         etiqueta_fecha_inicio_entrada = ttk.Label(seccion_entrada, text='Fecha inicio:', width=12, anchor=tk.W)
-        etiqueta_fecha_inicio_entrada.config(background="lightblue")
         etiqueta_fecha_inicio_entrada.grid(row=0, column=1, padx=5, pady=5, sticky=tk.W)
        
         # Crear los campos de texto para las entradas
@@ -230,8 +250,8 @@ class Panel_Entradas:
         etiqueta_fecha_fin_entrada.grid(row=1, column=1, padx=5, pady=5, sticky=tk.W)
 
         # Empaqueta los campos de texto y las leyendas en el LabelFrame de las entradas
-        self.campo_texto_entrada_fecha_inicio.grid(row=0, column=2, padx=5, pady=5, sticky='nsew')
-        self.campo_texto_entrada_fecha_fin.grid(row=1, column=2, padx=5, pady=5)
+        self.campo_texto_entrada_fecha_inicio.grid(row=0, column=2, padx=5, pady=5,sticky='nsew')
+        self.campo_texto_entrada_fecha_fin.grid(row=1, column=2, padx=5, pady=5, sticky='nsew')
         #######################################################################---
 
 
@@ -269,8 +289,8 @@ class Panel_Entradas:
         etiqueta_fecha_fin_salida.grid(row=1, column=1, padx=5, pady=5, sticky=tk.W)
 
         # Empaqueta los campos de texto y las leyendas en el LabelFrame de las salidas
-        self.campo_texto_salida_fecha_inicio.grid(row=0, column=2, padx=5, pady=5)
-        self.campo_texto_salida_fecha_fin.grid(row=1, column=2, padx=5, pady=5)
+        self.campo_texto_salida_fecha_inicio.grid(row=0, column=2, padx=5, pady=5, sticky='nsew')
+        self.campo_texto_salida_fecha_fin.grid(row=1, column=2, padx=5, pady=5, sticky='nsew')
         #######################################################################---
 
 
@@ -282,12 +302,12 @@ class Panel_Entradas:
         seccion_botones_consulta.grid(row=6, column=0, padx=5, pady=5, sticky='nsew')
 
         # Crea un botón y lo empaqueta en la seccion_botones_consulta
-        boton_consulta = tk.Button(seccion_botones_consulta, text='Consulta', command=self.hacer_consulta, width=15)
+        boton_consulta = ttk.Button(seccion_botones_consulta, text='Consulta', command=self.hacer_consulta, width=15)
         boton_consulta.grid(row=0, column=0, pady=5)
 
 
         # Crea un botón y lo empaqueta en la seccion_botones_consulta
-        boton_generar_reporte = tk.Button(seccion_botones_consulta, text='Generar reporte', width=15, command = self.realizar_reporte)
+        boton_generar_reporte = ttk.Button(seccion_botones_consulta, text='Generar reporte', width=15, command = self.realizar_reporte)
         boton_generar_reporte.grid(row=2, column=0, pady=5)
 
         # Crea un LabelFrame para los botones de desconectar y salir
@@ -295,11 +315,11 @@ class Panel_Entradas:
         seccion_botones_salir.grid(row=7, column=0, padx=10, pady=10, sticky='nsew')
 
         # Crea un botón y lo empaqueta en la seccion_botones_salir
-        boton_desconectar = tk.Button(seccion_botones_salir, text='Desconectar', width=15)
+        boton_desconectar = ttk.Button(seccion_botones_salir, text='Desconectar', width=15)
         boton_desconectar.grid(row=0, column=0, pady=5)
 
         # Crea un botón y lo empaqueta en la seccion_botones_salir
-        boton_salir = tk.Button(seccion_botones_salir, text='Salir', command=self.salir, width=15)
+        boton_salir = ttk.Button(seccion_botones_salir, text='Salir', command=self.salir, width=15)
         boton_salir.grid(row=2, column=0, pady=5)
         #######################################################################---
 
