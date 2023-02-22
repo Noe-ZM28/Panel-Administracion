@@ -40,7 +40,7 @@ class Panel_Entradas:
         style = ThemedStyle(self.panel)
         #style.theme_use('aquativo')
         #style.theme_use('arc')
-        #style.theme_use('black')
+        style.theme_use('black')
         #style.theme_use('blue')
         #style.theme_use('breeze')
         #style.theme_use('clearlooks')
@@ -165,6 +165,7 @@ class Panel_Entradas:
         # Empaqueta el Treeview en la ventana
         self.tabla.grid(row=0, column=0, sticky='NESW')
 
+
     def view_campos_consulta(self):
         '''Crea y empaqueta los campos de consulta en la ventana.'''
 
@@ -184,8 +185,12 @@ class Panel_Entradas:
         boton_vaciar_campos.grid(row=0, column=0, sticky='')
 
         # Crea un botón para ver todos los registros
-        boton_ver_todo = ttk.Button(seccion_botones_ayuda, text='Ver todo', command=self.ver_tabla_completa)
+        boton_ver_todo = ttk.Button(seccion_botones_ayuda, text='Vaciar tabla', command=self.vaciar_tabla)
         boton_ver_todo.grid(row=1, column=0, sticky='')
+
+        # Crea un botón para ver todos los registros
+        boton_ver_todo = ttk.Button(seccion_botones_ayuda, text='Ver todo', command=self.ver_tabla_completa)
+        boton_ver_todo.grid(row=2, column=0, sticky='')
         #######################################################################---
 
 
@@ -229,7 +234,12 @@ class Panel_Entradas:
 
 
         # Crear el boton para el calendario entrada inicio
-        boton_calendario_inicio_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, width=5, command= self.actualizar_fecha_inicio_entrada)
+        boton_calendario_inicio_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, width=5,
+                                                command=lambda: self.actualizar_fecha(
+                                                                                        calendario=self.calendario_fecha_inicio_entrada,
+                                                                                        fecha=self.fecha_hora_inicio_entrada,
+                                                                                        variable=self.variable_fecha_inicio_entrada,
+                                                                                        campo_texto=self.campo_texto_entrada_fecha_inicio))
         boton_calendario_inicio_entrada.grid(row=0, column=0, sticky=tk.W)
 
         # Crear las leyendas para los campos de texto de las entradas
@@ -238,12 +248,18 @@ class Panel_Entradas:
        
         # Crear los campos de texto para las entradas
         self.campo_texto_entrada_fecha_inicio = ttk.Label(seccion_entrada, text='')
-        self.campo_texto_entrada_fecha_fin = tk.Label(seccion_entrada, text='')
+        self.campo_texto_entrada_fecha_fin = ttk.Label(seccion_entrada, text='')
 
 
 
         # Crear el boton para el calendario entrada fin
-        boton_calendario_fin_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, width=5, command=self.actualizar_fecha_fin_entrada)
+        boton_calendario_fin_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, width=5,
+                                                command=lambda:self.actualizar_fecha(
+                                                                                        calendario=self.calendario_fecha_fin_entrada,
+                                                                                        fecha=self.fecha_hora_fin_entrada,
+                                                                                        variable=self.variable_fecha_fin_entrada,
+                                                                                        campo_texto=self.campo_texto_entrada_fecha_fin))
+
         boton_calendario_fin_entrada.grid(row=1, column=0, sticky=tk.W)
 
         etiqueta_fecha_fin_entrada = ttk.Label(seccion_entrada, text='Fecha fin:')
@@ -266,13 +282,18 @@ class Panel_Entradas:
 
 
         # Crear el boton para el calendario salida inicio
-        boton_calendario_inicio_salida = ttk.Button(seccion_salida, image=self.icono_calendario, width=5, command=self.actualizar_fecha_inicio_salida)
+        boton_calendario_inicio_salida = ttk.Button(seccion_salida, image=self.icono_calendario, width=5,
+                                                command=lambda: self.actualizar_fecha(
+                                                                                        calendario=self.calendario_fecha_inicio_salida,
+                                                                                        fecha=self.fecha_hora_inicio_salida,
+                                                                                        variable=self.variable_fecha_inicio_salida,
+                                                                                        campo_texto=self.campo_texto_salida_fecha_inicio))
         boton_calendario_inicio_salida.grid(row=0, column=0, sticky=tk.W)
 
 
         # Crear los campos de texto para las salidas
-        self.campo_texto_salida_fecha_inicio = tk.Label(seccion_salida, text='')
-        self.campo_texto_salida_fecha_fin = tk.Label(seccion_salida, text='')
+        self.campo_texto_salida_fecha_inicio = ttk.Label(seccion_salida, text='')
+        self.campo_texto_salida_fecha_fin = ttk.Label(seccion_salida, text='')
 
         # Crear las leyendas para los campos de texto de las salidas
         etiqueta_fecha_inicio_salida = ttk.Label(seccion_salida, text='Fecha inicio:')
@@ -282,7 +303,13 @@ class Panel_Entradas:
 
 
         # Crear el boton para el calendario salida fin
-        boton_calendario_fin_salida = ttk.Button(seccion_salida, image=self.icono_calendario, width=5, command=self.actualizar_fecha_fin_salida)
+        boton_calendario_fin_salida = ttk.Button(seccion_salida, image=self.icono_calendario, width=5,
+                                                command=lambda: self.actualizar_fecha(
+                                                                                        calendario=self.calendario_fecha_fin_salida,
+                                                                                        fecha=self.fecha_hora_fin_salida,
+                                                                                        variable=self.variable_fecha_fin_salida,
+                                                                                        campo_texto=self.campo_texto_salida_fecha_fin))
+        
         boton_calendario_fin_salida.grid(row=1, column=0, sticky=tk.W)
 
         etiqueta_fecha_fin_salida = ttk.Label(seccion_salida, text='Fecha fin:')
@@ -380,21 +407,12 @@ class Panel_Entradas:
         except TypeError:
             messagebox.showwarning('Error', 'El formato de la fecha ingresada no es correcto o la fecha ingresada no es válida')
 
-
-    def salir(self):
-        """
-        Muestra un cuadro de diálogo para informar al usuario que se está cerrando la aplicación y destruye el panel principal.
-        """
-        # Muestra un cuadro de diálogo con el mensaje "Hasta pronto"
-        messagebox.showinfo('Salida', 'Hasta pronto.')
-        # Destruye el panel principal
-        self.panel.destroy()
-
     
     def ver_tabla_completa(self):
         '''Método para visualizar la tabla completa sin restricciones.'''
-        if messagebox.askokcancel(title='Advertencia',message='Para ver todos los registros de la tabla, debe considerar que para reaizar esta consulta el tiempo de respuesta puede variar desde unos segundos hasta minutos, pasaria lo mismo si quiere realizar un reporte de esta tabla.\n\n\t\t ¿Quiere continuar?'):
-        # Obtiene todos los registros
+        #Advierte sobre la cantidad de registros
+        if messagebox.askokcancel(title='Advertencia',message='Al ver todos los registros de la tabla, debe considerar que para reaizar esta consulta el tiempo de respuesta puede variar desde unos segundos hasta minutos, pasaria lo mismo si quiere realizar un reporte de esta consulta.\n\n\t\t ¿Quiere continuar?'):
+            # Obtiene todos los registros
             registros = self.query.obtener_registros_completos(self.ver_tabla)
             
             # Llena la tabla con los registros
@@ -540,114 +558,56 @@ class Panel_Entradas:
         self.variable_fecha_fin_salida.set('')
 
 
-    def actualizar_fecha_inicio_entrada(self):
+    def actualizar_fecha(self, calendario, fecha, variable, campo_texto):
         """
         Actualiza la fecha y hora de inicio para la búsqueda de registros en la base de datos. 
         Utiliza un hilo para mostrar el calendario y obtener la fecha seleccionada por el usuario.
+
+        :param calendario: instancia de la clase Fecha_Hora.
+        :param fecha: fecha seleccionada por el usuario.
+        :param variable: variable que se utiliza para almacenar la fecha seleccionada.
+        :param campo_texto: caja de texto donde se muestra la fecha seleccionada.
+
         """
 
         def obtener_fecha():
             """
             Función interna que se encarga de mostrar el calendario y obtener la fecha seleccionada por el usuario.
             """
-            self.calendario_fecha_inicio_entrada = Fecha_Hora()
-            self.calendario_fecha_inicio_entrada.mostrar_calendario()
+            calendario = Fecha_Hora()
+            calendario.mostrar_calendario()
 
-            self.fecha_hora_inicio_entrada = self.calendario_fecha_inicio_entrada.selected_datetime
+            fecha = calendario.selected_datetime
 
-            self.variable_fecha_inicio_entrada.set(self.fecha_hora_inicio_entrada)
-
-            # Elimina cualquier texto existente en la caja de texto
-            self.campo_texto_entrada_fecha_inicio.config(text="")
-
-            # Inserta el nuevo valor en la caja de texto
-            self.campo_texto_entrada_fecha_inicio.config(text=self.fecha_hora_inicio_entrada)
-
-        # Se inicia un hilo para mostrar el calendario y obtener la fecha seleccionada por el usuario
-        t = threading.Thread(name='Calendario',target=obtener_fecha)
-        t.start()
-
-
-    def actualizar_fecha_fin_entrada(self):
-        """
-        Actualiza la fecha y hora de inicio para la búsqueda de registros en la base de datos. 
-        Utiliza un hilo para mostrar el calendario y obtener la fecha seleccionada por el usuario.
-        """
-
-        def obtener_fecha():
-            """
-            Función interna que se encarga de mostrar el calendario y obtener la fecha seleccionada por el usuario.
-            """
-            self.calendario_fecha_inicio_entrada = Fecha_Hora()
-            self.calendario_fecha_inicio_entrada.mostrar_calendario()
-
-            self.fecha_hora_inicio_entrada = self.calendario_fecha_inicio_entrada.selected_datetime
-
-            self.variable_fecha_inicio_entrada.set(self.fecha_hora_inicio_entrada)
+            variable.set(fecha)
 
             # Elimina cualquier texto existente en la caja de texto
-            self.campo_texto_entrada_fecha_inicio.config(text="")
+            campo_texto.config(text="")
 
             # Inserta el nuevo valor en la caja de texto
-            self.campo_texto_entrada_fecha_inicio.config(text=self.fecha_hora_inicio_entrada)
-
-        # Se inicia un hilo para mostrar el calendario y obtener la fecha seleccionada por el usuario
-        t = threading.Thread(target=obtener_fecha)
-        t.start()
+            campo_texto.config(text=fecha)
 
 
-    def actualizar_fecha_inicio_salida(self):
+        # Se llama a la función "obtener_fecha" después de 0 milisegundos
+        # utilizando el método "after" del panel.
+        # Esto permite que la función se ejecute en el hilo principal de la GUI.
+        self.panel.after(0, obtener_fecha)
+
+
+    def salir(self):
         """
-        Actualiza la fecha y hora de inicio para la búsqueda de registros en la base de datos. 
-        Utiliza un hilo para mostrar el calendario y obtener la fecha seleccionada por el usuario.
+        Muestra un cuadro de diálogo para informar al usuario que se está cerrando la aplicación y destruye el panel principal.
         """
+        #vaciar los campos antes de salir
+        self.vaciar_campos()
+        #vaciar la tabla antes de salir
+        self.vaciar_tabla()
 
-        def obtener_fecha():
-            """
-            Función interna que se encarga de mostrar el calendario y obtener la fecha seleccionada por el usuario.
-            """
-            self.calendario_fecha_inicio_entrada = Fecha_Hora()
-            self.calendario_fecha_inicio_entrada.mostrar_calendario()
-
-            self.fecha_hora_inicio_entrada = self.calendario_fecha_inicio_entrada.selected_datetime
-
-            self.variable_fecha_inicio_entrada.set(self.fecha_hora_inicio_entrada)
-
-            # Elimina cualquier texto existente en la caja de texto
-            self.campo_texto_entrada_fecha_inicio.config(text="")
-
-            # Inserta el nuevo valor en la caja de texto
-            self.campo_texto_entrada_fecha_inicio.config(text=self.fecha_hora_inicio_entrada)
-
-        # Se inicia un hilo para mostrar el calendario y obtener la fecha seleccionada por el usuario
-        t = threading.Thread(target=obtener_fecha)
-        t.start()
-
-
-    def actualizar_fecha_fin_salida(self):
-        """
-        Actualiza la fecha y hora de inicio para la búsqueda de registros en la base de datos. 
-        Utiliza un hilo para mostrar el calendario y obtener la fecha seleccionada por el usuario.
-        """
-
-        def obtener_fecha():
-            """
-            Función interna que se encarga de mostrar el calendario y obtener la fecha seleccionada por el usuario.
-            """
-            self.calendario_fecha_inicio_entrada = Fecha_Hora()
-            self.calendario_fecha_inicio_entrada.mostrar_calendario()
-
-            self.fecha_hora_inicio_entrada = self.calendario_fecha_inicio_entrada.selected_datetime
-
-            self.variable_fecha_inicio_entrada.set(self.fecha_hora_inicio_entrada)
-
-            # Elimina cualquier texto existente en la caja de texto
-            self.campo_texto_entrada_fecha_inicio.config(text="")
-
-            # Inserta el nuevo valor en la caja de texto
-            self.campo_texto_entrada_fecha_inicio.config(text=self.fecha_hora_inicio_entrada)
-
-        # Se inicia un hilo para mostrar el calendario y obtener la fecha seleccionada por el usuario
-        t = threading.Thread(target=obtener_fecha)
-        t.start()
+        # Muestra un cuadro de diálogo con el mensaje "Hasta pronto"
+        messagebox.showinfo('Salida', 'Hasta pronto.')
+        
+        #detener el loop principal
+        self.panel.quit()
+        # Destruye el panel principal
+        self.panel.destroy()
 

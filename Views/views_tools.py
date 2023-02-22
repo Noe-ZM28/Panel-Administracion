@@ -63,16 +63,22 @@ class Fecha_Hora:
         self.actionBtn = Button(self.master, text="Selecciona fecha y hora", padx=10, pady=10, command=self.select_datetime)
         self.actionBtn.pack(pady=10)
 
+
     def mostrar_calendario(self):
         self.master.mainloop()
         #self.master.wait_window()
 
+
     def salir_calendario(self):
-        #self.master.destroy()
+        #detener el loop principal
         self.master.quit()
+        # Destruye el panel principal
+        self.master.destroy()
+
 
     def get_selected_datetime(self):
         return self.selected_datetime
+
 
     def format_datetime(self, date, hour, minute, second):
         """
@@ -116,4 +122,5 @@ class Fecha_Hora:
         # print(self.selected_datetime)
 
         # Destruir la ventana principal
-        self.master.destroy()
+        self.salir_calendario()
+
