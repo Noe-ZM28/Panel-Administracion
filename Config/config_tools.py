@@ -52,7 +52,7 @@ class tools:
         :param file: El nombre del archivo de configuración.
         :return: La ruta del archivo de configuración.
         """
-        json_path = r'Config\config_files\settings_path_files.json'
+        json_path = r'Config/config_files/settings_path_files.json'
         try:
             with open(json_path) as f:
                 data = json.load(f)
