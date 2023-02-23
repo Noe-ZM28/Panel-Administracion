@@ -4,7 +4,7 @@ from datetime import datetime
 from datetime import date
 
 
-class Fecha_Hora:
+class Calendar:
 
     def __init__(self):
         """
@@ -118,7 +118,6 @@ class Fecha_Hora:
 
         # Dar formato a la fecha y hora seleccionada
         self.selected_datetime = self.format_datetime(date, hour, minute, second)
-        # print("------------------------------------------------------")
         # print(self.selected_datetime)
 
         # Destruir la ventana principal

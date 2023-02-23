@@ -8,7 +8,7 @@ from tkinter import PhotoImage
 
 from Config.config_tools import tools
 from Models.queries import Queries
-from Views.views_tools import Fecha_Hora
+from Views.views_tools import Calendar
 
 import threading
 
@@ -563,35 +563,35 @@ class Panel_Entradas:
         Actualiza la fecha y hora de inicio para la búsqueda de registros en la base de datos. 
         Utiliza un hilo para mostrar el calendario y obtener la fecha seleccionada por el usuario.
 
-        :param calendario: instancia de la clase Fecha_Hora.
+        :param calendario: instancia de la clase Calendar.
         :param fecha: fecha seleccionada por el usuario.
         :param variable: variable que se utiliza para almacenar la fecha seleccionada.
         :param campo_texto: caja de texto donde se muestra la fecha seleccionada.
 
         """
 
-        def obtener_fecha():
-            """
-            Función interna que se encarga de mostrar el calendario y obtener la fecha seleccionada por el usuario.
-            """
-            calendario = Fecha_Hora()
-            calendario.mostrar_calendario()
+        #def obtener_fecha():
+        """
+        Función interna que se encarga de mostrar el calendario y obtener la fecha seleccionada por el usuario.
+        """
+        calendario = Calendar()
+        calendario.mostrar_calendario()
 
-            fecha = calendario.selected_datetime
+        fecha = calendario.selected_datetime
 
-            variable.set(fecha)
+        variable.set(fecha)
 
-            # Elimina cualquier texto existente en la caja de texto
-            campo_texto.config(text="")
+        # Elimina cualquier texto existente en la caja de texto
+        campo_texto.config(text="")
 
-            # Inserta el nuevo valor en la caja de texto
-            campo_texto.config(text=fecha)
+        # Inserta el nuevo valor en la caja de texto
+        campo_texto.config(text=fecha)
 
 
         # Se llama a la función "obtener_fecha" después de 0 milisegundos
         # utilizando el método "after" del panel.
         # Esto permite que la función se ejecute en el hilo principal de la GUI.
-        self.panel.after(0, obtener_fecha)
+        #self.panel.after(0, obtener_fecha)
 
 
     def salir(self):
