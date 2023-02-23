@@ -10,7 +10,7 @@ class Fecha_Hora:
         """
         Inicializa la clase Fecha_Hora, crea una ventana de Tkinter y los widgets necesarios para seleccionar una fecha y hora.
         """
-        root = Tk()
+        root = Toplevel()
         self.master = root
         self.master.title("Seleccionar fecha y hora")
         self.master.geometry("300x360")

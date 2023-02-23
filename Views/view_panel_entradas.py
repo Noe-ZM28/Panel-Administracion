@@ -40,7 +40,7 @@ class Panel_Entradas:
         style = ThemedStyle(self.panel)
         #style.theme_use('aquativo')
         #style.theme_use('arc')
-        style.theme_use('black')
+        #style.theme_use('black')
         #style.theme_use('blue')
         #style.theme_use('breeze')
         #style.theme_use('clearlooks')
@@ -329,7 +329,7 @@ class Panel_Entradas:
         seccion_botones_consulta.grid(row=6, column=0, padx=5, pady=5, sticky='nsew')
 
         # Crea un botón y lo empaqueta en la seccion_botones_consulta
-        boton_consulta = ttk.Button(seccion_botones_consulta, text='Consulta', command=self.hacer_consulta, width=15)
+        boton_consulta = ttk.Button(seccion_botones_consulta, text='Consulta', command=self.hacer_consulta_entrada, width=15)
         boton_consulta.grid(row=0, column=0, pady=5)
 
 
@@ -353,7 +353,7 @@ class Panel_Entradas:
 
 
 
-    def hacer_consulta(self):
+    def hacer_consulta_entrada(self):
         """
         Realiza una consulta SQL con los valores proporcionados por el usuario y llena la tabla con los registros obtenidos.
         """
