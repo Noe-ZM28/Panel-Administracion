@@ -411,7 +411,7 @@ class Panel_Entradas:
     def ver_tabla_completa(self):
         '''Método para visualizar la tabla completa sin restricciones.'''
         #Advierte sobre la cantidad de registros
-        if messagebox.askokcancel(title='Advertencia',message='Al ver todos los registros de la tabla, debe considerar que para reaizar esta consulta el tiempo de respuesta puede variar desde unos segundos hasta minutos, pasaria lo mismo si quiere realizar un reporte de esta consulta.\n\n\t\t ¿Quiere continuar?'):
+        if messagebox.askokcancel(title='Advertencia',message='Al ver todos los registros de la tabla, debe considerar que para reaizar esta consulta el tiempo de respuesta puede variar desde unos segundos hasta minutos, pasaria lo mismo si quiere realizar un reporte de esta consulta.\n\n ¿Quiere continuar?'):
             # Obtiene todos los registros
             registros = self.query.obtener_registros_completos(self.ver_tabla)
             
