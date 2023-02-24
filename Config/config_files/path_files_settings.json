@@ -1,0 +1,20 @@
+{
+    "path_files": [
+        {
+            "config_files":[{
+                "database_config_file":"Config/config_files/database_connection_configuration.json",
+                "user_settings_file": "Config/config_files/user_settings.json",
+                "file3": "",
+                "file4": "",
+                "file5": ""
+            }],
+            "images":[{
+                "icono_calendario":"Public/Images/icono_calendario.png",
+                "logo_pase": "Public/Images/logo_pase.jpg",
+                "image3": "",
+                "image4": "",
+                "image5": ""
+            }]
+        }
+    ]
+}

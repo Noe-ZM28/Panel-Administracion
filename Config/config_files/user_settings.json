@@ -1,0 +1,22 @@
+{
+    "usuarios": [
+        {
+            "UserName": "juanito",
+            "Name": "Juan Pérez",
+            "Password": "password1",
+            "Permits": "admin"
+        },
+        {
+            "UserName": "pedrito",
+            "Nombre": "Pedro García",
+            "Contraseña": "password2",
+            "Permits": "usuario"
+        },
+        {
+            "UserName": "mariat",
+            "Nombre": "María Torres",
+            "Contraseña": "password3",
+            "Permits": "usuario"
+        }
+    ]
+}
