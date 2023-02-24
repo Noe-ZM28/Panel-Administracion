@@ -8,7 +8,7 @@ from tkinter import PhotoImage
 
 from Config.config_tools import tools
 from Models.queries import Queries
-from Views.views_tools import Calendar
+from Views.views_tools import Calendar_date
 
 import threading
 
@@ -234,7 +234,7 @@ class Panel_Entradas:
 
 
         # Crear el boton para el calendario entrada inicio
-        boton_calendario_inicio_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, width=5,
+        boton_calendario_inicio_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
                                                 command=lambda: self.actualizar_fecha(
                                                                                         calendario=self.calendario_fecha_inicio_entrada,
                                                                                         fecha=self.fecha_hora_inicio_entrada,
@@ -253,7 +253,7 @@ class Panel_Entradas:
 
 
         # Crear el boton para el calendario entrada fin
-        boton_calendario_fin_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, width=5,
+        boton_calendario_fin_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
                                                 command=lambda:self.actualizar_fecha(
                                                                                         calendario=self.calendario_fecha_fin_entrada,
                                                                                         fecha=self.fecha_hora_fin_entrada,
@@ -282,7 +282,7 @@ class Panel_Entradas:
 
 
         # Crear el boton para el calendario salida inicio
-        boton_calendario_inicio_salida = ttk.Button(seccion_salida, image=self.icono_calendario, width=5,
+        boton_calendario_inicio_salida = ttk.Button(seccion_salida, image=self.icono_calendario, 
                                                 command=lambda: self.actualizar_fecha(
                                                                                         calendario=self.calendario_fecha_inicio_salida,
                                                                                         fecha=self.fecha_hora_inicio_salida,
@@ -303,7 +303,7 @@ class Panel_Entradas:
 
 
         # Crear el boton para el calendario salida fin
-        boton_calendario_fin_salida = ttk.Button(seccion_salida, image=self.icono_calendario, width=5,
+        boton_calendario_fin_salida = ttk.Button(seccion_salida, image=self.icono_calendario, 
                                                 command=lambda: self.actualizar_fecha(
                                                                                         calendario=self.calendario_fecha_fin_salida,
                                                                                         fecha=self.fecha_hora_fin_salida,
@@ -563,7 +563,7 @@ class Panel_Entradas:
         Actualiza la fecha y hora de inicio para la búsqueda de registros en la base de datos. 
         Utiliza un hilo para mostrar el calendario y obtener la fecha seleccionada por el usuario.
 
-        :param calendario: instancia de la clase Calendar.
+        :param calendario: instancia de la clase Calendar_date.
         :param fecha: fecha seleccionada por el usuario.
         :param variable: variable que se utiliza para almacenar la fecha seleccionada.
         :param campo_texto: caja de texto donde se muestra la fecha seleccionada.
@@ -574,7 +574,7 @@ class Panel_Entradas:
         """
         Función interna que se encarga de mostrar el calendario y obtener la fecha seleccionada por el usuario.
         """
-        calendario = Calendar()
+        calendario = Calendar_date()
         calendario.mostrar_calendario()
 
         fecha = calendario.selected_datetime

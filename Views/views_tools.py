@@ -4,7 +4,7 @@ from datetime import datetime
 from datetime import date
 
 
-class Calendar:
+class Calendar_date:
 
     def __init__(self):
         """
