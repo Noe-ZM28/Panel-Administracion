@@ -1,24 +1,19 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-from tkinter import TclError
-from tkinter import filedialog
 from tkinter import StringVar
 from tkinter import PhotoImage
+
 
 from Config.config_tools import tools
 from Models.queries import Queries
 from Views.views_tools import Calendar_date
 
-import threading
-
-import xlsxwriter
-from xlsxwriter import exceptions
-
-from datetime import datetime
 
 from ttkthemes import ThemedStyle
 
+
+from Controller.controller_panel_entradas import EntradasController
 
 
 
@@ -26,6 +21,7 @@ class Panel_Entradas:
     '''Clase principal que maneja la interfaz gráfica del usuario.'''
 
     def __init__(self):
+
         '''
         Constructor de la clase. Crea la ventana principal, la tabla y los campos de consulta.
         '''
@@ -33,8 +29,10 @@ class Panel_Entradas:
         # Establece la tabla que se visualizará por defecto
         self.ver_tabla = 'Entradas'
 
+
         # Crea la ventana principal
         self.panel = tk.Tk()
+
 
         #temas xd
         style = ThemedStyle(self.panel)
@@ -59,8 +57,10 @@ class Panel_Entradas:
         self.panel.geometry('1230x610')
         self.panel.title(f'Panel de administración - {self.ver_tabla}')
 
+
         # Configura la columna principal del panel para que use todo el espacio disponible
         self.panel.columnconfigure(0, weight=1)
+
 
         # Crea las variables para los campos de consulta
         self.variable_corte_numero = StringVar()
@@ -70,12 +70,15 @@ class Panel_Entradas:
         self.variable_fecha_inicio_salida = StringVar()
         self.variable_fecha_fin_salida = StringVar()
 
+
         #instancia de la clase de herramientas
         tools_instance = tools()
-        icono_calendario = tools_instance.read_path_config_file('images', 'icono_calendario')
+
 
         # Crea las variables para el icono de calendario
+        icono_calendario = tools_instance.read_path_config_file('images', 'icono_calendario')
         self.icono_calendario = PhotoImage(file=icono_calendario).subsample(25)
+
 
         # Crea las variables para el manejo de calendario
         self.calendario_fecha_inicio_entrada = None
@@ -87,15 +90,21 @@ class Panel_Entradas:
         self.calendario_fecha_fin_salida = None
         self.fecha_hora_fin_salida = None
 
+
         # Crea las variables para almacenar los registros y las consultas a la base de datos
         self.registros = None
         self.query = Queries()
         self.message = None
         self.tabla = None
 
+
         # Crea la tabla y los campos de consulta
         self.view_tabla()
         self.view_campos_consulta()
+
+
+        self.controlador_entrada = EntradasController()
+
 
         # Inicia el loop principal de la ventana
         self.panel.mainloop()
@@ -235,7 +244,7 @@ class Panel_Entradas:
 
         # Crear el boton para el calendario entrada inicio
         boton_calendario_inicio_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
-                                                command=lambda: self.actualizar_fecha(
+                                                command=lambda: self.controlador_entrada.actualizar_fecha(
                                                                                         calendario=self.calendario_fecha_inicio_entrada,
                                                                                         fecha=self.fecha_hora_inicio_entrada,
                                                                                         variable=self.variable_fecha_inicio_entrada,
@@ -254,7 +263,7 @@ class Panel_Entradas:
 
         # Crear el boton para el calendario entrada fin
         boton_calendario_fin_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
-                                                command=lambda:self.actualizar_fecha(
+                                                command=lambda:self.controlador_entrada.actualizar_fecha(
                                                                                         calendario=self.calendario_fecha_fin_entrada,
                                                                                         fecha=self.fecha_hora_fin_entrada,
                                                                                         variable=self.variable_fecha_fin_entrada,
@@ -283,7 +292,7 @@ class Panel_Entradas:
 
         # Crear el boton para el calendario salida inicio
         boton_calendario_inicio_salida = ttk.Button(seccion_salida, image=self.icono_calendario, 
-                                                command=lambda: self.actualizar_fecha(
+                                                command=lambda: self.controlador_entrada.actualizar_fecha(
                                                                                         calendario=self.calendario_fecha_inicio_salida,
                                                                                         fecha=self.fecha_hora_inicio_salida,
                                                                                         variable=self.variable_fecha_inicio_salida,
@@ -304,7 +313,7 @@ class Panel_Entradas:
 
         # Crear el boton para el calendario salida fin
         boton_calendario_fin_salida = ttk.Button(seccion_salida, image=self.icono_calendario, 
-                                                command=lambda: self.actualizar_fecha(
+                                                command=lambda: self.controlador_entrada.actualizar_fecha(
                                                                                         calendario=self.calendario_fecha_fin_salida,
                                                                                         fecha=self.fecha_hora_fin_salida,
                                                                                         variable=self.variable_fecha_fin_salida,
@@ -329,12 +338,18 @@ class Panel_Entradas:
         seccion_botones_consulta.grid(row=6, column=0, padx=5, pady=5, sticky='nsew')
 
         # Crea un botón y lo empaqueta en la seccion_botones_consulta
-        boton_consulta = ttk.Button(seccion_botones_consulta, text='Consulta', command=self.hacer_consulta_entrada, width=15)
+        boton_consulta = ttk.Button(seccion_botones_consulta, text='Consulta', command = self.hacer_consulta_entrada,width=15)
+
         boton_consulta.grid(row=0, column=0, pady=5)
 
 
         # Crea un botón y lo empaqueta en la seccion_botones_consulta
-        boton_generar_reporte = ttk.Button(seccion_botones_consulta, text='Generar reporte', width=15, command = self.realizar_reporte)
+        boton_generar_reporte = ttk.Button(seccion_botones_consulta, text='Generar reporte', width=15,
+        command = lambda:
+                        {
+                            self.controlador_entrada.realizar_reporte(ver_tabla = self.ver_tabla, registros = self.registros),
+                            self.vaciar_campos()
+                        })
         boton_generar_reporte.grid(row=2, column=0, pady=5)
 
         # Crea un LabelFrame para los botones de desconectar y salir
@@ -353,61 +368,6 @@ class Panel_Entradas:
 
 
 
-    def hacer_consulta_entrada(self):
-        """
-        Realiza una consulta SQL con los valores proporcionados por el usuario y llena la tabla con los registros obtenidos.
-        """
-        try:
-            parametros = {}
-
-            # Obtener los valores de los campos de consulta
-            fecha_inicio_entrada = self.variable_fecha_inicio_entrada.get()
-            fecha_fin_entrada = self.variable_fecha_fin_entrada.get()
-            fecha_inicio_salida = self.variable_fecha_inicio_salida.get()
-            fecha_fin_salida = self.variable_fecha_fin_salida.get()
-            corte_numero = self.variable_corte_numero.get()
-            id = self.variable_folio.get()
-
-            # Validar y agregar los parámetros a la consulta
-            if fecha_inicio_entrada != '':
-                if len(fecha_inicio_entrada) < 19 or len(fecha_inicio_entrada) > 19:
-                    raise TypeError('Error, el valor de los campos es superior a 19 caracteres')
-                parametros['fecha_inicio_entrada'] = str(fecha_inicio_entrada)
-
-            if fecha_fin_entrada != '':
-                if len(fecha_fin_entrada) != 19:
-                    raise TypeError('Error, el valor de los campos es superior a 19 caracteres')
-                parametros['fecha_fin_entrada'] = str(fecha_fin_entrada)
-
-            if fecha_inicio_salida != '':
-                if len(fecha_inicio_salida) != 19:
-                    raise TypeError('Error, el valor de los campos es superior a 19 caracteres')
-                parametros['fecha_inicio_salida'] = str(fecha_inicio_salida)
-
-            if fecha_fin_salida != '':
-                parametros['fecha_fin_salida'] = str(fecha_fin_salida)
-                if len(fecha_fin_salida) != 19:
-                    raise TypeError('Error, el valor de los campos es superior a 19 caracteres')
-
-            if corte_numero != '':
-                parametros['corte_numero'] = int(corte_numero)
-
-            if id != '':
-                parametros['id'] = int(id)
-
-            # Validar que se hayan proporcionado parámetros para la consulta
-            if parametros == {}:raise ValueError('Error: los campos están vacíos')
-
-            # Realizar la consulta y llenar la tabla con los resultados
-            self.registros = self.query.hacer_consulta_sql_entradas(parametros)
-            self.llenar_tabla(self.registros)
-
-        except ValueError:
-            messagebox.showwarning('Error', 'Por favor introduzca un dato válido para realizar la consulta.')
-        except TypeError:
-            messagebox.showwarning('Error', 'El formato de la fecha ingresada no es correcto o la fecha ingresada no es válida')
-
-    
     def ver_tabla_completa(self):
         '''Método para visualizar la tabla completa sin restricciones.'''
         #Advierte sobre la cantidad de registros
@@ -444,78 +404,6 @@ class Panel_Entradas:
         """
         # Elimina todas las filas de la tabla
         self.tabla.delete(*self.tabla.get_children())
-
-
-    def realizar_reporte(self):
-        """
-        Realiza un reporte de los registros obtenidos en una consulta y lo guarda en un archivo de Excel.
-
-        Raises:
-            TypeError: Si no se ha realizado una consulta antes de generar un reporte.
-            ValueError: Si la consulta está vacía y no se puede generar un reporte.
-            AttributeError: Si hay valores inválidos en los campos Entrada o Salida para realizar la consulta.
-        """
-
-        try:
-            # Verificar que se haya realizado una consulta antes de generar un reporte
-            if self.registros == None:raise TypeError('Error: no se ha realizado una consulta antes de generar un reporte')
-            if len(self.registros) == 0:raise ValueError('Error: la consulta esta vacia y no se puede generar un reporte')
-
-            # Obtener los valores de los campos de entrada y salida, corte_numero e id
-            fecha_inicio_entrada = self.variable_fecha_inicio_entrada.get()
-            fecha_fin_entrada = self.variable_fecha_fin_entrada.get()
-            fecha_inicio_salida = self.variable_fecha_inicio_salida.get()
-            fecha_fin_salida = self.variable_fecha_fin_salida.get()
-            corte_numero = self.variable_corte_numero.get()
-            id = self.variable_folio.get()
-
-            # Obtener la ruta y el nombre del archivo donde se guardará el reporte
-            ruta_archivo = filedialog.asksaveasfilename(defaultextension='.xlsx', initialfile=f'reporte_')
-
-            # Crear un archivo de Excel y escribir los registros
-            workbook = xlsxwriter.Workbook(ruta_archivo)
-            worksheet = workbook.add_worksheet()
-
-            # Obtener las columnas de la tabla
-            columnas = self.query.obtener_campos_tabla(self.ver_tabla)
-
-            # Establecer el nombre de las columnas en la primera fila
-            for i in range(len(columnas)):
-                worksheet.write(0, i, columnas[i])
-
-            # Escribir los registros
-            for i, registro in enumerate(self.registros):
-                for j, valor in enumerate(registro):
-                    # Si el campo es "Entrada" o "Salida", convertir a fecha y hora
-                    if columnas[j] == 'Entrada':
-                        fecha_hora = datetime.strptime(valor.strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
-                        fecha_hora_str = datetime.strftime(fecha_hora, '%Y-%m-%d %H:%M:%S')
-                        worksheet.write(i+1, j, fecha_hora_str)
-                    elif columnas[j] == 'Salida':
-                        fecha_hora = datetime.strptime(valor.strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
-                        fecha_hora_str = datetime.strftime(fecha_hora, '%Y-%m-%d %H:%M:%S')
-                        worksheet.write(i+1, j, fecha_hora_str)
-                    else:
-                        worksheet.write(i+1, j, valor)
-
-            # Escribir la fórmula de suma
-            columna_importe = columnas.index('Importe')
-            ultima_fila = len(self.registros) + 1
-            num_registros = len(self.registros)
-            if num_registros > 0:
-                suma_importe = f'=SUM({xlsxwriter.utility.xl_rowcol_to_cell(1, columna_importe)}:{xlsxwriter.utility.xl_rowcol_to_cell(num_registros, columna_importe)})'
-                worksheet.write_formula(num_registros+4, columna_importe, suma_importe)
-
-            # Cerrar el archivo de Excel
-            workbook.close()
-            messagebox.showinfo('Mensaje', 'El reporte fue generado con exito')
-            self.vaciar_campos()
-
-        #Manejo de errores
-        except TypeError:messagebox.showerror('Error', 'Para realizar un reporte primero tiene que realizar una consulta')
-        except ValueError:messagebox.showerror('Error', 'Para realizar un reporte primero tiene que realizar una consulta que contenga registros')
-        except AttributeError:messagebox.showerror('Error', 'El reporte no se puede generar ya que en los campos Entrada o Salida hay valores invalidos para realizar la consulta, favor de revisar y volver a intentar')
-        except exceptions.FileCreateError:messagebox.showerror('Error', 'El reporte no se puede generar, seleccione el directorio para guardar el reporte y vuelva a intentar')
 
 
     def vaciar_campos(self):
@@ -558,40 +446,18 @@ class Panel_Entradas:
         self.variable_fecha_fin_salida.set('')
 
 
-    def actualizar_fecha(self, calendario, fecha, variable, campo_texto):
+    def hacer_consulta_entrada(self):
         """
-        Actualiza la fecha y hora de inicio para la búsqueda de registros en la base de datos. 
-        Utiliza un hilo para mostrar el calendario y obtener la fecha seleccionada por el usuario.
-
-        :param calendario: instancia de la clase Calendar_date.
-        :param fecha: fecha seleccionada por el usuario.
-        :param variable: variable que se utiliza para almacenar la fecha seleccionada.
-        :param campo_texto: caja de texto donde se muestra la fecha seleccionada.
-
+        Realiza una consulta de entrada con los parámetros proporcionados por el usuario y llena la tabla con los resultados obtenidos.
         """
-
-        #def obtener_fecha():
-        """
-        Función interna que se encarga de mostrar el calendario y obtener la fecha seleccionada por el usuario.
-        """
-        calendario = Calendar_date()
-        calendario.mostrar_calendario()
-
-        fecha = calendario.selected_datetime
-
-        variable.set(fecha)
-
-        # Elimina cualquier texto existente en la caja de texto
-        campo_texto.config(text="")
-
-        # Inserta el nuevo valor en la caja de texto
-        campo_texto.config(text=fecha)
-
-
-        # Se llama a la función "obtener_fecha" después de 0 milisegundos
-        # utilizando el método "after" del panel.
-        # Esto permite que la función se ejecute en el hilo principal de la GUI.
-        #self.panel.after(0, obtener_fecha)
+        self.registros = self.controlador_entrada.hacer_consulta_entrada(
+                                                                        fecha_inicio_entrada = self.variable_fecha_inicio_entrada.get(),
+                                                                        fecha_fin_entrada = self.variable_fecha_fin_entrada.get(),
+                                                                        fecha_inicio_salida = self.variable_fecha_inicio_salida.get(),
+                                                                        fecha_fin_salida = self.variable_fecha_fin_salida.get(),
+                                                                        corte_numero = self.variable_corte_numero.get(),
+                                                                        id = self.variable_folio.get())
+        self.llenar_tabla(self.registros)
 
 
     def salir(self):

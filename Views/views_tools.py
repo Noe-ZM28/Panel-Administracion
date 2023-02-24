@@ -5,6 +5,26 @@ from datetime import date
 
 
 class Calendar_date:
+    """
+    Clase para seleccionar una fecha y hora a través de una interfaz gráfica de usuario utilizando Tkinter y tkcalendar.
+
+    La clase crea una ventana de Tkinter y los widgets necesarios para seleccionar una fecha y hora utilizando un calendario y cuadros de entrada de tipo Spinbox para la hora, minutos y segundos. Una vez seleccionada la fecha y hora, la función select_datetime guarda el resultado en el atributo selected_datetime y da formato a la fecha y hora seleccionada utilizando la función format_datetime.
+
+    La función mostrar_calendario inicia el loop principal de la ventana y la función salir_calendario detiene el loop y destruye la ventana. La función get_selected_datetime retorna la fecha y hora seleccionada en formato YYYY-MM-DD HH:MM:SS.
+
+    Métodos:
+    - __init__(): Constructor de la clase. Crea una ventana de Tkinter y los widgets necesarios para seleccionar una fecha y hora.
+    - mostrar_calendario(): Inicia el loop principal de la ventana.
+    - salir_calendario(): Detiene el loop principal de la ventana y la destruye.
+    - format_datetime(date, hour, minute, second): Da formato a la fecha y hora seleccionada.
+    - select_datetime(): Guarda la fecha y hora seleccionada en el atributo selected_datetime y da formato a la fecha y hora utilizando la función format_datetime.
+
+    Atributos:
+    - selected_datetime: Almacena la fecha y hora seleccionada en formato YYYY-MM-DD HH:MM:SS.
+    - hour: Variable de entero que almacena la hora seleccionada.
+    - min: Variable de entero que almacena los minutos seleccionados.
+    - sec: Variable de entero que almacena los segundos seleccionados.
+    """
 
     def __init__(self):
         """
@@ -74,10 +94,6 @@ class Calendar_date:
         self.master.quit()
         # Destruye el panel principal
         self.master.destroy()
-
-
-    def get_selected_datetime(self):
-        return self.selected_datetime
 
 
     def format_datetime(self, date, hour, minute, second):
