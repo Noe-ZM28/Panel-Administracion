@@ -54,7 +54,7 @@ class Panel_Entradas:
         #style.theme_use('winxpblue')
 
         # Establece el tamaño de la ventana y su título
-        self.panel.geometry('1230x610')
+        self.panel.geometry()
         self.panel.title(f'Panel de administración - {self.ver_tabla}')
 
 
