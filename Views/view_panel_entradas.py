@@ -21,7 +21,6 @@ class Panel_Entradas:
     '''Clase principal que maneja la interfaz gráfica del usuario.'''
 
     def __init__(self):
-
         '''
         Constructor de la clase. Crea la ventana principal, la tabla y los campos de consulta.
         '''
@@ -130,7 +129,7 @@ class Panel_Entradas:
 
 
         # Obtiene los nombres de las columnas de la tabla que se va a mostrar
-        columnas = self.query.obtener_campos_tabla(self.ver_tabla)
+        columnas = self.query.obtener_campos_tabla()
 
         # Crea un Treeview con una columna por cada campo de la tabla
         style = ttk.Style()
@@ -147,16 +146,6 @@ class Panel_Entradas:
             i = i + 1
         self.tabla.column('#0', width=10, stretch=False)
         self.tabla.column('#1', width=50, stretch=False)
-        self.tabla.column('#2', width=120, stretch=False)
-        self.tabla.column('#3', width=120, stretch=False)
-        self.tabla.column('#4', width=100, stretch=False)
-        self.tabla.column('#5', width=60, stretch=False)
-        self.tabla.column('#6', width=60, stretch=False)
-        self.tabla.column('#7', width=60, stretch=False)
-        self.tabla.column('#8', width=60, stretch=False)
-        self.tabla.column('#9', width=100, stretch=False)
-        self.tabla.column('#10', width=90, stretch=False)
-        self.tabla.column('#11', width=75, stretch=False)
 
         # Inserta datos
         #self.ver_tabla_completa()
@@ -347,7 +336,7 @@ class Panel_Entradas:
         boton_generar_reporte = ttk.Button(seccion_botones_consulta, text='Generar reporte', width=15,
         command = lambda:
                         {
-                            self.controlador_entrada.realizar_reporte(ver_tabla = self.ver_tabla, registros = self.registros),
+                            self.controlador_entrada.realizar_reporte(registros = self.registros),
                             self.vaciar_campos()
                         })
         boton_generar_reporte.grid(row=2, column=0, pady=5)
@@ -373,12 +362,12 @@ class Panel_Entradas:
         #Advierte sobre la cantidad de registros
         if messagebox.askokcancel(title='Advertencia',message='Al ver todos los registros de la tabla, debe considerar que para reaizar esta consulta el tiempo de respuesta puede variar desde unos segundos hasta minutos, pasaria lo mismo si quiere realizar un reporte de esta consulta.\n\n ¿Quiere continuar?'):
             # Obtiene todos los registros
-            registros = self.query.obtener_registros_completos(self.ver_tabla)
+            self.registros = self.query.obtener_registros_completos()
             
             # Llena la tabla con los registros
-            self.llenar_tabla(registros)
+            self.llenar_tabla(self.registros)
 
-
+  
     def llenar_tabla(self, registros):
         '''Llena la tabla con los registros que cumplen con los criterios de búsqueda.
 

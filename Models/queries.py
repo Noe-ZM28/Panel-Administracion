@@ -12,26 +12,28 @@ class Queries:
     def __init__ (self, data_base = None):
         self.data_base = database_connection()
 
-    def obtener_campos_tabla(self, tabla):
+    def obtener_campos_tabla(self):
         """
         Obtiene los nombres de los campos en una tabla especificada.
 
         :param tabla: Nombre de la tabla.
-        :return: Lista de los nombres de los campos en la tabla.
+        :return: Lista de los nombres de los campos en la tabla, excluyendo los campos "vobo" y "QRPromo".
         """
-        query = f"DESCRIBE {tabla}"
+        query = f"DESCRIBE Entradas;"
         resultado = self.data_base.execute_query(query)
-        campos = [r[0] for r in resultado]
-        return list(campos)
+        exclusions = ["vobo", "QRPromo"]
+        campos = [r[0] for r in resultado if r[0] not in exclusions]
+        return campos
 
-    def obtener_registros_completos(self, table):
+
+    def obtener_registros_completos(self):
         """
         Obtiene todos los registros de una tabla especificada.
 
-        :param table: Nombre de la tabla.
         :return: Todos los registros de la tabla.
         """
-        query = f"select * from {table};"
+        query = f"SELECT id, Entrada, Salida, TiempoTotal, Importe, CorteInc, Placas, TarifaPreferente, TipoPromocion FROM Entradas;"
+        print(query)
         registros = self.data_base.execute_query(query)
         return registros
 
@@ -93,7 +95,7 @@ class Queries:
             where_clause = ""
 
         # Devolvemos la consulta SQL completa
-        query =  f"SELECT * FROM Entradas {where_clause}"
+        query =  f"SELECT id, Entrada, Salida, TiempoTotal, Importe, CorteInc, Placas, TarifaPreferente, TipoPromocion FROM Entradas {where_clause};"
         print(query)
         registros = self.data_base.execute_query(query)
 
@@ -106,3 +108,4 @@ class Queries:
         # if fecha_fin_entrada == "" or 0: fecha_fin_entrada == None
         # if fecha_inicio_salida == "" or 0: fecha_inicio_salida == None
         # if fecha_fin_salida == "" or 0: fecha_fin_salida == None
+

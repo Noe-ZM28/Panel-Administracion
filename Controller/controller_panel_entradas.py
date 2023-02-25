@@ -50,7 +50,6 @@ class EntradasController:
         campo_texto.config(text=fecha)
 
 
-
     def hacer_consulta_entrada(self, fecha_inicio_entrada:str, fecha_fin_entrada:str, fecha_inicio_salida:str, fecha_fin_salida:str, corte_numero:int, id:int) -> list:
         """
         Realiza una consulta SQL con los valores proporcionados por el usuario y devuelve una lista de registros obtenidos.
@@ -120,13 +119,11 @@ class EntradasController:
             messagebox.showwarning('Error', 'El formato de la fecha ingresada no es correcto o la fecha ingresada no es válida')
 
 
-
-    def realizar_reporte(self, ver_tabla, registros):
+    def realizar_reporte(self, registros):
         """
         Realiza un reporte de los registros obtenidos en una consulta y lo guarda en un archivo de Excel.
 
         Args:
-            ver_tabla (str): el nombre de la tabla que se está consultando
             registros (list): una lista de tuplas que contiene los registros obtenidos de la consulta
 
         Raises:
@@ -150,12 +147,14 @@ class EntradasController:
             worksheet = workbook.add_worksheet()
 
             # Obtener las columnas de la tabla
-            columnas = self.query.obtener_campos_tabla(ver_tabla)
+            columnas = self.query.obtener_campos_tabla()
 
             # Establecer el nombre de las columnas en la primera fila
             for i in range(len(columnas)):
                 worksheet.write(0, i, columnas[i])
-
+            
+            formato_moneda = workbook.add_format({'num_format': '$#,##0.00'})
+            
             # Escribir los registros
             for i, registro in enumerate(self.registros):
                 for j, valor in enumerate(registro):
@@ -164,8 +163,13 @@ class EntradasController:
                         fecha_hora = datetime.strptime(valor.strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
                         fecha_hora_str = datetime.strftime(fecha_hora, '%Y-%m-%d %H:%M:%S')
                         worksheet.write(i+1, j, fecha_hora_str)
+                    # Si el campo es "Importe", aplicar el formato de moneda
+                    elif columnas[j] == 'Importe':
+                        
+                        worksheet.write(i+1, j, valor, formato_moneda)
                     else:
                         worksheet.write(i+1, j, valor)
+
 
             # Escribir la fórmula de suma
             columna_importe = columnas.index('Importe')
@@ -173,7 +177,7 @@ class EntradasController:
             num_registros = len(self.registros)
             if num_registros > 0:
                 suma_importe = f'=SUM({xlsxwriter.utility.xl_rowcol_to_cell(1, columna_importe)}:{xlsxwriter.utility.xl_rowcol_to_cell(num_registros, columna_importe)})'
-                worksheet.write_formula(num_registros+4, columna_importe, suma_importe)
+                worksheet.write_formula(num_registros+4, columna_importe, suma_importe, cell_format=formato_moneda)
 
             # Cerrar el archivo de Excel
             workbook.close()
@@ -185,4 +189,5 @@ class EntradasController:
         except ValueError:messagebox.showerror('Error', 'Para realizar un reporte primero tiene que realizar una consulta que contenga registros')
         except AttributeError:messagebox.showerror('Error', 'El reporte no se puede generar ya que en los campos Entrada o Salida hay valores invalidos para realizar la consulta, favor de revisar y volver a intentar')
         except exceptions.FileCreateError:messagebox.showerror('Error', 'El reporte no se puede generar, seleccione el directorio para guardar el reporte y vuelva a intentar')
+
 
