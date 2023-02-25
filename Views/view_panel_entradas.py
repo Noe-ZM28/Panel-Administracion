@@ -7,7 +7,6 @@ from tkinter import PhotoImage
 
 from Config.config_tools import tools
 from Models.queries import Queries
-from Views.views_tools import Calendar_date
 
 
 from ttkthemes import ThemedStyle
@@ -20,11 +19,10 @@ from Controller.controller_panel_entradas import EntradasController
 class Panel_Entradas:
     '''Clase principal que maneja la interfaz gráfica del usuario.'''
 
-    def __init__(self):
+    def __init__(self, theme=None):
         '''
         Constructor de la clase. Crea la ventana principal, la tabla y los campos de consulta.
         '''
-
         # Establece la tabla que se visualizará por defecto
         self.ver_tabla = 'Entradas'
 
@@ -32,28 +30,18 @@ class Panel_Entradas:
         # Crea la ventana principal
         self.panel = tk.Tk()
 
+        self.theme = theme
+        if self.theme != None:
+            #temas xd
+            
+            style = ThemedStyle(self.panel)
+            style.theme_use(self.theme)
 
-        #temas xd
-        style = ThemedStyle(self.panel)
-        #style.theme_use('aquativo')
-        #style.theme_use('arc')
-        #style.theme_use('black')
-        #style.theme_use('blue')
-        #style.theme_use('breeze')
-        #style.theme_use('clearlooks')
-        #style.theme_use('elegance')
-        #style.theme_use('equilux')
-        #style.theme_use('itft1')
-        #style.theme_use('kroc')
-        #style.theme_use('plastik')
-        #style.theme_use('radiance')
-        #style.theme_use('scidblue')
-        #style.theme_use('smog')
-        #style.theme_use('ubuntu')
-        #style.theme_use('winxpblue')
 
         # Establece el tamaño de la ventana y su título
         self.panel.geometry()
+        #self.panel.resizable(False, False)
+
         self.panel.title(f'Panel de administración - {self.ver_tabla}')
 
 
@@ -77,6 +65,12 @@ class Panel_Entradas:
         # Crea las variables para el icono de calendario
         icono_calendario = tools_instance.read_path_config_file('images', 'icono_calendario')
         self.icono_calendario = PhotoImage(file=icono_calendario).subsample(25)
+
+        icono_salir = tools_instance.read_path_config_file('images', 'icono_salir')
+        self.icono_salir = PhotoImage(file=icono_salir).subsample(30)
+
+        icono_desconectar = tools_instance.read_path_config_file('images', 'icono_desconectar')
+        self.icono_desconectar = PhotoImage(file=icono_desconectar).subsample(30)
 
 
         # Crea las variables para el manejo de calendario
@@ -102,74 +96,20 @@ class Panel_Entradas:
         self.view_campos_consulta()
 
 
-        self.controlador_entrada = EntradasController()
+        self.controlador_entrada = EntradasController(self.theme)
 
 
         # Inicia el loop principal de la ventana
         self.panel.mainloop()
 
 
-    def view_tabla(self):
-        """
-        Crea una tabla en la interfaz y la llena con los datos de la base de datos.
-
-        Esta función utiliza el método `obtener_campos_tabla` de la instancia de la clase `query`
-        para obtener los nombres de las columnas de la tabla que se va a mostrar en la interfaz.
-        Luego, crea un `Treeview` con una columna por cada campo de la tabla, configura los encabezados
-        de las columnas y los tamaños de columna. Finalmente, inserta los datos en el `Treeview`.
-
-        """
-        # Crea un Frame para la tabla y lo configura para llenar todo el espacio disponible
-
-        seccion_tabla = ttk.LabelFrame(self.panel, text=f'Tabla - {self.ver_tabla}')
-        seccion_tabla.columnconfigure(0, weight=1, uniform='tabla')
-        seccion_tabla.rowconfigure(0, weight=1)
-        seccion_tabla.grid_propagate(True)
-        seccion_tabla.grid(row=0, column=0, sticky='nsew')
-
-
-        # Obtiene los nombres de las columnas de la tabla que se va a mostrar
-        columnas = self.query.obtener_campos_tabla()
-
-        # Crea un Treeview con una columna por cada campo de la tabla
-        style = ttk.Style()
-
-        #style.theme_use('xpnative')
-        self.tabla = ttk.Treeview(seccion_tabla, columns=(columnas))
-        self.tabla.config(height=15)
-
-        # Define los encabezados de columna
-        i = 1
-        for headd in (columnas):
-            self.tabla.heading(f'#{i}', text=headd)
-            self.tabla.column(f'#{i}', width=100)
-            i = i + 1
-        self.tabla.column('#0', width=10, stretch=False)
-        self.tabla.column('#1', width=50, stretch=False)
-
-        # Inserta datos
-        #self.ver_tabla_completa()
-
-        # Crea un Scrollbar vertical y lo asocia con el Treeview
-        scrollbar_Y = ttk.Scrollbar(seccion_tabla, orient='vertical', command=self.tabla.yview)
-        self.tabla.configure(yscroll=scrollbar_Y.set)
-        scrollbar_Y.grid(row=0, column=1, sticky='NS')
-
-        # Crea un Scrollbar horizontal y lo asocia con el Treeview
-        scrollbar_X = ttk.Scrollbar(seccion_tabla, orient='horizontal', command=self.tabla.xview)
-        self.tabla.configure(xscroll=scrollbar_X.set)
-        scrollbar_X.grid(row=1, column=0, sticky='EW')
-
-        # Empaqueta el Treeview en la ventana
-        self.tabla.grid(row=0, column=0, sticky='NESW')
-
-
     def view_campos_consulta(self):
         '''Crea y empaqueta los campos de consulta en la ventana.'''
 
         # Crear una seccion para todos los campos de texto
-        seccion_campos_consulta = ttk.LabelFrame(self.panel, text='Consulta de datos', padding=10)
-        seccion_campos_consulta.grid(row=0, column=2, sticky='n')
+        seccion_campos_consulta = ttk.LabelFrame(self.panel, text='', padding=10)
+        seccion_campos_consulta.grid_propagate(True)
+        seccion_campos_consulta.grid(row=0, column=0, sticky='nsew')
 
 
         seccion_botones_ayuda = ttk.LabelFrame(seccion_campos_consulta, text='Botones', padding=10)
@@ -343,16 +283,72 @@ class Panel_Entradas:
 
         # Crea un LabelFrame para los botones de desconectar y salir
         seccion_botones_salir = ttk.LabelFrame(seccion_campos_consulta, text='Salir')
-        seccion_botones_salir.grid(row=7, column=0, padx=10, pady=10, sticky='nsew')
+        seccion_botones_salir.grid(row=0, column=0, padx=10, pady=10, sticky='nsew')
 
         # Crea un botón y lo empaqueta en la seccion_botones_salir
-        boton_desconectar = ttk.Button(seccion_botones_salir, text='Desconectar', width=15)
+        boton_desconectar = ttk.Button(seccion_botones_salir, text='Desconectar', image=self.icono_desconectar)
         boton_desconectar.grid(row=0, column=0, pady=5)
 
         # Crea un botón y lo empaqueta en la seccion_botones_salir
-        boton_salir = ttk.Button(seccion_botones_salir, text='Salir', command=self.salir, width=15)
-        boton_salir.grid(row=2, column=0, pady=5)
+        boton_salir = ttk.Button(seccion_botones_salir, text='Salir', command=self.salir, image=self.icono_salir)
+        boton_salir.grid(row=0, column=1, pady=5)
         #######################################################################---
+
+
+    def view_tabla(self):
+        """
+        Crea una tabla en la interfaz y la llena con los datos de la base de datos.
+
+        Esta función utiliza el método `obtener_campos_tabla` de la instancia de la clase `query`
+        para obtener los nombres de las columnas de la tabla que se va a mostrar en la interfaz.
+        Luego, crea un `Treeview` con una columna por cada campo de la tabla, configura los encabezados
+        de las columnas y los tamaños de columna. Finalmente, inserta los datos en el `Treeview`.
+
+        """
+        # Crea un Frame para la tabla y lo configura para llenar todo el espacio disponible
+
+        seccion_tabla = ttk.LabelFrame(self.panel, text=f'Tabla - {self.ver_tabla}')
+        seccion_tabla.columnconfigure(0, weight=1, uniform='tabla')
+        seccion_tabla.rowconfigure(0, weight=1)
+        seccion_tabla.grid_propagate(True)
+        seccion_tabla.grid(row=1, column=0, sticky='nsew')
+
+
+        # Obtiene los nombres de las columnas de la tabla que se va a mostrar
+        columnas = self.query.obtener_campos_tabla()
+
+        # Crea un Treeview con una columna por cada campo de la tabla
+        style = ttk.Style()
+
+        #style.theme_use('xpnative')
+        self.tabla = ttk.Treeview(seccion_tabla, columns=(columnas))
+        self.tabla.config(height=15)
+
+        # Define los encabezados de columna
+        i = 1
+        for headd in (columnas):
+            self.tabla.heading(f'#{i}', text=headd)
+            self.tabla.column(f'#{i}', width=100)
+            i = i + 1
+        self.tabla.column('#0', width=10, stretch=False)
+        self.tabla.column('#1', width=50, stretch=False)
+
+        # Inserta datos
+        #self.ver_tabla_completa()
+
+        # Crea un Scrollbar vertical y lo asocia con el Treeview
+        scrollbar_Y = ttk.Scrollbar(seccion_tabla, orient='vertical', command=self.tabla.yview)
+        self.tabla.configure(yscroll=scrollbar_Y.set)
+        scrollbar_Y.grid(row=0, column=1, sticky='NS')
+
+        # Crea un Scrollbar horizontal y lo asocia con el Treeview
+        scrollbar_X = ttk.Scrollbar(seccion_tabla, orient='horizontal', command=self.tabla.xview)
+        self.tabla.configure(xscroll=scrollbar_X.set)
+        scrollbar_X.grid(row=1, column=0, sticky='EW')
+
+        # Empaqueta el Treeview en la ventana
+        self.tabla.grid(row=0, column=0, sticky='NESW')
+
 
 
 

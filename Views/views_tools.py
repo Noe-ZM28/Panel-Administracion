@@ -3,6 +3,7 @@ from tkcalendar import *
 from datetime import datetime
 from datetime import date
 
+from ttkthemes import ThemedStyle
 
 class Calendar_date:
     """
@@ -26,7 +27,7 @@ class Calendar_date:
     - sec: Variable de entero que almacena los segundos seleccionados.
     """
 
-    def __init__(self):
+    def __init__(self, theme = None):
         """
         Inicializa la clase Fecha_Hora, crea una ventana de Tkinter y los widgets necesarios para seleccionar una fecha y hora.
         """
@@ -35,6 +36,13 @@ class Calendar_date:
         self.master.title("Seleccionar fecha y hora")
         self.master.geometry("300x360")
         self.master.resizable(width=False, height=False)
+
+        self.theme = theme
+
+        if self.theme != None:
+            #temas xd
+            style = ThemedStyle(self.master)
+            style.theme_use(self.theme)
 
         # Creamos variables de cadena para los campos de hora, minutos y segundos
         self.hour = IntVar()

@@ -15,11 +15,13 @@ import os
 
 
 class EntradasController:
-    def __init__(self):
+    def __init__(self, theme = None):
         '''
         Constructor de la clase. Crea la ventana principal, la tabla y los campos de consulta.
         '''
         self.query = Queries()
+        self.theme = theme
+
 
     def actualizar_fecha(self, calendario, fecha, variable, campo_texto):
         """
@@ -34,9 +36,8 @@ class EntradasController:
         :type variable: tk.StringVar
         :param campo_texto: caja de texto donde se muestra la fecha seleccionada.
         :type campo_texto: tk.Label
-
         """
-        calendario = Calendar_date()
+        calendario = Calendar_date(self.theme)
         calendario.mostrar_calendario()
 
         fecha = calendario.selected_datetime
