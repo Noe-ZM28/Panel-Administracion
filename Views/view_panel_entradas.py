@@ -43,7 +43,7 @@ class Panel_Entradas:
         self.panel.geometry()
         #self.panel.resizable(False, False)
 
-        self.panel.title(f'Panel de administración - {self.ver_tabla}')
+        self.panel.title(f'Panel de administración reporte general - Cortes')
 
 
         # Configura la columna principal del panel para que use todo el espacio disponible
@@ -113,72 +113,78 @@ class Panel_Entradas:
     def view_campos_consulta(self):
         '''Crea y empaqueta los campos de consulta en la ventana.'''
 
-        seccion_campos_consulta = ttk.LabelFrame(self.panel, text='', padding=10)
-        seccion_campos_consulta.grid_propagate(True)
-        seccion_campos_consulta.grid(row=0, column=0, sticky=tk.NSEW)
+        seccion_principal = ttk.LabelFrame(self.panel, text='')
+        seccion_principal.columnconfigure(1, weight=1)
+        seccion_principal.grid_propagate(True)
+        seccion_principal.grid(row=0, column=0, sticky=tk.NSEW)
 
-        seccion_logo = ttk.LabelFrame(seccion_campos_consulta, text='', padding=10)
-        seccion_logo.grid(row=0, column=0, sticky=tk.NW) 
+
+        seccion_logo = ttk.LabelFrame(seccion_principal, text='')
+        seccion_logo.grid(row=0, column=0, sticky=tk.NW)
 
         etiqueta_logo = tk.Label(seccion_logo, image=self.logo_pase)
         etiqueta_logo.grid(row=0, column=0, sticky=tk.NW)
 
 
-        seccion_botones_ayuda = ttk.LabelFrame(seccion_campos_consulta, text='Botones', padding=10, width=200, height=100)
-        seccion_botones_ayuda.grid(row=0, column=1, padx=5, pady=5, sticky='NW')
+        seccion_menu_consulta = ttk.LabelFrame(seccion_principal, text='Selecciona tipo de consulta', padding=10)
+        seccion_menu_consulta.grid(row=0, column=1, padx=5, pady=5, sticky=tk.NSEW)
 
-
-
-        #######################################################################---
-        # Crear un boton para vaciar todos los campos
-        boton_vaciar_campos = ttk.Button(seccion_botones_ayuda, text='Vaciar campos', command=self.vaciar_campos)
+        boton_vaciar_campos = ttk.Button(seccion_menu_consulta, text='Reporte simple', command=self.mostrar_campos_simple)
         boton_vaciar_campos.grid(row=0, column=0, sticky='')
 
-        # Crea un botón para ver todos los registros
-        boton_ver_todo = ttk.Button(seccion_botones_ayuda, text='Vaciar tabla', command=self.vaciar_tabla)
-        boton_ver_todo.grid(row=1, column=0, sticky='')
+        boton_ver_todo = ttk.Button(seccion_menu_consulta, text='Reporte avanzado')
+        boton_ver_todo.grid(row=0, column=1, sticky='')
 
-        # Crea un botón para ver todos los registros
-        boton_ver_todo = ttk.Button(seccion_botones_ayuda, text='Ver todo', command=self.ver_tabla_completa)
-        boton_ver_todo.grid(row=2, column=0, sticky='')
+        # Configurar las columnas intermedias con un tamaño mínimo
+        seccion_menu_consulta.columnconfigure(2, minsize=50)
+        seccion_menu_consulta.columnconfigure(3, minsize=50)
+
+        boton_generar_reporte = ttk.Button(seccion_menu_consulta, text='Exportar reporte', width=15,
+        command = lambda:
+                        {
+                            self.controlador_entrada.realizar_reporte(registros = self.registros),
+                            self.vaciar_campos()
+                        })
+        boton_generar_reporte.grid(row=0, column=4, pady=5)
+
+
+        self.seccion_formulario_datos = ttk.LabelFrame(seccion_principal, text='Ingresa los datos de la consulta', padding=10)
+
+
+
+        # Crear un LabelFrame para la consulta de corte y folio
+        self.seccion_consulta = ttk.LabelFrame(self.seccion_formulario_datos, text='Consulta')
+
+        #######################################################################---
+        # Crear la leyenda para el campo de texto de la consulta de folio
+        etiqueta_folio = ttk.Label(self.seccion_consulta, text='Folio: ')
+        etiqueta_folio.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
+
+        # Crear los campos de texto para la consulta de folio
+        self.campo_texto_folio = tk.Entry(self.seccion_consulta, textvariable=self.variable_folio)
+        self.campo_texto_folio.grid(row=0, column=1, padx=5, pady=5)
+        #######################################################################---
+
+        #######################################################################---
+        # Crear la leyenda para el campo de texto de la consulta de corte
+        etiqueta_corte = ttk.Label(self.seccion_consulta, text='Corte: ')
+        etiqueta_corte.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
+
+        # Crear los campos de texto para la consulta de corte
+        self.campo_texto_corte = tk.Entry(self.seccion_consulta, textvariable=self.variable_corte_numero)
+        self.campo_texto_corte.grid(row=1, column=1, padx=5, pady=5)
         #######################################################################---
 
 
 
-
-
-
-        # # Crear un LabelFrame para la consulta de corte y folio
-        # seccion_consulta = ttk.LabelFrame(seccion_campos_consulta, text='Consulta')
-        # seccion_consulta.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')
-
-        # #######################################################################---
-        # # Crear la leyenda para el campo de texto de la consulta de corte
-        # etiqueta_corte = ttk.Label(seccion_consulta, text='Corte: ')
-        # etiqueta_corte.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
-
-        # # Crear los campos de texto para la consulta de corte
-        # self.campo_texto_corte = tk.Entry(seccion_consulta, textvariable=self.variable_corte_numero)
-        # self.campo_texto_corte.grid(row=0, column=1, padx=5, pady=5)
-        # #######################################################################---
-
-        # #######################################################################---
-        # # Crear la leyenda para el campo de texto de la consulta de folio
-        # etiqueta_folio = ttk.Label(seccion_consulta, text='Folio: ')
-        # etiqueta_folio.grid(row=3, column=0, padx=5, pady=5, sticky=tk.W)
-
-        # # Crear los campos de texto para la consulta de folio
-        # self.campo_texto_folio = tk.Entry(seccion_consulta, textvariable=self.variable_folio)
-        # self.campo_texto_folio.grid(row=3, column=1, padx=5, pady=5)
-        # #######################################################################---
-
-
-
+        # Crea un botón y lo empaqueta en la seccion_botones_consulta
+        boton_consulta = ttk.Button(self.seccion_consulta, text='Consulta', command = self.hacer_consulta_entrada,width=15)
+        boton_consulta.grid(row=2, column=2, pady=5)
 
 
         # #######################################################################---
         # # Crear un LabelFrame para las entradas
-        # seccion_entrada = ttk.LabelFrame(seccion_campos_consulta, text='Entradas')
+        # seccion_entrada = ttk.LabelFrame(seccion_principal, text='Entradas')
         # seccion_entrada.grid(row=3, column=0, padx=5, pady=5, sticky='nsew')
 
 
@@ -226,7 +232,7 @@ class Panel_Entradas:
 
         # #######################################################################---
         # # Crear un LabelFrame para las salidas
-        # seccion_salida = ttk.LabelFrame(seccion_campos_consulta, text='Salidas')
+        # seccion_salida = ttk.LabelFrame(seccion_principal, text='Salidas')
         # seccion_salida.grid(row=4, column=0, padx=5, pady=5, sticky='nsew')
 
 
@@ -275,13 +281,10 @@ class Panel_Entradas:
 
         # #######################################################################---
         # # Crea un LabelFrame para los botones de consulta
-        # seccion_botones_consulta = ttk.LabelFrame(seccion_campos_consulta, text='Consulta')
+        # seccion_botones_consulta = ttk.LabelFrame(seccion_principal, text='Consulta')
         # seccion_botones_consulta.grid(row=6, column=0, padx=5, pady=5, sticky='nsew')
 
-        # # Crea un botón y lo empaqueta en la seccion_botones_consulta
-        # boton_consulta = ttk.Button(seccion_botones_consulta, text='Consulta', command = self.hacer_consulta_entrada,width=15)
 
-        # boton_consulta.grid(row=0, column=0, pady=5)
 
 
         # # Crea un botón y lo empaqueta en la seccion_botones_consulta
@@ -293,18 +296,20 @@ class Panel_Entradas:
         #                 })
         # boton_generar_reporte.grid(row=2, column=0, pady=5)
 
+
+
+
         # Crea un LabelFrame para los botones de desconectar y salir
-        seccion_botones_salir = ttk.LabelFrame(seccion_campos_consulta, text='Salir')
+        seccion_botones_salir = ttk.LabelFrame(seccion_principal, text='Salir')
         seccion_botones_salir.grid(row=0, column=3, padx=5, pady=5, sticky='NW')
 
         # Crea un botón y lo empaqueta en la seccion_botones_salir
-        boton_desconectar = ttk.Button(seccion_botones_salir, text='Desconectar', image=self.icono_desconectar)
+        boton_desconectar = ttk.Button(seccion_botones_salir, text='Desconectar', command=self.desconectar,  image=self.icono_desconectar)
         boton_desconectar.grid(row=0, column=0, pady=5)
 
         # Crea un botón y lo empaqueta en la seccion_botones_salir
         boton_salir = ttk.Button(seccion_botones_salir, text='Salir', command=self.salir, image=self.icono_salir)
         boton_salir.grid(row=0, column=1, pady=5)
-        #######################################################################---
 
 
     def view_tabla(self):
@@ -362,6 +367,14 @@ class Panel_Entradas:
         self.tabla.grid(row=0, column=0, sticky='NESW')
 
 
+    def mostrar_campos_simple(self):
+        if self.seccion_formulario_datos.winfo_ismapped():
+            self.seccion_consulta.grid_forget()  # ocultar el labelframe
+            self.seccion_formulario_datos.grid_forget()
+        else:
+            self.seccion_consulta.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')  # mostrar el labelframe 
+            self.seccion_formulario_datos.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NSEW)
+
 
 
 
@@ -375,7 +388,7 @@ class Panel_Entradas:
             # Llena la tabla con los registros
             self.llenar_tabla(self.registros)
 
-  
+
     def llenar_tabla(self, registros):
         '''Llena la tabla con los registros que cumplen con los criterios de búsqueda.
 
@@ -455,6 +468,10 @@ class Panel_Entradas:
                                                                         corte_numero = self.variable_corte_numero.get(),
                                                                         id = self.variable_folio.get())
         self.llenar_tabla(self.registros)
+
+
+    def desconectar(self):
+        pass
 
 
     def salir(self):
