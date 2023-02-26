@@ -7,9 +7,7 @@ proyecto_dir = os.getcwd()
 sys.path.append(proyecto_dir)
 
 from Views.view_panel_entradas import Panel_Entradas
-from Views.view_login import Login
 
 #Ejemplo para correr el panel
 app = Panel_Entradas()
 
-#app = Login()
