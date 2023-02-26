@@ -53,6 +53,10 @@ class Panel_Entradas:
         # Crea las variables para los campos de consulta
         self.variable_corte_numero = StringVar()
         self.variable_folio = StringVar()
+        self.variable_tarifa_preferente = StringVar()
+        self.variable_tipo_promocion = StringVar()
+
+
         self.variable_fecha_inicio_entrada = StringVar()
         self.variable_fecha_fin_entrada = StringVar()
         self.variable_fecha_inicio_salida = StringVar()
@@ -129,17 +133,17 @@ class Panel_Entradas:
         seccion_menu_consulta = ttk.LabelFrame(seccion_principal, text='Selecciona tipo de consulta', padding=10)
         seccion_menu_consulta.grid(row=0, column=1, padx=5, pady=5, sticky=tk.NSEW)
 
-        boton_vaciar_campos = ttk.Button(seccion_menu_consulta, text='Reporte simple', command=self.mostrar_campos_simple)
-        boton_vaciar_campos.grid(row=0, column=0, sticky='')
+        boton_campos_simple = ttk.Button(seccion_menu_consulta, text='Consulta simple', command=self.mostrar_campos_simple)
+        boton_campos_simple.grid(row=0, column=0, sticky='')
 
-        boton_ver_todo = ttk.Button(seccion_menu_consulta, text='Reporte avanzado')
+        boton_ver_todo = ttk.Button(seccion_menu_consulta, text='Consulta avanzado')
         boton_ver_todo.grid(row=0, column=1, sticky='')
 
         # Configurar las columnas intermedias con un tamaño mínimo
         seccion_menu_consulta.columnconfigure(2, minsize=50)
         seccion_menu_consulta.columnconfigure(3, minsize=50)
 
-        boton_generar_reporte = ttk.Button(seccion_menu_consulta, text='Exportar reporte', width=15,
+        boton_generar_reporte = ttk.Button(seccion_menu_consulta, text='Generar reporte', width=15,
         command = lambda:
                         {
                             self.controlador_entrada.realizar_reporte(registros = self.registros),
@@ -153,11 +157,11 @@ class Panel_Entradas:
 
 
         # Crear un LabelFrame para la consulta de corte y folio
-        self.seccion_consulta = ttk.LabelFrame(self.seccion_formulario_datos, text='Consulta')
+        self.seccion_consulta = ttk.LabelFrame(self.seccion_formulario_datos, text='Consulta simple')
 
         #######################################################################---
         # Crear la leyenda para el campo de texto de la consulta de folio
-        etiqueta_folio = ttk.Label(self.seccion_consulta, text='Folio: ')
+        etiqueta_folio = ttk.Label(self.seccion_consulta, text='N° de boleto: ')
         etiqueta_folio.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
 
         # Crear los campos de texto para la consulta de folio
@@ -167,7 +171,7 @@ class Panel_Entradas:
 
         #######################################################################---
         # Crear la leyenda para el campo de texto de la consulta de corte
-        etiqueta_corte = ttk.Label(self.seccion_consulta, text='Corte: ')
+        etiqueta_corte = ttk.Label(self.seccion_consulta, text='N° de corte: ')
         etiqueta_corte.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
 
         # Crear los campos de texto para la consulta de corte
@@ -175,11 +179,49 @@ class Panel_Entradas:
         self.campo_texto_corte.grid(row=1, column=1, padx=5, pady=5)
         #######################################################################---
 
+        #######################################################################---
+        # Crear la leyenda para el campo de texto de la consulta de corte
+        etiqueta_tipo_tarifa = ttk.Label(self.seccion_consulta, text='Tipo de tarifa: ')
+        etiqueta_tipo_tarifa.grid(row=2, column=0, padx=5, pady=5, sticky=tk.W)
+
+
+        opciones = self.query.obtener_lista_de('TarifaPreferente')
+        # Crear la lista desplegable
+        self.lista_desplegable_tipo_tarifa = ttk.Combobox(self.seccion_consulta, values=opciones, textvariable=self.variable_tarifa_preferente, state='readonly')
+        self.lista_desplegable_tipo_tarifa.grid(row=2, column=1, padx=5, pady=5)
+        #######################################################################---
+
+
+        #######################################################################---
+        # Crear la leyenda para el campo de texto de la consulta de corte
+        etiqueta_tipo_promocion = ttk.Label(self.seccion_consulta, text='Tipo de promoción: ')
+        etiqueta_tipo_promocion.grid(row=3, column=0, padx=5, pady=5, sticky=tk.W)
+
+
+        opciones = self.query.obtener_lista_de('TipoPromocion')
+        # Crear la lista desplegable
+        self.lista_desplegable_tipo_promocion = ttk.Combobox(self.seccion_consulta, values=opciones, textvariable=self.variable_tipo_promocion, state='readonly')
+        self.lista_desplegable_tipo_promocion.grid(row=3, column=1, padx=5, pady=5)
+
+
+
+        # # Crear los campos de texto para la consulta de corte
+        # self.campo_texto_tipo_promocion = tk.Entry(self.seccion_consulta, textvariable=self.variable_tipo_promocion)
+        # self.campo_texto_tipo_promocion.grid(row=3, column=1, padx=5, pady=5)
+        #######################################################################---
+
+
 
 
         # Crea un botón y lo empaqueta en la seccion_botones_consulta
-        boton_consulta = ttk.Button(self.seccion_consulta, text='Consulta', command = self.hacer_consulta_entrada,width=15)
-        boton_consulta.grid(row=2, column=2, pady=5)
+        boton_consulta = ttk.Button(self.seccion_consulta, text='Limpiar campos', command = self.vaciar_campos, width=15)
+        boton_consulta.grid(row=4, column=0, pady=5)
+
+
+
+        # Crea un botón y lo empaqueta en la seccion_botones_consulta
+        boton_consulta = ttk.Button(self.seccion_consulta, text='Realizar consulta', command = self.hacer_consulta_entrada, width=15)
+        boton_consulta.grid(row=4, column=1, pady=5)
 
 
         # #######################################################################---
@@ -399,10 +441,6 @@ class Panel_Entradas:
         # Limpia la tabla antes de llenarla con nuevos registros
         self.vaciar_tabla()
 
-        # Si no hay registros que correspondan a la consulta, muestra un mensaje informativo
-        if len(registros) == 0:
-            messagebox.showinfo('Info', 'No hay registros que correspondan a la consulta establecida.')
-
         # Itera a través de los registros y los inserta en la tabla
         for registro in registros:
             self.tabla.insert('', 'end', values=registro)
@@ -438,18 +476,23 @@ class Panel_Entradas:
         # Limpia los campos de texto
         self.campo_texto_corte.delete(0, 'end')
         self.campo_texto_folio.delete(0, 'end')
+        self.lista_desplegable_tipo_tarifa.selection_clear()
+        self.lista_desplegable_tipo_tarifa.selection_clear()
 
 
-        self.campo_texto_entrada_fecha_inicio.config(text="")
-        self.campo_texto_entrada_fecha_fin.config(text="")
+        # self.campo_texto_entrada_fecha_inicio.config(text="")
+        # self.campo_texto_entrada_fecha_fin.config(text="")
+
+        # self.campo_texto_salida_fecha_fin.config(text="")
+        # self.campo_texto_salida_fecha_inicio.config(text="")
 
 
-        self.campo_texto_salida_fecha_fin.config(text="")
-        self.campo_texto_salida_fecha_inicio.config(text="")
 
         # Limpia las variables de control
         self.variable_corte_numero.set('')
         self.variable_folio.set('')
+        self.variable_tarifa_preferente.set('')
+        self.variable_tipo_promocion.set('')
         self.variable_fecha_inicio_entrada.set('')
         self.variable_fecha_fin_entrada.set('')
         self.variable_fecha_inicio_salida.set('')
@@ -461,13 +504,16 @@ class Panel_Entradas:
         Realiza una consulta de entrada con los parámetros proporcionados por el usuario y llena la tabla con los resultados obtenidos.
         """
         self.registros = self.controlador_entrada.hacer_consulta_entrada(
+                                                                        corte_numero = self.variable_corte_numero.get(),
+                                                                        id = self.variable_folio.get(),
+                                                                        tarifa_preferente = self.variable_tarifa_preferente.get(),
+                                                                        tipo_promocion = self.variable_tipo_promocion.get(),
                                                                         fecha_inicio_entrada = self.variable_fecha_inicio_entrada.get(),
                                                                         fecha_fin_entrada = self.variable_fecha_fin_entrada.get(),
                                                                         fecha_inicio_salida = self.variable_fecha_inicio_salida.get(),
-                                                                        fecha_fin_salida = self.variable_fecha_fin_salida.get(),
-                                                                        corte_numero = self.variable_corte_numero.get(),
-                                                                        id = self.variable_folio.get())
-        self.llenar_tabla(self.registros)
+                                                                        fecha_fin_salida = self.variable_fecha_fin_salida.get())
+        if self.registros:
+            self.llenar_tabla(self.registros)
 
 
     def desconectar(self):

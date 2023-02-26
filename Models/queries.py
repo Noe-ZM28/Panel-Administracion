@@ -25,6 +25,14 @@ class Queries:
         campos = [r[0] for r in resultado if r[0] not in exclusions]
         return campos
 
+    def obtener_lista_de(self, listar):
+        query = f"SELECT DISTINCT {listar} FROM entradas;"
+        resultado = self.data_base.execute_query(query)
+        lista = [r[0] for r in resultado]
+        if None in lista:
+            return []
+        return lista
+
 
     def obtener_registros_completos(self):
         """
@@ -60,6 +68,14 @@ class Queries:
         if 'corte_numero' in parametros:
             where.append(f"CorteInc = {parametros['corte_numero']}")
 
+        # Si se especifica ¨la tarifa preferente, agregamos una cláusula WHERE a la lista
+        if 'tarifa_preferente' in parametros:
+            where.append(f"TarifaPreferente = '{parametros['tarifa_preferente']}'")
+
+        # Si se especifica el tipo de promocion, agregamos una cláusula WHERE a la lista
+        if 'tipo_promocion' in parametros:
+            where.append(f"TipoPromocion = '{parametros['tipo_promocion']}'")
+
         # Si se especifica una fecha de inicio y una fecha de fin para entradas, agregamos una cláusula WHERE que seleccione
         # todas las entradas entre esas dos fechas. Si solo se especifica una fecha de inicio o una fecha de fin para entradas,
         # seleccionamos todas las entradas a partir de la fecha de inicio o hasta la fecha de fin, respectivamente.
@@ -80,6 +96,7 @@ class Queries:
 
         elif 'fecha_inicio_salida' in parametros:
             where.append(f"Salida >= '{parametros['fecha_inicio_salida']}'")
+
         elif  'fecha_fin_salida' in parametros:
             where.append(f"Salida <= '{parametros['fecha_fin_salida']}'")
 
@@ -99,13 +116,9 @@ class Queries:
         print(query)
         registros = self.data_base.execute_query(query)
 
+        if len(registros) == 0:
+            messagebox.showinfo('Info', 'No hay registros que correspondan a la consulta establecida.')
+            registros = []
         return registros
 
-
-        # if corte_numero == "" or 0: corte_numero == None
-        # if id == "" or 0: id == None
-        # if fecha_inicio_entrada == "" or 0: fecha_inicio_entrada == None
-        # if fecha_fin_entrada == "" or 0: fecha_fin_entrada == None
-        # if fecha_inicio_salida == "" or 0: fecha_inicio_salida == None
-        # if fecha_fin_salida == "" or 0: fecha_fin_salida == None
 

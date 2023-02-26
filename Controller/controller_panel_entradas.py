@@ -51,7 +51,7 @@ class EntradasController:
         campo_texto.config(text=fecha)
 
 
-    def hacer_consulta_entrada(self, fecha_inicio_entrada:str, fecha_fin_entrada:str, fecha_inicio_salida:str, fecha_fin_salida:str, corte_numero:int, id:int) -> list:
+    def hacer_consulta_entrada(self, fecha_inicio_entrada:str, fecha_fin_entrada:str, fecha_inicio_salida:str, fecha_fin_salida:str, corte_numero:int, id:int, tipo_promocion:str, tarifa_preferente:str) -> list:
         """
         Realiza una consulta SQL con los valores proporcionados por el usuario y devuelve una lista de registros obtenidos.
 
@@ -70,6 +70,7 @@ class EntradasController:
         ValueError: si los campos para la consulta están vacíos.
         TypeError: si el formato de la fecha ingresada no es correcto o la fecha ingresada no es válida.
         """
+        
         try:
             parametros = {}
 
@@ -78,6 +79,8 @@ class EntradasController:
             self.fecha_fin_entrada = fecha_fin_entrada
             self.fecha_inicio_salida = fecha_inicio_salida
             self.fecha_fin_salida = fecha_fin_salida
+            self.tarifa_preferente = tarifa_preferente
+            self.tipo_promocion = tipo_promocion
             self.corte_numero = corte_numero
             self.id = id
 
@@ -101,6 +104,10 @@ class EntradasController:
                 parametros['fecha_fin_salida'] = str(fecha_fin_salida)
                 if len(fecha_fin_salida) != 19:
                     raise TypeError('Error, el valor de los campos es superior a 19 caracteres')
+
+            if tipo_promocion != '':parametros['tipo_promocion'] = str(tipo_promocion)
+
+            if tarifa_preferente != '':parametros['tarifa_preferente'] = str(tarifa_preferente)
 
             if corte_numero != '':parametros['corte_numero'] = int(corte_numero)
 
