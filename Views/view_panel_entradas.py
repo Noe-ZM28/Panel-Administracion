@@ -174,9 +174,11 @@ class Panel_Entradas:
         etiqueta_corte = ttk.Label(self.seccion_consulta, text='N° de corte: ')
         etiqueta_corte.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
 
-        # Crear los campos de texto para la consulta de corte
-        self.campo_texto_corte = tk.Entry(self.seccion_consulta, textvariable=self.variable_corte_numero)
-        self.campo_texto_corte.grid(row=1, column=1, padx=5, pady=5)
+
+        opciones = self.query.obtener_lista_de('CorteInc', 'Y')
+        # Crear la lista desplegable
+        self.lista_desplegable_corte = ttk.Combobox(self.seccion_consulta, values=opciones, textvariable=self.variable_corte_numero, state='readonly', height=5)
+        self.lista_desplegable_corte.grid(row=1, column=1, padx=5, pady=5)
         #######################################################################---
 
         #######################################################################---
@@ -203,26 +205,16 @@ class Panel_Entradas:
         self.lista_desplegable_tipo_promocion = ttk.Combobox(self.seccion_consulta, values=opciones, textvariable=self.variable_tipo_promocion, state='readonly')
         self.lista_desplegable_tipo_promocion.grid(row=3, column=1, padx=5, pady=5)
 
-
-
-        # # Crear los campos de texto para la consulta de corte
-        # self.campo_texto_tipo_promocion = tk.Entry(self.seccion_consulta, textvariable=self.variable_tipo_promocion)
-        # self.campo_texto_tipo_promocion.grid(row=3, column=1, padx=5, pady=5)
         #######################################################################---
-
-
-
-
-        # Crea un botón y lo empaqueta en la seccion_botones_consulta
-        boton_consulta = ttk.Button(self.seccion_consulta, text='Limpiar campos', command = self.vaciar_campos, width=15)
-        boton_consulta.grid(row=4, column=0, pady=5)
-
 
 
         # Crea un botón y lo empaqueta en la seccion_botones_consulta
         boton_consulta = ttk.Button(self.seccion_consulta, text='Realizar consulta', command = self.hacer_consulta_entrada, width=15)
-        boton_consulta.grid(row=4, column=1, pady=5)
+        boton_consulta.grid(row=4, column=0, pady=5)
 
+        # Crea un botón y lo empaqueta en la seccion_botones_consulta
+        boton_consulta = ttk.Button(self.seccion_consulta, text='Limpiar campos', command = self.vaciar_campos, width=15)
+        boton_consulta.grid(row=4, column=1, pady=5)
 
         # #######################################################################---
         # # Crear un LabelFrame para las entradas
@@ -413,6 +405,7 @@ class Panel_Entradas:
         if self.seccion_formulario_datos.winfo_ismapped():
             self.seccion_consulta.grid_forget()  # ocultar el labelframe
             self.seccion_formulario_datos.grid_forget()
+            self.vaciar_campos()
         else:
             self.seccion_consulta.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')  # mostrar el labelframe 
             self.seccion_formulario_datos.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NSEW)
@@ -441,9 +434,10 @@ class Panel_Entradas:
         # Limpia la tabla antes de llenarla con nuevos registros
         self.vaciar_tabla()
 
-        # Itera a través de los registros y los inserta en la tabla
-        for registro in registros:
-            self.tabla.insert('', 'end', values=registro)
+        if self.registros:
+            for registro in registros:
+                self.tabla.insert('', 'end', values=registro)
+
 
 
     def vaciar_tabla(self):
@@ -474,7 +468,7 @@ class Panel_Entradas:
         - variable_fecha_fin_salida
         """
         # Limpia los campos de texto
-        self.campo_texto_corte.delete(0, 'end')
+        self.lista_desplegable_corte.selection_clear()
         self.campo_texto_folio.delete(0, 'end')
         self.lista_desplegable_tipo_tarifa.selection_clear()
         self.lista_desplegable_tipo_tarifa.selection_clear()
@@ -512,8 +506,7 @@ class Panel_Entradas:
                                                                         fecha_fin_entrada = self.variable_fecha_fin_entrada.get(),
                                                                         fecha_inicio_salida = self.variable_fecha_inicio_salida.get(),
                                                                         fecha_fin_salida = self.variable_fecha_fin_salida.get())
-        if self.registros:
-            self.llenar_tabla(self.registros)
+        self.llenar_tabla(self.registros)
 
 
     def desconectar(self):

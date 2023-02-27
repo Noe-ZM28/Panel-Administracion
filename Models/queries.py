@@ -25,13 +25,15 @@ class Queries:
         campos = [r[0] for r in resultado if r[0] not in exclusions]
         return campos
 
-    def obtener_lista_de(self, listar):
-        query = f"SELECT DISTINCT {listar} FROM entradas;"
+    def obtener_lista_de(self, listar, revez = None):
+        if revez == 'Y': query = f"SELECT DISTINCT {listar} FROM entradas ORDER BY {listar} DESC;"
+        if revez == None: query = f"SELECT DISTINCT {listar} FROM entradas;" 
+            
         resultado = self.data_base.execute_query(query)
         lista = [r[0] for r in resultado]
-        if None in lista:
-            return []
-        return lista
+        lista_sin_nones = list(filter(lambda x: x is not None, lista))
+        return lista_sin_nones
+
 
 
     def obtener_registros_completos(self):
@@ -45,7 +47,7 @@ class Queries:
         registros = self.data_base.execute_query(query)
         return registros
 
-    def hacer_consulta_sql_entradas(self, parametros):#self, fecha_inicio_entrada = None, fecha_fin_entrada = None, fecha_inicio_salida = None, fecha_fin_salida = None, corte_numero = None, id = None):
+    def hacer_consulta_sql_entradas(self, parametros):
         """
         Crea una consulta SQL dependiendo de los valores de los campos de consulta.
 
@@ -118,7 +120,6 @@ class Queries:
 
         if len(registros) == 0:
             messagebox.showinfo('Info', 'No hay registros que correspondan a la consulta establecida.')
-            registros = []
         return registros
 
 
