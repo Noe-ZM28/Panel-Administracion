@@ -51,7 +51,8 @@ class EntradasController:
         campo_texto.config(text=fecha)
 
 
-    def hacer_consulta_entrada(self, fecha_inicio_entrada:str, fecha_fin_entrada:str, fecha_inicio_salida:str, fecha_fin_salida:str, corte_numero:int, id:int, tipo_promocion:str, tarifa_preferente:str) -> list:
+    def hacer_consulta_entrada(self, id:int, tarifa_preferente:str, fecha_inicio_entrada:str, fecha_fin_entrada:str, fecha_inicio_salida:str, fecha_fin_salida:str, tiempo_dentro:str, tiempo_dentro_mayor:str, tiempo_dentro_menor:str, tipo_promocion:str, corte_numero:int, corte_numero_inicio:int, corte_numero_fin:int, tiempo_ingreso:str, tiempo_ingreso_mayor:str, tiempo_ingreso_menor:str, tarifa:str) -> list:
+
         """
         Realiza una consulta SQL con los valores proporcionados por el usuario y devuelve una lista de registros obtenidos.
 
@@ -75,43 +76,43 @@ class EntradasController:
             parametros = {}
 
             # Obtener los valores de los campos de consulta
+            self.id = id
+            self.tarifa_preferente = tarifa_preferente
+            self.tipo_promocion = tipo_promocion
             self.fecha_inicio_entrada = fecha_inicio_entrada
             self.fecha_fin_entrada = fecha_fin_entrada
             self.fecha_inicio_salida = fecha_inicio_salida
             self.fecha_fin_salida = fecha_fin_salida
-            self.tarifa_preferente = tarifa_preferente
-            self.tipo_promocion = tipo_promocion
+            self.tiempo_dentro = tiempo_dentro
+            self.tiempo_dentro_mayor = tiempo_dentro_mayor
+            self.tiempo_dentro_menor = tiempo_dentro_menor
             self.corte_numero = corte_numero
-            self.id = id
+            self.corte_numero_inicio = corte_numero_inicio
+            self.corte_numero_fin = corte_numero_fin
+            self.tiempo_ingreso = tiempo_ingreso
+            self.tiempo_ingreso_mayor = tiempo_ingreso_mayor
+            self.tiempo_ingreso_menor = tiempo_ingreso_menor
+            self.tarifa = tarifa
+
 
             # Validar y agregar los parámetros a la consulta
-            if fecha_inicio_entrada != '':
-                if len(fecha_inicio_entrada) < 19 or len(fecha_inicio_entrada) > 19:
-                    raise TypeError('Error, el valor de los campos es superior a 19 caracteres')
-                parametros['fecha_inicio_entrada'] = str(fecha_inicio_entrada)
-
-            if fecha_fin_entrada != '':
-                if len(fecha_fin_entrada) != 19:
-                    raise TypeError('Error, el valor de los campos es superior a 19 caracteres')
-                parametros['fecha_fin_entrada'] = str(fecha_fin_entrada)
-
-            if fecha_inicio_salida != '':
-                if len(fecha_inicio_salida) != 19:
-                    raise TypeError('Error, el valor de los campos es superior a 19 caracteres')
-                parametros['fecha_inicio_salida'] = str(fecha_inicio_salida)
-
-            if fecha_fin_salida != '':
-                parametros['fecha_fin_salida'] = str(fecha_fin_salida)
-                if len(fecha_fin_salida) != 19:
-                    raise TypeError('Error, el valor de los campos es superior a 19 caracteres')
-
-            if tipo_promocion != '':parametros['tipo_promocion'] = str(tipo_promocion)
-
-            if tarifa_preferente != '':parametros['tarifa_preferente'] = str(tarifa_preferente)
-
-            if corte_numero != '':parametros['corte_numero'] = int(corte_numero)
-
-            if id != '':parametros['id'] = int(id)
+            if id != '': parametros['id'] = int(id)
+            if tarifa_preferente != '': parametros['tarifa_preferente'] = str(tarifa_preferente)
+            if tipo_promocion != '': parametros['tipo_promocion'] = str(tipo_promocion)
+            if fecha_inicio_entrada != '': parametros['fecha_inicio_entrada'] = str(fecha_inicio_entrada)
+            if fecha_fin_entrada != '': parametros['fecha_fin_entrada'] = str(fecha_fin_entrada)
+            if fecha_inicio_salida != '': parametros['fecha_inicio_salida'] = str(fecha_inicio_salida)
+            if fecha_fin_salida != '': parametros['fecha_fin_salida'] = str(fecha_fin_salida)
+            if tiempo_dentro != '': parametros['tiempo_dentro'] = str(tiempo_dentro)
+            if tiempo_dentro_mayor != '': parametros['tiempo_dentro_mayor'] = int(tiempo_dentro_mayor)
+            if tiempo_dentro_menor != '': parametros['tiempo_dentro_menor'] = int(tiempo_dentro_menor)
+            if corte_numero != '': parametros['corte_numero'] = int(corte_numero)
+            if corte_numero_inicio != '': parametros['corte_numero_inicio'] = int(corte_numero_inicio)
+            if corte_numero_fin != '': parametros['corte_numero_fin'] = int(corte_numero_fin)
+            if tiempo_ingreso != '': parametros['tiempo_ingreso'] = str(tiempo_ingreso)
+            if tiempo_ingreso_mayor != '': parametros['tiempo_ingreso_mayor'] = int(tiempo_ingreso_mayor)
+            if tiempo_ingreso_menor != '': parametros['tiempo_ingreso_menor'] = int(tiempo_ingreso_menor)
+            if tarifa != '': parametros['tarifa'] = str(tarifa)
 
 
             # Validar que se hayan proporcionado parámetros para la consulta

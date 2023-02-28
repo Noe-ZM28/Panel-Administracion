@@ -54,17 +54,41 @@ class Panel_Entradas:
         self.panel.columnconfigure(0, weight=1)
 
 
-        # Crea las variables para los campos de consulta
-        self.variable_corte_numero = StringVar()
+        # Crea las variables para la consulta simple
+
         self.variable_folio = StringVar()
+
         self.variable_tarifa_preferente = StringVar()
-        self.variable_tipo_promocion = StringVar()
 
 
         self.variable_fecha_inicio_entrada = StringVar()
         self.variable_fecha_fin_entrada = StringVar()
         self.variable_fecha_inicio_salida = StringVar()
         self.variable_fecha_fin_salida = StringVar()
+
+
+        self.variable_tiempo_dentro = StringVar()
+        self.variable_tiempo_dentro_mayor = StringVar()
+        self.variable_tiempo_dentro_menor = StringVar()
+
+
+        self.variable_tipo_promocion = StringVar()
+
+
+        self.variable_corte_numero = StringVar()
+        self.variable_corte_inicio = StringVar()
+        self.variable_corte_fin = StringVar()
+
+
+        self.variable_tiempo_ingreso = StringVar()
+        self.variable_tiempo_ingreso_mayor = StringVar()
+        self.variable_tiempo_ingreso_menor = StringVar()
+
+
+        self.variable_tarifa = StringVar()
+
+
+
 
 
         #instancia de la clase de herramientas
@@ -123,7 +147,8 @@ class Panel_Entradas:
         #Label frame principal
         seccion_principal = ttk.LabelFrame(self.panel, text='')
         seccion_principal.columnconfigure(1, weight=1)
-        seccion_principal.grid_propagate(True)
+        #seccion_principal.grid_propagate(True)
+        seccion_principal.propagate(True)
         seccion_principal.grid(row=0, column=0, sticky=tk.NSEW)
 
 
@@ -355,8 +380,40 @@ class Panel_Entradas:
             seccion_promociones = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Promociones')
             seccion_promociones.grid(row=0, column=2, padx=5, pady=5, sticky=tk.NW)
 
-            etiqueta_fecha_fin_salida = ttk.Label(seccion_promociones, text='Fecha fin:')
-            etiqueta_fecha_fin_salida.grid(row=0, column=0, sticky=tk.NW)
+
+
+            #ARREGLAR ESTO
+            self.lista_promociones = tk.Listbox(seccion_promociones, selectmode="multiple")
+            self.variable_tipo_promocion = self.lista_promociones.curselection()
+            self.lista_promociones.grid(row=0, column=0)
+
+            promociones = self.query.obtener_lista_de('TarifaPreferente')
+            for promocion in promociones:
+                self.lista_promociones.insert(tk.END, promocion)
+
+
+
+
+
+
+
+            #tarifas = self.query.obtener_lista_de('TarifaPreferente')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -449,7 +506,7 @@ class Panel_Entradas:
             self.tabla.heading(f'#{i}', text=headd)
             self.tabla.column(f'#{i}', width=100)
             i = i + 1
-        self.tabla.column('#0', width=10, stretch=False)
+        self.tabla.column('#0', width=0, stretch=False)
         self.tabla.column('#1', width=50, stretch=False)
 
         # Inserta datos
@@ -549,18 +606,20 @@ class Panel_Entradas:
         - variable_fecha_inicio_salida
         - variable_fecha_fin_salida
         """
-        # Limpia los campos de texto
+        # Limpia los campos de consulta simple
         self.lista_desplegable_corte.selection_clear()
         self.campo_texto_folio.delete(0, 'end')
         self.lista_desplegable_tipo_tarifa.selection_clear()
         self.lista_desplegable_tipo_tarifa.selection_clear()
 
 
+        # Limpia los campos de consulta avanzada
         self.campo_texto_entrada_fecha_inicio.config(text="")
         self.campo_texto_entrada_fecha_fin.config(text="")
 
         self.campo_texto_salida_fecha_fin.config(text="")
         self.campo_texto_salida_fecha_inicio.config(text="")
+        self.lista_promociones.selection_clear(0, 'end')
 
 
 
@@ -580,14 +639,40 @@ class Panel_Entradas:
         Realiza una consulta de entrada con los parámetros proporcionados por el usuario y llena la tabla con los resultados obtenidos.
         """
         self.registros = self.controlador_entrada.hacer_consulta_entrada(
-                                                                        corte_numero = self.variable_corte_numero.get(),
-                                                                        id = self.variable_folio.get(),
-                                                                        tarifa_preferente = self.variable_tarifa_preferente.get(),
-                                                                        tipo_promocion = self.variable_tipo_promocion.get(),
-                                                                        fecha_inicio_entrada = self.variable_fecha_inicio_entrada.get(),
-                                                                        fecha_fin_entrada = self.variable_fecha_fin_entrada.get(),
-                                                                        fecha_inicio_salida = self.variable_fecha_inicio_salida.get(),
-                                                                        fecha_fin_salida = self.variable_fecha_fin_salida.get())
+                                                                            id = self.variable_folio.get(),
+                                                                            tarifa_preferente = self.variable_tarifa_preferente.get(),
+
+
+                                                                            fecha_inicio_entrada = self.variable_fecha_inicio_entrada.get(),
+                                                                            fecha_fin_entrada = self.variable_fecha_fin_entrada.get(),
+                                                                            fecha_inicio_salida = self.variable_fecha_inicio_salida.get(),
+                                                                            fecha_fin_salida = self.variable_fecha_fin_salida.get(),
+
+
+                                                                            tiempo_dentro = self.variable_tiempo_dentro.get(),
+                                                                            tiempo_dentro_mayor = self.variable_tiempo_dentro_mayor.get(),
+                                                                            tiempo_dentro_menor = self.variable_tiempo_dentro_menor.get(),
+
+
+                                                                            #promocion = self.variable_tipo_promocion.get(),
+
+
+                                                                            corte_numero = self.variable_corte_numero.get(),
+                                                                            corte_numero_inicio = self.variable_corte_inicio.get(),
+                                                                            corte_numero_fin = self.variable_corte_fin.get(),
+
+
+                                                                            tiempo_ingreso = self.variable_tiempo_ingreso.get(),
+                                                                            tiempo_ingreso_mayor = self.variable_tiempo_ingreso_mayor.get(),
+                                                                            tiempo_ingreso_menor = self.variable_tiempo_ingreso_menor.get(),
+
+
+                                                                            tarifa = self.variable_tarifa.get())
+
+
+
+
+
         self.llenar_tabla(self.registros)
 
 
