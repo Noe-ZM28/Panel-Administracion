@@ -97,22 +97,61 @@ class EntradasController:
             # Validar y agregar los parámetros a la consulta
             if id != '': parametros['id'] = int(id)
 
+
             if tarifa_preferente != '': parametros['tarifa_preferente'] = str(tarifa_preferente)
+
 
             if tipo_promocion != '': parametros['tipo_promocion'] = str(tipo_promocion)
 
-            if fecha_inicio_entrada != '': parametros['fecha_inicio_entrada'] = str(fecha_inicio_entrada)
-            if fecha_fin_entrada != '': parametros['fecha_fin_entrada'] = str(fecha_fin_entrada)
-            if fecha_inicio_salida != '': parametros['fecha_inicio_salida'] = str(fecha_inicio_salida)
-            if fecha_fin_salida != '': parametros['fecha_fin_salida'] = str(fecha_fin_salida)
+
+            if fecha_inicio_entrada != '':
+                if len(fecha_inicio_entrada) != 19 or len(fecha_inicio_entrada) > 19:
+                    raise ValueError('Error, La cantidad de caracteres no corresponde al formato de fecha')
+                parametros['fecha_inicio_entrada'] = str(fecha_inicio_entrada)
+
+            if fecha_fin_entrada != '':
+                if len(fecha_fin_entrada) != 19:
+                    raise ValueError('Error, La cantidad de caracteres no corresponde al formato de fecha')
+                parametros['fecha_fin_entrada'] = str(fecha_fin_entrada)
+
+            if 'fecha_inicio_entrada' in parametros and 'fecha_fin_entrada' in parametros:
+                if parametros['fecha_inicio_entrada'] > parametros['fecha_fin_entrada']:
+                    raise ValueError("La fecha de inicio debe ser menor o igual que la fecha final.")
+
+
+            if fecha_inicio_salida != '':
+                if len(fecha_inicio_salida) != 19:
+                    raise ValueError('Error, La cantidad de caracteres no corresponde al formato de fecha')
+                parametros['fecha_inicio_salida'] = str(fecha_inicio_salida)
+
+            if fecha_fin_salida != '':
+                if len(fecha_fin_salida) != 19:
+                    raise ValueError('Error, La cantidad de caracteres no corresponde al formato de fecha')
+                parametros['fecha_fin_salida'] = str(fecha_fin_salida)
+
+            if 'fecha_inicio_salida' in parametros and 'fecha_fin_salida' in parametros:
+                if parametros['fecha_inicio_salida'] > parametros['fecha_fin_salida']:
+                    raise ValueError("La fecha de inicio debe ser menor o igual que la fecha final.")
+
+
+
+
+
 
             if tiempo_dentro != '': parametros['tiempo_dentro'] = str(tiempo_dentro)
             if tiempo_dentro_mayor != '': parametros['tiempo_dentro_mayor'] = int(tiempo_dentro_mayor)
             if tiempo_dentro_menor != '': parametros['tiempo_dentro_menor'] = int(tiempo_dentro_menor)
 
-            if corte_numero != '': parametros['corte_numero'] = int(corte_numero)
-            if corte_numero_inicio != '': parametros['corte_numero_inicio'] = int(corte_numero_inicio)
-            if corte_numero_fin != '': parametros['corte_numero_fin'] = int(corte_numero_fin)
+
+            if corte_numero != '':parametros['corte_numero'] = int(corte_numero)
+            if corte_numero_inicio != '':parametros['corte_numero_inicio'] = int(corte_numero_inicio)
+            if corte_numero_fin != '':parametros['corte_numero_fin'] = int(corte_numero_fin)
+
+            if 'corte_numero_inicio' in parametros and 'corte_numero_fin' in parametros:
+                if parametros['corte_numero_inicio'] > parametros['corte_numero_fin']:
+                    raise ValueError("El corte de inicio debe ser menor o igual que el corte final.")
+
+
 
             if tiempo_ingreso != '': parametros['tiempo_ingreso'] = str(tiempo_ingreso)
             if tiempo_ingreso_mayor != '': parametros['tiempo_ingreso_mayor'] = int(tiempo_ingreso_mayor)
@@ -121,16 +160,25 @@ class EntradasController:
 
             print (parametros)
             # Validar que se hayan proporcionado parámetros para la consulta
-            if parametros == {}:raise ValueError('Error: los campos están vacíos')
+            if parametros == {}:raise ValueError('Los campos están vacíos')
 
             # Realizar la consulta y devolver la lista de registros obtenidos
             registros = self.query.hacer_consulta_sql_entradas(parametros)
             return registros
 
-        except ValueError:
-            messagebox.showwarning('Error', 'Por favor introduzca un dato válido para realizar la consulta.')
-        except TypeError:
-            messagebox.showwarning('Error', 'El formato de la fecha ingresada no es correcto o la fecha ingresada no es válida')
+
+
+
+
+
+
+
+
+
+        except ValueError as e:
+            messagebox.showwarning('Error', f'Error: {e}\nPor favor introduzca un dato válido para realizar la consulta.')
+        except TypeError as e:
+            messagebox.showwarning('Error', f'Error: {e}\nEl formato de la fecha ingresada no es correcto o la fecha ingresada no es válida')
 
 
     def realizar_reporte(self, registros):
@@ -143,15 +191,14 @@ class EntradasController:
         Raises:
             TypeError: Si no se ha realizado una consulta antes de generar un reporte.
             ValueError: Si la consulta está vacía y no se puede generar un reporte.
-            AttributeError: Si hay valores inválidos en los campos Entrada o Salida para realizar la consulta.
             exceptions.FileCreateError: Si el archivo de Excel no se puede crear.
         """
         self.registros = registros
 
         try:
             # Verificar que se haya realizado una consulta antes de generar un reporte
-            if self.registros is None: raise TypeError('Error: no se ha realizado una consulta antes de generar un reporte')
-            if len(self.registros) == 0: raise ValueError('Error: la consulta esta vacia y no se puede generar un reporte')
+            if self.registros is None: raise TypeError('Primero genera una consulta antes de generar un reporte')
+            if len(self.registros) == 0: raise ValueError('La consulta esta vacia y no se puede generar un reporte')
 
             # Obtener la ruta y el nombre del archivo donde se guardará el reporte
             ruta_archivo = filedialog.asksaveasfilename(defaultextension='.xlsx', initialfile=f'reporte_')
@@ -199,9 +246,8 @@ class EntradasController:
             messagebox.showinfo('Mensaje', 'El reporte fue generado con exito')
 
         #Manejo de errores
-        except TypeError:messagebox.showerror('Error', 'Para realizar un reporte primero tiene que realizar una consulta')
-        except ValueError:messagebox.showerror('Error', 'Para realizar un reporte primero tiene que realizar una consulta que contenga registros')
-        except AttributeError:messagebox.showerror('Error', 'El reporte no se puede generar ya que en los campos Entrada o Salida hay valores invalidos para realizar la consulta, favor de revisar y volver a intentar')
-        except exceptions.FileCreateError:messagebox.showerror('Error', 'El reporte no se puede generar, seleccione el directorio para guardar el reporte y vuelva a intentar')
+        except TypeError as e:messagebox.showerror('Error', f'Error: {e}\nPara realizar un reporte primero tiene que realizar una consulta')
+        except ValueError as e:messagebox.showerror('Error', f'Error: {e}\nPara realizar un reporte primero tiene que realizar una consulta que contenga registros')
+        except exceptions.FileCreateError as e:messagebox.showerror('Error', f'Error: El reporte no se puede generar, seleccione el directorio para guardar el reporte y vuelva a intentar')
 
 

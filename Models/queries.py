@@ -67,22 +67,19 @@ class Queries:
         where = []
         ############################################################################################################################
         # Si se especifica un número de ID, agregamos una cláusula WHERE a la lista
-        if 'id' in parametros:
-            where.append(f"id = {parametros['id']}")
+        if 'id' in parametros:where.append(f"id = {parametros['id']}")
         ############################################################################################################################
 
 
         ############################################################################################################################
         # Si se especifica ¨la tarifa preferente, agregamos una cláusula WHERE a la lista
-        if 'tarifa_preferente' in parametros:
-            where.append(f"TarifaPreferente = '{parametros['tarifa_preferente']}'")
+        if 'tarifa_preferente' in parametros:where.append(f"TarifaPreferente = '{parametros['tarifa_preferente']}'")
         ############################################################################################################################
 
 
         ############################################################################################################################
         # Si se especifica el tipo de promocion, agregamos una cláusula WHERE a la lista
-        if 'tipo_promocion' in parametros:
-            where.append(f"TipoPromocion = '{parametros['tipo_promocion']}'")
+        if 'tipo_promocion' in parametros:where.append(f"TipoPromocion = '{parametros['tipo_promocion']}'")
         ############################################################################################################################
 
 
@@ -93,11 +90,9 @@ class Queries:
         if 'fecha_inicio_entrada' in parametros and 'fecha_fin_entrada' in parametros:
             where.append(f"Entrada BETWEEN '{parametros['fecha_inicio_entrada']}' AND '{parametros['fecha_fin_entrada']}'")
 
-        elif 'fecha_inicio_entrada' in parametros:
-            where.append(f"Entrada >= '{parametros['fecha_inicio_entrada']}'")
+        elif 'fecha_inicio_entrada' in parametros:where.append(f"Entrada >= '{parametros['fecha_inicio_entrada']}'")
 
-        elif 'fecha_fin_entrada' in parametros:
-            where.append(f"Entrada <= '{parametros['fecha_fin_entrada']}'")
+        elif 'fecha_fin_entrada' in parametros:where.append(f"Entrada <= '{parametros['fecha_fin_entrada']}'")
 
         # Si se especifica una fecha de inicio y una fecha de fin para salidas, agregamos una cláusula WHERE que seleccione
         # todas las salidas entre esas dos fechas. Si solo se especifica una fecha de inicio o una fecha de fin para salidas,
@@ -105,11 +100,9 @@ class Queries:
         if 'fecha_inicio_salida' in parametros and 'fecha_fin_salida' in parametros:
             where.append(f"Salida BETWEEN '{parametros['fecha_inicio_salida']}' AND '{parametros['fecha_fin_salida']}'")
 
-        elif 'fecha_inicio_salida' in parametros:
-            where.append(f"Salida >= '{parametros['fecha_inicio_salida']}'")
+        elif 'fecha_inicio_salida' in parametros:where.append(f"Salida >= '{parametros['fecha_inicio_salida']}'")
 
-        elif  'fecha_fin_salida' in parametros:
-            where.append(f"Salida <= '{parametros['fecha_fin_salida']}'")
+        elif  'fecha_fin_salida' in parametros:where.append(f"Salida <= '{parametros['fecha_fin_salida']}'")
         ############################################################################################################################
 
 
