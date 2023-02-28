@@ -39,6 +39,10 @@ class Panel_Entradas:
             style.theme_use(self.theme)
 
 
+        ancho_max = self.panel.winfo_screenwidth()
+        alto_max = self.panel.winfo_screenheight() - 100
+        self.panel.wm_maxsize(ancho_max, alto_max)
+
         # Establece el tamaño de la ventana y su título
         self.panel.geometry()
         #self.panel.resizable(False, False)
@@ -78,10 +82,10 @@ class Panel_Entradas:
         self.icono_calendario = PhotoImage(file=icono_calendario).subsample(25)
 
         icono_salir = tools_instance.read_path_config_file('images', 'icono_salir')
-        self.icono_salir = PhotoImage(file=icono_salir).subsample(25)
+        self.icono_salir = PhotoImage(file=icono_salir).subsample(50)
 
         icono_desconectar = tools_instance.read_path_config_file('images', 'icono_desconectar')
-        self.icono_desconectar = PhotoImage(file=icono_desconectar).subsample(25)
+        self.icono_desconectar = PhotoImage(file=icono_desconectar).subsample(50)
 
 
         # Crea las variables para el manejo de calendario
@@ -116,7 +120,7 @@ class Panel_Entradas:
 
     def view_campos_consulta(self):
         '''Crea y empaqueta los campos de consulta en la ventana.'''
-
+        #Label frame principal
         seccion_principal = ttk.LabelFrame(self.panel, text='')
         seccion_principal.columnconfigure(1, weight=1)
         seccion_principal.grid_propagate(True)
@@ -129,19 +133,18 @@ class Panel_Entradas:
         etiqueta_logo = tk.Label(seccion_logo, image=self.logo_pase)
         etiqueta_logo.grid(row=0, column=0, sticky=tk.NW)
 
-
+        #Label frame para seleccionar el tipo de consulta
         seccion_menu_consulta = ttk.LabelFrame(seccion_principal, text='Selecciona tipo de consulta', padding=10)
         seccion_menu_consulta.grid(row=0, column=1, padx=5, pady=5, sticky=tk.NSEW)
 
         boton_campos_simple = ttk.Button(seccion_menu_consulta, text='Consulta simple', command=self.mostrar_campos_simple)
-        boton_campos_simple.grid(row=0, column=0, sticky='')
+        boton_campos_simple.grid(row=0, column=0, sticky=tk.NSEW, padx=5, pady=5)
 
-        boton_ver_todo = ttk.Button(seccion_menu_consulta, text='Consulta avanzado')
-        boton_ver_todo.grid(row=0, column=1, sticky='')
+        boton_ver_todo = ttk.Button(seccion_menu_consulta, text='Consulta avanzado', command=self.mostrar_campos_avanzado)
+        boton_ver_todo.grid(row=0, column=1, sticky=tk.NSEW, padx=5, pady=5)
 
         # Configurar las columnas intermedias con un tamaño mínimo
         seccion_menu_consulta.columnconfigure(2, minsize=50)
-        seccion_menu_consulta.columnconfigure(3, minsize=50)
 
         boton_generar_reporte = ttk.Button(seccion_menu_consulta, text='Generar reporte', width=15,
         command = lambda:
@@ -149,188 +152,7 @@ class Panel_Entradas:
                             self.controlador_entrada.realizar_reporte(registros = self.registros),
                             self.vaciar_campos()
                         })
-        boton_generar_reporte.grid(row=0, column=4, pady=5)
-
-
-        self.seccion_formulario_datos = ttk.LabelFrame(seccion_principal, text='Ingresa los datos de la consulta', padding=10)
-
-
-
-        # Crear un LabelFrame para la consulta de corte y folio
-        self.seccion_consulta = ttk.LabelFrame(self.seccion_formulario_datos, text='Consulta simple')
-
-        #######################################################################---
-        # Crear la leyenda para el campo de texto de la consulta de folio
-        etiqueta_folio = ttk.Label(self.seccion_consulta, text='N° de boleto: ')
-        etiqueta_folio.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
-
-        # Crear los campos de texto para la consulta de folio
-        self.campo_texto_folio = tk.Entry(self.seccion_consulta, textvariable=self.variable_folio)
-        self.campo_texto_folio.grid(row=0, column=1, padx=5, pady=5)
-        #######################################################################---
-
-        #######################################################################---
-        # Crear la leyenda para el campo de texto de la consulta de corte
-        etiqueta_corte = ttk.Label(self.seccion_consulta, text='N° de corte: ')
-        etiqueta_corte.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
-
-
-        opciones = self.query.obtener_lista_de('CorteInc', 'Y')
-        # Crear la lista desplegable
-        self.lista_desplegable_corte = ttk.Combobox(self.seccion_consulta, values=opciones, textvariable=self.variable_corte_numero, state='readonly', height=5)
-        self.lista_desplegable_corte.grid(row=1, column=1, padx=5, pady=5)
-        #######################################################################---
-
-        #######################################################################---
-        # Crear la leyenda para el campo de texto de la consulta de corte
-        etiqueta_tipo_tarifa = ttk.Label(self.seccion_consulta, text='Tipo de tarifa: ')
-        etiqueta_tipo_tarifa.grid(row=2, column=0, padx=5, pady=5, sticky=tk.W)
-
-
-        opciones = self.query.obtener_lista_de('TarifaPreferente')
-        # Crear la lista desplegable
-        self.lista_desplegable_tipo_tarifa = ttk.Combobox(self.seccion_consulta, values=opciones, textvariable=self.variable_tarifa_preferente, state='readonly')
-        self.lista_desplegable_tipo_tarifa.grid(row=2, column=1, padx=5, pady=5)
-        #######################################################################---
-
-
-        #######################################################################---
-        # Crear la leyenda para el campo de texto de la consulta de corte
-        etiqueta_tipo_promocion = ttk.Label(self.seccion_consulta, text='Tipo de promoción: ')
-        etiqueta_tipo_promocion.grid(row=3, column=0, padx=5, pady=5, sticky=tk.W)
-
-
-        opciones = self.query.obtener_lista_de('TipoPromocion')
-        # Crear la lista desplegable
-        self.lista_desplegable_tipo_promocion = ttk.Combobox(self.seccion_consulta, values=opciones, textvariable=self.variable_tipo_promocion, state='readonly')
-        self.lista_desplegable_tipo_promocion.grid(row=3, column=1, padx=5, pady=5)
-
-        #######################################################################---
-
-
-        # Crea un botón y lo empaqueta en la seccion_botones_consulta
-        boton_consulta = ttk.Button(self.seccion_consulta, text='Realizar consulta', command = self.hacer_consulta_entrada, width=15)
-        boton_consulta.grid(row=4, column=0, pady=5)
-
-        # Crea un botón y lo empaqueta en la seccion_botones_consulta
-        boton_consulta = ttk.Button(self.seccion_consulta, text='Limpiar campos', command = self.vaciar_campos, width=15)
-        boton_consulta.grid(row=4, column=1, pady=5)
-
-        # #######################################################################---
-        # # Crear un LabelFrame para las entradas
-        # seccion_entrada = ttk.LabelFrame(seccion_principal, text='Entradas')
-        # seccion_entrada.grid(row=3, column=0, padx=5, pady=5, sticky='nsew')
-
-
-
-        # # Crear el boton para el calendario entrada inicio
-        # boton_calendario_inicio_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
-        #                                         command=lambda: self.controlador_entrada.actualizar_fecha(
-        #                                                                                 calendario=self.calendario_fecha_inicio_entrada,
-        #                                                                                 fecha=self.fecha_hora_inicio_entrada,
-        #                                                                                 variable=self.variable_fecha_inicio_entrada,
-        #                                                                                 campo_texto=self.campo_texto_entrada_fecha_inicio))
-        # boton_calendario_inicio_entrada.grid(row=0, column=0, sticky=tk.W)
-
-        # # Crear las leyendas para los campos de texto de las entradas
-        # etiqueta_fecha_inicio_entrada = ttk.Label(seccion_entrada, text='Fecha inicio:', width=12, anchor=tk.W)
-        # etiqueta_fecha_inicio_entrada.grid(row=0, column=1, padx=5, pady=5, sticky=tk.W)
-       
-        # # Crear los campos de texto para las entradas
-        # self.campo_texto_entrada_fecha_inicio = ttk.Label(seccion_entrada, text='')
-        # self.campo_texto_entrada_fecha_fin = ttk.Label(seccion_entrada, text='')
-
-
-
-        # # Crear el boton para el calendario entrada fin
-        # boton_calendario_fin_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
-        #                                         command=lambda:self.controlador_entrada.actualizar_fecha(
-        #                                                                                 calendario=self.calendario_fecha_fin_entrada,
-        #                                                                                 fecha=self.fecha_hora_fin_entrada,
-        #                                                                                 variable=self.variable_fecha_fin_entrada,
-        #                                                                                 campo_texto=self.campo_texto_entrada_fecha_fin))
-
-        # boton_calendario_fin_entrada.grid(row=1, column=0, sticky=tk.W)
-
-        # etiqueta_fecha_fin_entrada = ttk.Label(seccion_entrada, text='Fecha fin:')
-        # etiqueta_fecha_fin_entrada.grid(row=1, column=1, padx=5, pady=5, sticky=tk.W)
-
-        # # Empaqueta los campos de texto y las leyendas en el LabelFrame de las entradas
-        # self.campo_texto_entrada_fecha_inicio.grid(row=0, column=2, padx=5, pady=5,sticky='nsew')
-        # self.campo_texto_entrada_fecha_fin.grid(row=1, column=2, padx=5, pady=5, sticky='nsew')
-        # #######################################################################---
-
-
-
-
-
-        # #######################################################################---
-        # # Crear un LabelFrame para las salidas
-        # seccion_salida = ttk.LabelFrame(seccion_principal, text='Salidas')
-        # seccion_salida.grid(row=4, column=0, padx=5, pady=5, sticky='nsew')
-
-
-
-        # # Crear el boton para el calendario salida inicio
-        # boton_calendario_inicio_salida = ttk.Button(seccion_salida, image=self.icono_calendario, 
-        #                                         command=lambda: self.controlador_entrada.actualizar_fecha(
-        #                                                                                 calendario=self.calendario_fecha_inicio_salida,
-        #                                                                                 fecha=self.fecha_hora_inicio_salida,
-        #                                                                                 variable=self.variable_fecha_inicio_salida,
-        #                                                                                 campo_texto=self.campo_texto_salida_fecha_inicio))
-        # boton_calendario_inicio_salida.grid(row=0, column=0, sticky=tk.W)
-
-
-        # # Crear los campos de texto para las salidas
-        # self.campo_texto_salida_fecha_inicio = ttk.Label(seccion_salida, text='')
-        # self.campo_texto_salida_fecha_fin = ttk.Label(seccion_salida, text='')
-
-        # # Crear las leyendas para los campos de texto de las salidas
-        # etiqueta_fecha_inicio_salida = ttk.Label(seccion_salida, text='Fecha inicio:')
-        # etiqueta_fecha_inicio_salida.grid(row=0, column=1, padx=5, pady=5, sticky=tk.W)
-
-
-
-
-        # # Crear el boton para el calendario salida fin
-        # boton_calendario_fin_salida = ttk.Button(seccion_salida, image=self.icono_calendario, 
-        #                                         command=lambda: self.controlador_entrada.actualizar_fecha(
-        #                                                                                 calendario=self.calendario_fecha_fin_salida,
-        #                                                                                 fecha=self.fecha_hora_fin_salida,
-        #                                                                                 variable=self.variable_fecha_fin_salida,
-        #                                                                                 campo_texto=self.campo_texto_salida_fecha_fin))
-        
-        # boton_calendario_fin_salida.grid(row=1, column=0, sticky=tk.W)
-
-        # etiqueta_fecha_fin_salida = ttk.Label(seccion_salida, text='Fecha fin:')
-        # etiqueta_fecha_fin_salida.grid(row=1, column=1, padx=5, pady=5, sticky=tk.W)
-
-        # # Empaqueta los campos de texto y las leyendas en el LabelFrame de las salidas
-        # self.campo_texto_salida_fecha_inicio.grid(row=0, column=2, padx=5, pady=5, sticky='nsew')
-        # self.campo_texto_salida_fecha_fin.grid(row=1, column=2, padx=5, pady=5, sticky='nsew')
-        # #######################################################################---
-
-
-
-
-        # #######################################################################---
-        # # Crea un LabelFrame para los botones de consulta
-        # seccion_botones_consulta = ttk.LabelFrame(seccion_principal, text='Consulta')
-        # seccion_botones_consulta.grid(row=6, column=0, padx=5, pady=5, sticky='nsew')
-
-
-
-
-        # # Crea un botón y lo empaqueta en la seccion_botones_consulta
-        # boton_generar_reporte = ttk.Button(seccion_botones_consulta, text='Generar reporte', width=15,
-        # command = lambda:
-        #                 {
-        #                     self.controlador_entrada.realizar_reporte(registros = self.registros),
-        #                     self.vaciar_campos()
-        #                 })
-        # boton_generar_reporte.grid(row=2, column=0, pady=5)
-
-
+        boton_generar_reporte.grid(row=0, column=3, sticky=tk.NE, pady=5)
 
 
         # Crea un LabelFrame para los botones de desconectar y salir
@@ -346,6 +168,255 @@ class Panel_Entradas:
         boton_salir.grid(row=0, column=1, pady=5)
 
 
+
+        #Labelframe para el tipo de consulta a realizar
+        self.seccion_formulario_datos = ttk.LabelFrame(seccion_principal, text='Ingresa los datos de la consulta', padding=10)
+
+
+        #Labelframe para consultas simple
+        self.seccion_consulta_simple = ttk.LabelFrame(self.seccion_formulario_datos, text='Formulario simple')
+
+        def view_consulta_simple(self):
+            seccion_formulario_simple = ttk.LabelFrame(self.seccion_consulta_simple, text='Consulta simple')
+            seccion_formulario_simple.grid(row=0, column=0, padx=5, pady=5, sticky=tk.NW)
+            #######################################################################---
+            # Crear la leyenda para el campo de texto de la consulta de folio
+            etiqueta_folio = ttk.Label(seccion_formulario_simple,  text='N° de boleto: ')
+            etiqueta_folio.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
+
+            # Crear los campos de texto para la consulta de folio
+            self.campo_texto_folio = tk.Entry(seccion_formulario_simple,  textvariable=self.variable_folio)
+            self.campo_texto_folio.grid(row=0, column=1, padx=5, pady=5)
+            #######################################################################---
+
+            #######################################################################---
+            # Crear la leyenda para el campo de texto de la consulta de corte
+            etiqueta_corte = ttk.Label(seccion_formulario_simple,  text='N° de corte: ')
+            etiqueta_corte.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
+
+
+            opciones = self.query.obtener_lista_de('CorteInc', 'Y')
+            # Crear la lista desplegable
+            self.lista_desplegable_corte = ttk.Combobox(seccion_formulario_simple,  values=opciones, textvariable=self.variable_corte_numero, state='readonly', height=5)
+            self.lista_desplegable_corte.grid(row=1, column=1, padx=5, pady=5)
+            #######################################################################---
+
+            #######################################################################---
+            # Crear la leyenda para el campo de texto de la consulta de corte
+            etiqueta_tipo_tarifa = ttk.Label(seccion_formulario_simple,  text='Tipo de tarifa: ')
+            etiqueta_tipo_tarifa.grid(row=2, column=0, padx=5, pady=5, sticky=tk.W)
+
+
+            opciones = self.query.obtener_lista_de('TarifaPreferente')
+            # Crear la lista desplegable
+            self.lista_desplegable_tipo_tarifa = ttk.Combobox(seccion_formulario_simple,  values=opciones, textvariable=self.variable_tarifa_preferente, state='readonly')
+            self.lista_desplegable_tipo_tarifa.grid(row=2, column=1, padx=5, pady=5)
+            #######################################################################---
+
+
+            #######################################################################---
+            # Crear la leyenda para el campo de texto de la consulta de corte
+            etiqueta_tipo_promocion = ttk.Label(seccion_formulario_simple,  text='Tipo de promoción: ')
+            etiqueta_tipo_promocion.grid(row=3, column=0, padx=5, pady=5, sticky=tk.W)
+
+
+            opciones = self.query.obtener_lista_de('TipoPromocion')
+            # Crear la lista desplegable
+            self.lista_desplegable_tipo_promocion = ttk.Combobox(seccion_formulario_simple,  values=opciones, textvariable=self.variable_tipo_promocion, state='readonly')
+            self.lista_desplegable_tipo_promocion.grid(row=3, column=1, padx=5, pady=5)
+
+            #######################################################################---
+
+
+
+            # Crea un LabelFrame para los botones de desconectar y salir
+            seccion_botones_consulta = ttk.LabelFrame(self.seccion_consulta_simple, text='Botones consulta')
+            seccion_botones_consulta.grid(row=0, column=1, padx=5, pady=5, sticky='NW')
+
+            # Crea un botón y lo empaqueta en la seccion_botones_consulta
+            boton_consulta = ttk.Button(seccion_botones_consulta, text='Realizar consulta', command=self.hacer_consulta_entrada, width=50)
+
+            boton_consulta.grid(row=0, column=0, padx=5, pady=5)
+
+            # Crea un botón y lo empaqueta en la seccion_botones_consulta
+            boton_limpiar_campos = ttk.Button(seccion_botones_consulta,  text='Limpiar campos', command = self.vaciar_campos, width=50)
+            boton_limpiar_campos.grid(row=1, column=0, padx=5, pady=5)
+
+            # Crea un botón y lo empaqueta en la seccion_botones_consulta
+            boton_limpiar_campos = ttk.Button(seccion_botones_consulta,  text='Vaciar tabla', command = self.vaciar_tabla, width=50)
+            boton_limpiar_campos.grid(row=2, column=0, padx=5, pady=5)
+
+
+        #Labelframe para consultas avanzadas
+        self.seccion_consulta_avanzada = ttk.LabelFrame(self.seccion_formulario_datos, text='Consulta avanzada')
+        
+        def view_consulta_avanzada(self):
+
+            seccion_fechas = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Fechas')
+            seccion_fechas.grid(row=0, column=0, padx=5, pady=5)
+
+
+            #######################################################################---
+            # Crear un LabelFrame para las entradas
+            seccion_entrada = ttk.LabelFrame(seccion_fechas, text='Entradas')
+            seccion_entrada.grid(row=3, column=0, padx=5, pady=5, sticky='nsew')
+
+
+            # Crear el boton para el calendario entrada inicio
+            boton_calendario_inicio_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
+                                                    command=lambda: self.controlador_entrada.actualizar_fecha(
+                                                                                            calendario=self.calendario_fecha_inicio_entrada,
+                                                                                            fecha=self.fecha_hora_inicio_entrada,
+                                                                                            variable=self.variable_fecha_inicio_entrada,
+                                                                                            campo_texto=self.campo_texto_entrada_fecha_inicio))
+            boton_calendario_inicio_entrada.grid(row=0, column=0, sticky=tk.W)
+
+            # Crear las leyendas para los campos de texto de las entradas
+            etiqueta_fecha_inicio_entrada = ttk.Label(seccion_entrada, text='Fecha inicio:', width=12, anchor=tk.W)
+            etiqueta_fecha_inicio_entrada.grid(row=0, column=1, padx=5, pady=5, sticky=tk.W)
+        
+            # Crear los campos de texto para las entradas
+            self.campo_texto_entrada_fecha_inicio = ttk.Label(seccion_entrada, text='')
+            self.campo_texto_entrada_fecha_fin = ttk.Label(seccion_entrada, text='')
+
+
+            # Crear el boton para el calendario entrada fin
+            boton_calendario_fin_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
+                                                    command=lambda:self.controlador_entrada.actualizar_fecha(
+                                                                                            calendario=self.calendario_fecha_fin_entrada,
+                                                                                            fecha=self.fecha_hora_fin_entrada,
+                                                                                            variable=self.variable_fecha_fin_entrada,
+                                                                                            campo_texto=self.campo_texto_entrada_fecha_fin))
+
+            boton_calendario_fin_entrada.grid(row=1, column=0, sticky=tk.W)
+
+            etiqueta_fecha_fin_entrada = ttk.Label(seccion_entrada, text='Fecha fin:')
+            etiqueta_fecha_fin_entrada.grid(row=1, column=1, padx=5, pady=5, sticky=tk.W)
+
+            # Empaqueta los campos de texto y las leyendas en el LabelFrame de las entradas
+            self.campo_texto_entrada_fecha_inicio.grid(row=0, column=2, padx=5, pady=5,sticky='nsew')
+            self.campo_texto_entrada_fecha_fin.grid(row=1, column=2, padx=5, pady=5, sticky='nsew')
+            #######################################################################---
+
+
+            #######################################################################---
+            # Crear un LabelFrame para las salidas
+            seccion_salida = ttk.LabelFrame(seccion_fechas, text='Salidas')
+            seccion_salida.grid(row=4, column=0, padx=5, pady=5, sticky='nsew')
+
+
+
+            # Crear el boton para el calendario salida inicio
+            boton_calendario_inicio_salida = ttk.Button(seccion_salida, image=self.icono_calendario, 
+                                                    command=lambda: self.controlador_entrada.actualizar_fecha(
+                                                                                            calendario=self.calendario_fecha_inicio_salida,
+                                                                                            fecha=self.fecha_hora_inicio_salida,
+                                                                                            variable=self.variable_fecha_inicio_salida,
+                                                                                            campo_texto=self.campo_texto_salida_fecha_inicio))
+            boton_calendario_inicio_salida.grid(row=0, column=0, sticky=tk.W)
+
+
+            # Crear los campos de texto para las salidas
+            self.campo_texto_salida_fecha_inicio = ttk.Label(seccion_salida, text='')
+            self.campo_texto_salida_fecha_fin = ttk.Label(seccion_salida, text='')
+
+            # Crear las leyendas para los campos de texto de las salidas
+            etiqueta_fecha_inicio_salida = ttk.Label(seccion_salida, text='Fecha inicio:')
+            etiqueta_fecha_inicio_salida.grid(row=0, column=1, padx=5, pady=5, sticky=tk.W)
+
+
+            # Crear el boton para el calendario salida fin
+            boton_calendario_fin_salida = ttk.Button(seccion_salida, image=self.icono_calendario, 
+                                                    command=lambda: self.controlador_entrada.actualizar_fecha(
+                                                                                            calendario=self.calendario_fecha_fin_salida,
+                                                                                            fecha=self.fecha_hora_fin_salida,
+                                                                                            variable=self.variable_fecha_fin_salida,
+                                                                                            campo_texto=self.campo_texto_salida_fecha_fin))
+            
+            boton_calendario_fin_salida.grid(row=1, column=0, sticky=tk.W)
+
+            etiqueta_fecha_fin_salida = ttk.Label(seccion_salida, text='Fecha fin:')
+            etiqueta_fecha_fin_salida.grid(row=1, column=1, padx=5, pady=5, sticky=tk.W)
+
+            # Empaqueta los campos de texto y las leyendas en el LabelFrame de las salidas
+            self.campo_texto_salida_fecha_inicio.grid(row=0, column=2, padx=5, pady=5, sticky='nsew')
+            self.campo_texto_salida_fecha_fin.grid(row=1, column=2, padx=5, pady=5, sticky='nsew')
+            #######################################################################---
+
+
+            seccion_tiempo_dentro = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Tiempo dentro')
+            seccion_tiempo_dentro.grid(row=0, column=1, padx=5, pady=5, sticky=tk.NW)
+
+            etiqueta_fecha_fin_salida = ttk.Label(seccion_tiempo_dentro, text='Fecha fin:')
+            etiqueta_fecha_fin_salida.grid(row=0, column=0, sticky=tk.NW)
+
+
+
+            seccion_promociones = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Promociones')
+            seccion_promociones.grid(row=0, column=2, padx=5, pady=5, sticky=tk.NW)
+
+            etiqueta_fecha_fin_salida = ttk.Label(seccion_promociones, text='Fecha fin:')
+            etiqueta_fecha_fin_salida.grid(row=0, column=0, sticky=tk.NW)
+
+
+
+
+            seccion_cortes = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Cortes')
+            seccion_cortes.grid(row=1, column=0, padx=5, pady=5, sticky=tk.NW)
+
+            etiqueta_fecha_fin_salida = ttk.Label(seccion_cortes, text='Fecha fin:')
+            etiqueta_fecha_fin_salida.grid(row=0, column=0, sticky=tk.NW)
+
+
+            seccion_ingresos = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Ingresos')
+            seccion_ingresos.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NW)
+
+            etiqueta_fecha_fin_salida = ttk.Label(seccion_ingresos, text='Fecha fin:')
+            etiqueta_fecha_fin_salida.grid(row=0, column=0, sticky=tk.NW)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            # Crea un LabelFrame para los botones de desconectar y salir
+            seccion_botones_consulta = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Botones consulta')
+            seccion_botones_consulta.grid(row=1, column=2, padx=5, pady=5, sticky='NW')
+
+            # Crea un botón y lo empaqueta en la seccion_botones_consulta
+            boton_consulta = ttk.Button(seccion_botones_consulta, text='Realizar consulta', command=self.hacer_consulta_entrada)
+
+            boton_consulta.grid(row=0, column=0, padx=5, pady=5)
+
+            # Crea un botón y lo empaqueta en la seccion_botones_consulta
+            boton_limpiar_campos = ttk.Button(seccion_botones_consulta,  text='Limpiar campos', command = self.vaciar_campos)
+            boton_limpiar_campos.grid(row=1, column=0, padx=5, pady=5)
+
+            # Crea un botón y lo empaqueta en la seccion_botones_consulta
+            boton_limpiar_campos = ttk.Button(seccion_botones_consulta,  text='Vaciar tabla', command = self.vaciar_tabla)
+            boton_limpiar_campos.grid(row=2, column=0, padx=5, pady=5)
+
+
+        view_consulta_simple(self)
+        view_consulta_avanzada(self)
+
+
+
+
+
+
+
+
     def view_tabla(self):
         """
         Crea una tabla en la interfaz y la llena con los datos de la base de datos.
@@ -358,7 +429,7 @@ class Panel_Entradas:
         """
         # Crea un Frame para la tabla y lo configura para llenar todo el espacio disponible
 
-        seccion_tabla = ttk.LabelFrame(self.panel, text=f'Tabla - {self.ver_tabla}')
+        seccion_tabla = ttk.LabelFrame(self.panel, text = '')
         seccion_tabla.columnconfigure(0, weight=1, uniform='tabla')
         seccion_tabla.rowconfigure(0, weight=1)
         seccion_tabla.grid_propagate(True)
@@ -369,9 +440,6 @@ class Panel_Entradas:
         columnas = self.query.obtener_campos_tabla()
 
         # Crea un Treeview con una columna por cada campo de la tabla
-        style = ttk.Style()
-
-        #style.theme_use('xpnative')
         self.tabla = ttk.Treeview(seccion_tabla, columns=(columnas))
         self.tabla.config(height=15)
 
@@ -398,16 +466,30 @@ class Panel_Entradas:
         scrollbar_X.grid(row=1, column=0, sticky='EW')
 
         # Empaqueta el Treeview en la ventana
-        self.tabla.grid(row=0, column=0, sticky='NESW')
+        self.tabla.grid(row=0, column=0, sticky='NESW', padx=5, pady=5, ipadx=5, ipady=5, columnspan=2, rowspan=2)  # Modificado
+
 
 
     def mostrar_campos_simple(self):
         if self.seccion_formulario_datos.winfo_ismapped():
-            self.seccion_consulta.grid_forget()  # ocultar el labelframe
+            self.seccion_consulta_simple.grid_forget()  # ocultar el labelframe
+            self.seccion_consulta_avanzada.grid_forget()
             self.seccion_formulario_datos.grid_forget()
             self.vaciar_campos()
         else:
-            self.seccion_consulta.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')  # mostrar el labelframe 
+            self.seccion_consulta_avanzada.grid_forget()
+            self.seccion_consulta_simple.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')  # mostrar el labelframe 
+            self.seccion_formulario_datos.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NSEW)
+
+    def mostrar_campos_avanzado(self):
+        if self.seccion_formulario_datos.winfo_ismapped():
+            self.seccion_consulta_simple.grid_forget()  # ocultar el labelframe
+            self.seccion_consulta_avanzada.grid_forget()
+            self.seccion_formulario_datos.grid_forget()
+            self.vaciar_campos()
+        else:
+            self.seccion_consulta_simple.grid_forget()
+            self.seccion_consulta_avanzada.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')  # mostrar el labelframe 
             self.seccion_formulario_datos.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NSEW)
 
 
@@ -474,11 +556,11 @@ class Panel_Entradas:
         self.lista_desplegable_tipo_tarifa.selection_clear()
 
 
-        # self.campo_texto_entrada_fecha_inicio.config(text="")
-        # self.campo_texto_entrada_fecha_fin.config(text="")
+        self.campo_texto_entrada_fecha_inicio.config(text="")
+        self.campo_texto_entrada_fecha_fin.config(text="")
 
-        # self.campo_texto_salida_fecha_fin.config(text="")
-        # self.campo_texto_salida_fecha_inicio.config(text="")
+        self.campo_texto_salida_fecha_fin.config(text="")
+        self.campo_texto_salida_fecha_inicio.config(text="")
 
 
 
