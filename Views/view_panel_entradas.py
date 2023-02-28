@@ -654,7 +654,7 @@ class Panel_Entradas:
                                                                             tiempo_dentro_menor = self.variable_tiempo_dentro_menor.get(),
 
 
-                                                                            #promocion = self.variable_tipo_promocion.get(),
+                                                                            tipo_promocion = self.variable_tipo_promocion.get(),
 
 
                                                                             corte_numero = self.variable_corte_numero.get(),
@@ -668,9 +668,6 @@ class Panel_Entradas:
 
 
                                                                             tarifa = self.variable_tarifa.get())
-
-
-
 
 
         self.llenar_tabla(self.registros)
