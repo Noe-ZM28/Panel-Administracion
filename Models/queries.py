@@ -65,19 +65,28 @@ class Queries:
 
         # Creamos una lista vacía para agregar las cláusulas WHERE a nuestra consulta
         where = []
+        ############################################################################################################################
+        # Si se especifica un número de ID, agregamos una cláusula WHERE a la lista
+        if 'id' in parametros:
+            where.append(f"id = {parametros['id']}")
+        ############################################################################################################################
 
-        # Si se especifica el número de corte, agregamos una cláusula WHERE a la lista
-        if 'corte_numero' in parametros:
-            where.append(f"CorteInc = {parametros['corte_numero']}")
 
+        ############################################################################################################################
         # Si se especifica ¨la tarifa preferente, agregamos una cláusula WHERE a la lista
         if 'tarifa_preferente' in parametros:
             where.append(f"TarifaPreferente = '{parametros['tarifa_preferente']}'")
+        ############################################################################################################################
 
+
+        ############################################################################################################################
         # Si se especifica el tipo de promocion, agregamos una cláusula WHERE a la lista
         if 'tipo_promocion' in parametros:
             where.append(f"TipoPromocion = '{parametros['tipo_promocion']}'")
+        ############################################################################################################################
 
+
+        ############################################################################################################################
         # Si se especifica una fecha de inicio y una fecha de fin para entradas, agregamos una cláusula WHERE que seleccione
         # todas las entradas entre esas dos fechas. Si solo se especifica una fecha de inicio o una fecha de fin para entradas,
         # seleccionamos todas las entradas a partir de la fecha de inicio o hasta la fecha de fin, respectivamente.
@@ -101,10 +110,49 @@ class Queries:
 
         elif  'fecha_fin_salida' in parametros:
             where.append(f"Salida <= '{parametros['fecha_fin_salida']}'")
+        ############################################################################################################################
 
-        # Si se especifica un número de ID, agregamos una cláusula WHERE a la lista
-        if 'id' in parametros:
-            where.append(f"id = {parametros['id']}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+        ############################################################################################################################
+        # Si se especifica el número de corte, agregamos una cláusula WHERE a la lista
+        if 'corte_numero' in parametros:
+            where.append(f"CorteInc = {parametros['corte_numero']}")
+
+        if 'corte_numero_inicio' in parametros and 'corte_numero_fin' in parametros:
+            where.append(f"CorteInc BETWEEN {parametros['corte_numero_inicio']} AND {parametros['corte_numero_fin']}")
+
+        elif 'corte_numero_inicio' in parametros:
+            where.append(f"CorteInc >= {parametros['corte_numero_inicio']}")
+
+        elif 'corte_numero_fin' in parametros:
+            where.append(f"CorteInc <= {parametros['corte_numero_fin']}")
+        ############################################################################################################################
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
 
         # Si tenemos al menos una cláusula WHERE, las unimos con el operador AND y agregamos la cláusula WHERE
         # completa a nuestra consulta SQL. De lo contrario, simplemente dejamos la cláusula WHERE vacía.

@@ -51,7 +51,7 @@ class EntradasController:
         campo_texto.config(text=fecha)
 
 
-    def hacer_consulta_entrada(self, id:int, tarifa_preferente:str, fecha_inicio_entrada:str, fecha_fin_entrada:str, fecha_inicio_salida:str, fecha_fin_salida:str, tiempo_dentro:str, tiempo_dentro_mayor:str, tiempo_dentro_menor:str, tipo_promocion:str, corte_numero:int, corte_numero_inicio:int, corte_numero_fin:int, tiempo_ingreso:str, tiempo_ingreso_mayor:str, tiempo_ingreso_menor:str, tarifa:str) -> list:
+    def hacer_consulta_entrada(self, id:int, tarifa_preferente:str, fecha_inicio_entrada:str, fecha_fin_entrada:str, fecha_inicio_salida:str, fecha_fin_salida:str, tiempo_dentro:str, tiempo_dentro_mayor:str, tiempo_dentro_menor:str, tipo_promocion:str, corte_numero:int, corte_numero_inicio:int, corte_numero_fin:int, tiempo_ingreso:str, tiempo_ingreso_mayor:str, tiempo_ingreso_menor:str) -> list:
 
         """
         Realiza una consulta SQL con los valores proporcionados por el usuario y devuelve una lista de registros obtenidos.
@@ -92,29 +92,34 @@ class EntradasController:
             self.tiempo_ingreso = tiempo_ingreso
             self.tiempo_ingreso_mayor = tiempo_ingreso_mayor
             self.tiempo_ingreso_menor = tiempo_ingreso_menor
-            self.tarifa = tarifa
 
 
             # Validar y agregar los parámetros a la consulta
             if id != '': parametros['id'] = int(id)
+
             if tarifa_preferente != '': parametros['tarifa_preferente'] = str(tarifa_preferente)
+
             if tipo_promocion != '': parametros['tipo_promocion'] = str(tipo_promocion)
+
             if fecha_inicio_entrada != '': parametros['fecha_inicio_entrada'] = str(fecha_inicio_entrada)
             if fecha_fin_entrada != '': parametros['fecha_fin_entrada'] = str(fecha_fin_entrada)
             if fecha_inicio_salida != '': parametros['fecha_inicio_salida'] = str(fecha_inicio_salida)
             if fecha_fin_salida != '': parametros['fecha_fin_salida'] = str(fecha_fin_salida)
+
             if tiempo_dentro != '': parametros['tiempo_dentro'] = str(tiempo_dentro)
             if tiempo_dentro_mayor != '': parametros['tiempo_dentro_mayor'] = int(tiempo_dentro_mayor)
             if tiempo_dentro_menor != '': parametros['tiempo_dentro_menor'] = int(tiempo_dentro_menor)
+
             if corte_numero != '': parametros['corte_numero'] = int(corte_numero)
             if corte_numero_inicio != '': parametros['corte_numero_inicio'] = int(corte_numero_inicio)
             if corte_numero_fin != '': parametros['corte_numero_fin'] = int(corte_numero_fin)
+
             if tiempo_ingreso != '': parametros['tiempo_ingreso'] = str(tiempo_ingreso)
             if tiempo_ingreso_mayor != '': parametros['tiempo_ingreso_mayor'] = int(tiempo_ingreso_mayor)
             if tiempo_ingreso_menor != '': parametros['tiempo_ingreso_menor'] = int(tiempo_ingreso_menor)
-            if tarifa != '': parametros['tarifa'] = str(tarifa)
 
 
+            print (parametros)
             # Validar que se hayan proporcionado parámetros para la consulta
             if parametros == {}:raise ValueError('Error: los campos están vacíos')
 
