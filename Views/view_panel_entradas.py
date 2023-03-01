@@ -540,7 +540,6 @@ class Panel_Entradas:
         para obtener los nombres de las columnas de la tabla que se va a mostrar en la interfaz.
         Luego, crea un `Treeview` con una columna por cada campo de la tabla, configura los encabezados
         de las columnas y los tamaños de columna. Finalmente, inserta los datos en el `Treeview`.
-
         """
         # Crea un Frame para la tabla y lo configura para llenar todo el espacio disponible
 
@@ -548,7 +547,7 @@ class Panel_Entradas:
         seccion_tabla.columnconfigure(0, weight=1, uniform='tabla')
         seccion_tabla.rowconfigure(0, weight=1, uniform='tabla')
         seccion_tabla.grid_propagate(True)
-        seccion_tabla.grid(row=1, column=0, sticky='nsew')
+        seccion_tabla.grid(row=1, column=0, padx=5, pady=5, sticky='nsew') 
 
 
         # Obtiene los nombres de las columnas de la tabla que se va a mostrar
@@ -565,7 +564,7 @@ class Panel_Entradas:
             self.tabla.column(f'#{i}', width=100)
             i = i + 1
         self.tabla.column('#0', width=0, stretch=False)
-        self.tabla.column('#1', width=50, stretch=False)
+        self.tabla.column('#1', width=40, stretch=False)
 
         # Inserta datos
         #self.ver_tabla_completa()
@@ -581,7 +580,7 @@ class Panel_Entradas:
         scrollbar_X.grid(row=1, column=0, sticky='EW')
 
         # Empaqueta el Treeview en la ventana
-        self.tabla.grid(row=0, column=0, sticky='NESW', padx=5, pady=5, ipadx=5, ipady=5, columnspan=2, rowspan=2)  # Modificado
+        self.tabla.grid(row=0, column=0, sticky='NESW', padx=5, pady=5, ipadx=5, ipady=5, columnspan=2, rowspan=2)
 
 
 
