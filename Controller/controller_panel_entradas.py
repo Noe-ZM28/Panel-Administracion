@@ -51,7 +51,7 @@ class EntradasController:
         campo_texto.config(text=fecha)
 
 
-    def hacer_consulta_entrada(self, id:int, tarifa_preferente:str, fecha_inicio_entrada:str, fecha_fin_entrada:str, fecha_inicio_salida:str, fecha_fin_salida:str, tiempo_dentro:str, tiempo_dentro_mayor:str, tiempo_dentro_menor:str, tipo_promocion:str, corte_numero:int, corte_numero_inicio:int, corte_numero_fin:int, tiempo_ingreso:str, tiempo_ingreso_mayor:str, tiempo_ingreso_menor:str) -> list:
+    def hacer_consulta_entrada(self, id:int, tarifa_preferente:str, fecha_inicio_entrada:str, fecha_fin_entrada:str, fecha_inicio_salida:str, fecha_fin_salida:str, tiempo_dentro:str, tiempo_dentro_mayor:str, tiempo_dentro_menor:str, tipo_promocion:str, corte_numero:int, corte_numero_inicio:int, corte_numero_fin:int, ingreso:str, ingreso_mayor:str, ingreso_menor:str) -> list:
 
         """
         Realiza una consulta SQL con los valores proporcionados por el usuario y devuelve una lista de registros obtenidos.
@@ -79,19 +79,23 @@ class EntradasController:
             self.id = id
             self.tarifa_preferente = tarifa_preferente
             self.tipo_promocion = tipo_promocion
+
             self.fecha_inicio_entrada = fecha_inicio_entrada
             self.fecha_fin_entrada = fecha_fin_entrada
             self.fecha_inicio_salida = fecha_inicio_salida
             self.fecha_fin_salida = fecha_fin_salida
+
             self.tiempo_dentro = tiempo_dentro
             self.tiempo_dentro_mayor = tiempo_dentro_mayor
             self.tiempo_dentro_menor = tiempo_dentro_menor
+
             self.corte_numero = corte_numero
             self.corte_numero_inicio = corte_numero_inicio
             self.corte_numero_fin = corte_numero_fin
-            self.tiempo_ingreso = tiempo_ingreso
-            self.tiempo_ingreso_mayor = tiempo_ingreso_mayor
-            self.tiempo_ingreso_menor = tiempo_ingreso_menor
+
+            self.ingreso = ingreso
+            self.ingreso_mayor = ingreso_mayor
+            self.ingreso_menor = ingreso_menor
 
 
             # Validar y agregar los parámetros a la consulta
@@ -105,7 +109,7 @@ class EntradasController:
 
 
             if fecha_inicio_entrada != '':
-                if len(fecha_inicio_entrada) != 19 or len(fecha_inicio_entrada) > 19:
+                if len(fecha_inicio_entrada) != 19:
                     raise ValueError('Error, La cantidad de caracteres no corresponde al formato de fecha')
                 parametros['fecha_inicio_entrada'] = str(fecha_inicio_entrada)
 
@@ -143,6 +147,8 @@ class EntradasController:
             if tiempo_dentro_menor != '': parametros['tiempo_dentro_menor'] = int(tiempo_dentro_menor)
 
 
+
+
             if corte_numero != '':parametros['corte_numero'] = int(corte_numero)
             if corte_numero_inicio != '':parametros['corte_numero_inicio'] = int(corte_numero_inicio)
             if corte_numero_fin != '':parametros['corte_numero_fin'] = int(corte_numero_fin)
@@ -153,9 +159,15 @@ class EntradasController:
 
 
 
-            if tiempo_ingreso != '': parametros['tiempo_ingreso'] = str(tiempo_ingreso)
-            if tiempo_ingreso_mayor != '': parametros['tiempo_ingreso_mayor'] = int(tiempo_ingreso_mayor)
-            if tiempo_ingreso_menor != '': parametros['tiempo_ingreso_menor'] = int(tiempo_ingreso_menor)
+            if ingreso != '':parametros['ingreso'] = round(float(ingreso), 1)
+            if ingreso_mayor != '':parametros['ingreso_mayor'] = round(float(ingreso_mayor), 1)
+            if ingreso_menor != '':parametros['ingreso_menor'] = round(float(ingreso_menor), 1)
+
+            if 'ingreso_mayor' in parametros and 'ingreso_menor' in parametros:
+                if parametros['ingreso_menor'] > parametros['ingreso_mayor']:
+                    raise ValueError("El ingreso menor debe de ser menor al ingreso mayor.")
+
+
 
 
             print (parametros)

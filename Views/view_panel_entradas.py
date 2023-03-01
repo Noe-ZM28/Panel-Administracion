@@ -80,9 +80,10 @@ class Panel_Entradas:
         self.variable_corte_fin = StringVar()
 
 
-        self.variable_tiempo_ingreso = StringVar()
-        self.variable_tiempo_ingreso_mayor = StringVar()
-        self.variable_tiempo_ingreso_menor = StringVar()
+        self.variable_importe = StringVar()
+        self.variable_importe_inicio = StringVar()
+        self.variable_importe_final = StringVar()
+
 
 
 
@@ -217,7 +218,7 @@ class Panel_Entradas:
             etiqueta_corte.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
 
 
-            opciones = self.query.obtener_lista_de('CorteInc', 'Y')
+            opciones = self.query.obtener_lista_de('CorteInc', 'D')
             # Crear la lista desplegable
             self.lista_desplegable_corte = ttk.Combobox(seccion_formulario_simple,  values=opciones, textvariable=self.variable_corte_numero, state='readonly', height=5)
             self.lista_desplegable_corte.grid(row=1, column=1, padx=5, pady=5)
@@ -231,8 +232,8 @@ class Panel_Entradas:
 
             opciones = self.query.obtener_lista_de('TarifaPreferente')
             # Crear la lista desplegable
-            self.lista_desplegable_tipo_tarifa = ttk.Combobox(seccion_formulario_simple,  values=opciones, textvariable=self.variable_tipo_tarifa_preferente, state='readonly')
-            self.lista_desplegable_tipo_tarifa.grid(row=2, column=1, padx=5, pady=5)
+            self.lista_desplegable_tipo_tarifa_preferente = ttk.Combobox(seccion_formulario_simple,  values=opciones, textvariable=self.variable_tipo_tarifa_preferente, state='readonly')
+            self.lista_desplegable_tipo_tarifa_preferente.grid(row=2, column=1, padx=5, pady=5)
             #######################################################################---
 
 
@@ -377,19 +378,19 @@ class Panel_Entradas:
             seccion_tarifas.grid(row=0, column=2, padx=5, pady=5, sticky=tk.NW)
             
             #ARREGLAR ESTO
-            self.lista_tarifas = tk.Listbox(seccion_tarifas, selectmode="multiple", height=5)
-            self.lista_tarifas.grid(row=0, column=0, sticky="nsew")
+            self.lista_tarifa_preferente = tk.Listbox(seccion_tarifas, selectmode="multiple", height=5)
+            self.lista_tarifa_preferente.grid(row=0, column=0, sticky="nsew")
 
-            scrollbar = ttk.Scrollbar(seccion_tarifas, orient="vertical", command=self.lista_tarifas.yview)
+            scrollbar = ttk.Scrollbar(seccion_tarifas, orient="vertical", command=self.lista_tarifa_preferente.yview)
             scrollbar.grid(row=0, column=1, sticky="ns")
-            self.lista_tarifas.configure(yscrollcommand=scrollbar.set)
+            self.lista_tarifa_preferente.configure(yscrollcommand=scrollbar.set)
 
             seccion_tarifas.rowconfigure(0, weight=1)
             seccion_tarifas.columnconfigure(0, weight=1)
 
-            promociones = self.query.obtener_lista_de('CorteInc')
+            promociones = self.query.obtener_lista_de('TarifaPreferente')
             for promocion in promociones:
-                self.lista_tarifas.insert(tk.END, promocion)
+                self.lista_tarifa_preferente.insert(tk.END, promocion)
             ##########################################################################################################
 
 
@@ -398,7 +399,7 @@ class Panel_Entradas:
             seccion_cortes.grid(row=1, column=0, padx=5, pady=5, sticky=tk.NW)
 
 
-            opciones = self.query.obtener_lista_de('CorteInc', 'Y')
+            opciones = self.query.obtener_lista_de('CorteInc', 'D')
 
 
             etiqueta_corte = ttk.Label(seccion_cortes,  text='Corte: ')
@@ -415,17 +416,30 @@ class Panel_Entradas:
             etiqueta_corte_final.grid(row=2, column=0, padx=5, pady=5, sticky=tk.W)
             self.lista_desplegable_corte_final = ttk.Combobox(seccion_cortes,  values=opciones, textvariable=self.variable_corte_fin, state='readonly', height=5)
             self.lista_desplegable_corte_final.grid(row=2, column=1, padx=5, pady=5)
-
-
             ##########################################################################################################
 
             ##########################################################################################################
-            seccion_ingresos = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Ingresos')
-            seccion_ingresos.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NW)
+            seccion_importe = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Importe')
+            seccion_importe.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NW)
 
 
-            etiqueta_fecha_fin_salida = ttk.Label(seccion_ingresos, text='Fecha fin:')
-            etiqueta_fecha_fin_salida.grid(row=0, column=0, sticky=tk.NW)
+            opciones = self.query.obtener_lista_de('Importe', 'A')
+
+
+            etiqueta_importe = ttk.Label(seccion_importe,  text='Importe: ')
+            etiqueta_importe.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
+            self.lista_desplegable_ingreso = ttk.Combobox(seccion_importe,  values=opciones, textvariable=self.variable_importe, state='readonly', height=5)
+            self.lista_desplegable_ingreso.grid(row=0, column=1, padx=5, pady=5)
+
+            etiqueta_importe_inicio = ttk.Label(seccion_importe,  text='Importe inicio: ')
+            etiqueta_importe_inicio.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
+            self.lista_desplegable_ingreso_inicio = ttk.Combobox(seccion_importe,  values=opciones, textvariable=self.variable_importe_inicio, state='readonly', height=5)
+            self.lista_desplegable_ingreso_inicio.grid(row=1, column=1, padx=5, pady=5)
+
+            etiqueta_importe_final = ttk.Label(seccion_importe,  text='Importe final: ')
+            etiqueta_importe_final.grid(row=2, column=0, padx=5, pady=5, sticky=tk.W)
+            self.lista_desplegable_ingreso_final = ttk.Combobox(seccion_importe,  values=opciones, textvariable=self.variable_importe_final, state='readonly', height=5)
+            self.lista_desplegable_ingreso_final.grid(row=2, column=1, padx=5, pady=5)
             ##########################################################################################################
 
             ##########################################################################################################
@@ -468,7 +482,7 @@ class Panel_Entradas:
             boton_limpiar_campos.grid(row=1, column=0, padx=5, pady=5)
 
             # Crea un botón y lo empaqueta en la seccion_botones_consulta
-            boton_limpiar_campos = ttk.Button(seccion_botones_consulta,  text='Vaciar tabla', command = self.vaciar_tabla)
+            boton_limpiar_campos = ttk.Button(seccion_botones_consulta,  text='Vaciar tabla', command = self.limpiar_registros)
             boton_limpiar_campos.grid(row=2, column=0, padx=5, pady=5)
             ##########################################################################################################
 
@@ -595,6 +609,9 @@ class Panel_Entradas:
         # Elimina todas las filas de la tabla
         self.tabla.delete(*self.tabla.get_children())
 
+    def limpiar_registros(self):
+        self.registros = None
+        self.vaciar_tabla()
 
     def vaciar_campos(self):
         """
@@ -615,32 +632,65 @@ class Panel_Entradas:
         - variable_fecha_inicio_salida
         - variable_fecha_fin_salida
         """
-        # Limpia los campos de consulta simple
-        self.lista_desplegable_corte.selection_clear()
+        # Limpia las variables
+        self.variable_folio.set('')
+
+
+        self.variable_tipo_tarifa_preferente.set('')
+
+
+        self.variable_fecha_inicio_entrada.set('')
+        self.variable_fecha_fin_entrada.set('')
+        self.variable_fecha_inicio_salida.set('')
+        self.variable_fecha_fin_salida.set('')
+
+
+        self.variable_tiempo_dentro.set('')
+        self.variable_tiempo_dentro_mayor.set('')
+        self.variable_tiempo_dentro_menor.set('')
+
+
+        #self.variable_tipo_promocion.set('')
+
+
+        self.variable_corte_numero.set('')
+        self.variable_corte_inicio.set('')
+        self.variable_corte_fin.set('')
+
+
+        self.variable_importe.set('')
+        self.variable_importe_final.set('')
+        self.variable_importe_inicio.set('')
+
+
+
+
+        # Limpia los campos de consulta
         self.campo_texto_folio.delete(0, 'end')
-        self.lista_desplegable_tipo_tarifa.selection_clear()
-        self.lista_desplegable_tipo_tarifa.selection_clear()
+
+        self.lista_desplegable_tipo_tarifa_preferente.selection_clear()
+        self.lista_tarifa_preferente.selection_clear(0, 'end')
 
 
-        # Limpia los campos de consulta avanzada
         self.campo_texto_entrada_fecha_inicio.config(text="")
         self.campo_texto_entrada_fecha_fin.config(text="")
 
         self.campo_texto_salida_fecha_fin.config(text="")
         self.campo_texto_salida_fecha_inicio.config(text="")
+
+
         self.lista_promociones.selection_clear(0, 'end')
+        self.lista_desplegable_tipo_promocion.selection_clear()
 
 
+        self.lista_desplegable_corte.selection_clear()
+        self.lista_desplegable_corte_inicio.selection_clear()
+        self.lista_desplegable_corte_final.selection_clear()
 
-        # Limpia las variables de control
-        self.variable_corte_numero.set('')
-        self.variable_folio.set('')
-        self.variable_tipo_tarifa_preferente.set('')
-        #self.variable_tipo_promocion.set('')
-        self.variable_fecha_inicio_entrada.set('')
-        self.variable_fecha_fin_entrada.set('')
-        self.variable_fecha_inicio_salida.set('')
-        self.variable_fecha_fin_salida.set('')
+
+        self.lista_desplegable_ingreso.selection_clear()
+        self.lista_desplegable_ingreso_inicio.selection_clear()
+        self.lista_desplegable_ingreso_final.selection_clear()
 
 
     def hacer_consulta_entrada(self):
@@ -668,9 +718,9 @@ class Panel_Entradas:
                                                                             corte_numero_fin = self.variable_corte_fin.get(),
 
 
-                                                                            tiempo_ingreso = self.variable_tiempo_ingreso.get(),
-                                                                            tiempo_ingreso_mayor = self.variable_tiempo_ingreso_mayor.get(),
-                                                                            tiempo_ingreso_menor = self.variable_tiempo_ingreso_menor.get())
+                                                                            ingreso = self.variable_importe.get(),
+                                                                            ingreso_mayor = self.variable_importe_final.get(),
+                                                                            ingreso_menor = self.variable_importe_inicio.get())
 
 
         self.llenar_tabla(self.registros)

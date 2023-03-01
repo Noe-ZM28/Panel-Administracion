@@ -26,7 +26,8 @@ class Queries:
         return campos
 
     def obtener_lista_de(self, listar, revez = None):
-        if revez == 'Y': query = f"SELECT DISTINCT {listar} FROM entradas ORDER BY {listar} DESC;"
+        if revez == 'D': query = f"SELECT DISTINCT {listar} FROM entradas ORDER BY {listar} DESC;"
+        elif revez == 'A': query = f"SELECT DISTINCT {listar} FROM entradas ORDER BY {listar} ASC;"
         if revez == None: query = f"SELECT DISTINCT {listar} FROM entradas;" 
             
         resultado = self.data_base.execute_query(query)
@@ -134,11 +135,20 @@ class Queries:
         ############################################################################################################################
 
 
-        
+        ############################################################################################################################
+        # Si se especifica el número de corte, agregamos una cláusula WHERE a la lista
+        if 'ingreso' in parametros:
+            where.append(f"Importe = {parametros['ingreso']}")
 
+        if 'ingreso_mayor' in parametros and 'ingreso_menor' in parametros:
+            where.append(f"Importe BETWEEN {parametros['ingreso_menor']} AND {parametros['ingreso_mayor']}")
 
+        elif 'ingreso_mayor' in parametros:
+            where.append(f"Importe <= {parametros['ingreso_mayor']}")
 
-
+        elif 'ingreso_menor' in parametros:
+            where.append(f"Importe >= {parametros['ingreso_menor']}")
+        ############################################################################################################################
 
 
 
