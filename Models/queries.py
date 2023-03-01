@@ -25,16 +25,34 @@ class Queries:
         campos = [r[0] for r in resultado if r[0] not in exclusions]
         return campos
 
-    def obtener_lista_de(self, listar, revez = None):
-        if revez == 'D': query = f"SELECT DISTINCT {listar} FROM entradas ORDER BY {listar} DESC;"
-        elif revez == 'A': query = f"SELECT DISTINCT {listar} FROM entradas ORDER BY {listar} ASC;"
-        if revez == None: query = f"SELECT DISTINCT {listar} FROM entradas;" 
-            
+    def obtener_lista_de(self, listar, revez=None):
+        """
+        Devuelve una lista con los valores únicos de la columna especificada de la tabla 'entradas' de la base de datos.
+
+        Args:
+        - listar: nombre de la columna de la tabla 'entradas' de la que se quieren obtener los valores únicos.
+        - revez: (opcional) si se especifica 'D', devuelve los valores en orden descendente; si se especifica 'A', los devuelve en orden ascendente; si no se especifica, los devuelve en el orden en que se encuentran en la tabla.
+
+        return:
+        - lista_sin_nones: una lista con los valores únicos de la columna especificada de la tabla 'entradas', sin incluir valores 'None'.
+        """
+        # Si revez es igual a 'D', la consulta se hace en orden descendente.
+        if revez == 'D': 
+            query = f"SELECT DISTINCT {listar} FROM entradas ORDER BY {listar} DESC;"
+        # Si revez es igual a 'A', la consulta se hace en orden ascendente.
+        elif revez == 'A': 
+            query = f"SELECT DISTINCT {listar} FROM entradas ORDER BY {listar} ASC;"
+        # Si revez no está definido, se realiza una consulta simple.
+        if revez == None: 
+            query = f"SELECT DISTINCT {listar} FROM entradas;" 
+
+        # Se ejecuta la consulta y se obtiene el resultado.
         resultado = self.data_base.execute_query(query)
+        # Se obtiene una lista con los valores de la columna especificada, sin valores None.
         lista = [r[0] for r in resultado]
         lista_sin_nones = list(filter(lambda x: x is not None, lista))
+        # Se retorna la lista sin los valores None.
         return lista_sin_nones
-
 
 
     def obtener_registros_completos(self):
@@ -67,22 +85,22 @@ class Queries:
         # Creamos una lista vacía para agregar las cláusulas WHERE a nuestra consulta
         where = []
         ############################################################################################################################
-        # Si se especifica un número de ID, agregamos una cláusula WHERE a la lista
+        # Si existe el parámetro 'id' en el diccionario de parámetros,
+        # se agrega una condición a la lista de condiciones a evaluar.
         if 'id' in parametros:where.append(f"id = {parametros['id']}")
         ############################################################################################################################
 
-
         ############################################################################################################################
-        # Si se especifica ¨la tarifa preferente, agregamos una cláusula WHERE a la lista
+        # Si existe el parámetro 'tarifa_preferente' en el diccionario de parámetros,
+        # se agrega una condición a la lista de condiciones a evaluar.
         if 'tarifa_preferente' in parametros:where.append(f"TarifaPreferente = '{parametros['tarifa_preferente']}'")
         ############################################################################################################################
 
-
         ############################################################################################################################
-        # Si se especifica el tipo de promocion, agregamos una cláusula WHERE a la lista
+        # Si existe el parámetro 'tipo_promocion' en el diccionario de parámetros,
+        # se agrega una condición a la lista de condiciones a evaluar.
         if 'tipo_promocion' in parametros:where.append(f"TipoPromocion = '{parametros['tipo_promocion']}'")
         ############################################################################################################################
-
 
         ############################################################################################################################
         # Si se especifica una fecha de inicio y una fecha de fin para entradas, agregamos una cláusula WHERE que seleccione
@@ -92,9 +110,8 @@ class Queries:
             where.append(f"Entrada BETWEEN '{parametros['fecha_inicio_entrada']}' AND '{parametros['fecha_fin_entrada']}'")
 
         elif 'fecha_inicio_entrada' in parametros:where.append(f"Entrada >= '{parametros['fecha_inicio_entrada']}'")
-
         elif 'fecha_fin_entrada' in parametros:where.append(f"Entrada <= '{parametros['fecha_fin_entrada']}'")
-
+        ##############################################################
         # Si se especifica una fecha de inicio y una fecha de fin para salidas, agregamos una cláusula WHERE que seleccione
         # todas las salidas entre esas dos fechas. Si solo se especifica una fecha de inicio o una fecha de fin para salidas,
         # seleccionamos todas las salidas a partir de la fecha de inicio o hasta la fecha de fin, respectivamente.
@@ -102,21 +119,34 @@ class Queries:
             where.append(f"Salida BETWEEN '{parametros['fecha_inicio_salida']}' AND '{parametros['fecha_fin_salida']}'")
 
         elif 'fecha_inicio_salida' in parametros:where.append(f"Salida >= '{parametros['fecha_inicio_salida']}'")
-
         elif  'fecha_fin_salida' in parametros:where.append(f"Salida <= '{parametros['fecha_fin_salida']}'")
         ############################################################################################################################
 
+        ############################################################################################################################
+        if 'tiempo_dentro' in parametros:
+            # Si existe el parámetro 'tiempo_dentro' en el diccionario de parámetros,
+            # se agrega una condición a la lista de condiciones a evaluar.
+            where.append(f"TiempoTotal = '{parametros['tiempo_dentro']}'")
 
+        if 'tiempo_dentro_inicio' in parametros and 'tiempo_dentro_fin' in parametros:
+            # Si existen los parámetros 'tiempo_dentro_inicio' y 'tiempo_dentro_fin'
+            # en el diccionario de parámetros, se agrega una condición a la lista de
+            # condiciones a evaluar.
+            where.append(f"TiempoTotal BETWEEN '{parametros['tiempo_dentro_inicio']}' AND '{parametros['tiempo_dentro_fin']}'")
 
+        elif 'tiempo_dentro_inicio' in parametros:
+            # Si existe únicamente el parámetro 'tiempo_dentro_inicio' en el
+            # diccionario de parámetros, se agrega una condición a la lista de
+            # condiciones a evaluar.
+            where.append(f"TiempoTotal >= '{parametros['tiempo_dentro_inicio']}'")
 
+        elif 'tiempo_dentro_fin' in parametros:
+            # Si existe únicamente el parámetro 'tiempo_dentro_fin' en el
+            # diccionario de parámetros, se agrega una condición a la lista de
+            # condiciones a evaluar.
+            where.append(f"TiempoTotal <= '{parametros['tiempo_dentro_fin']}'")
 
-
-
-
-
-
-
-
+        ############################################################################################################################
 
 
         ############################################################################################################################
@@ -124,46 +154,52 @@ class Queries:
         if 'corte_numero' in parametros:
             where.append(f"CorteInc = {parametros['corte_numero']}")
 
+        # Si se especifican tanto el inicio como el fin del rango de números de corte,
+        # agregamos una cláusula WHERE entre ellos
         if 'corte_numero_inicio' in parametros and 'corte_numero_fin' in parametros:
             where.append(f"CorteInc BETWEEN {parametros['corte_numero_inicio']} AND {parametros['corte_numero_fin']}")
 
+        # Si solo se especifica el número de inicio del rango de números de corte, 
+        # agregamos una cláusula WHERE para números de corte mayores o iguales a él
         elif 'corte_numero_inicio' in parametros:
             where.append(f"CorteInc >= {parametros['corte_numero_inicio']}")
 
+        # Si solo se especifica el número de fin del rango de números de corte, 
+        # agregamos una cláusula WHERE para números de corte menores o iguales a él
         elif 'corte_numero_fin' in parametros:
             where.append(f"CorteInc <= {parametros['corte_numero_fin']}")
+
         ############################################################################################################################
 
 
         ############################################################################################################################
-        # Si se especifica el número de corte, agregamos una cláusula WHERE a la lista
+        # Si se especifica el importe, agregamos una cláusula WHERE a la lista
         if 'ingreso' in parametros:
-            where.append(f"Importe = {parametros['ingreso']}")
+            where.append(f"Importe = '{parametros['ingreso']}'")
 
+        # Si se especifica un rango de importes, agregamos una cláusula BETWEEN a la lista
         if 'ingreso_mayor' in parametros and 'ingreso_menor' in parametros:
-            where.append(f"Importe BETWEEN {parametros['ingreso_menor']} AND {parametros['ingreso_mayor']}")
+            where.append(f"Importe BETWEEN '{parametros['ingreso_menor']}' AND '{parametros['ingreso_mayor']}'")
 
+        # Si se especifica un importe máximo, agregamos una cláusula <= a la lista
         elif 'ingreso_mayor' in parametros:
-            where.append(f"Importe <= {parametros['ingreso_mayor']}")
+            where.append(f"Importe <= '{parametros['ingreso_mayor']}'")
 
+        # Si se especifica un importe mínimo, agregamos una cláusula >= a la lista
         elif 'ingreso_menor' in parametros:
-            where.append(f"Importe >= {parametros['ingreso_menor']}")
+            where.append(f"Importe >= '{parametros['ingreso_menor']}'")
+
         ############################################################################################################################
 
-
-
-
-
-
-
-
+        ############################################################################################################################
         # Si tenemos al menos una cláusula WHERE, las unimos con el operador AND y agregamos la cláusula WHERE
         # completa a nuestra consulta SQL. De lo contrario, simplemente dejamos la cláusula WHERE vacía.
         if where:
             where_clause = "WHERE " + " AND ".join(where)
         else:
             where_clause = ""
-
+        ############################################################################################################################
+        
         # Devolvemos la consulta SQL completa
         query =  f"SELECT id, Entrada, Salida, TiempoTotal, Importe, CorteInc, Placas, TarifaPreferente, TipoPromocion FROM Entradas {where_clause};"
         print(query)

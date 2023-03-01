@@ -5,6 +5,8 @@ import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
 
+from tkinter import ttk
+
 
 import xlsxwriter
 from xlsxwriter import exceptions
@@ -29,13 +31,9 @@ class EntradasController:
         Utiliza un hilo para mostrar el calendario y obtener la fecha seleccionada por el usuario.
 
         :param calendario: instancia de la clase Calendar_date.
-        :type calendario: Calendar_date
         :param fecha: fecha seleccionada por el usuario.
-        :type fecha: datetime
         :param variable: variable que se utiliza para almacenar la fecha seleccionada.
-        :type variable: tk.StringVar
         :param campo_texto: caja de texto donde se muestra la fecha seleccionada.
-        :type campo_texto: tk.Label
         """
         calendario = Calendar_date(self.theme)
         calendario.mostrar_calendario()
@@ -51,26 +49,36 @@ class EntradasController:
         campo_texto.config(text=fecha)
 
 
-    def hacer_consulta_entrada(self, id:int, tarifa_preferente:str, fecha_inicio_entrada:str, fecha_fin_entrada:str, fecha_inicio_salida:str, fecha_fin_salida:str, tiempo_dentro:str, tiempo_dentro_mayor:str, tiempo_dentro_menor:str, tipo_promocion:str, corte_numero:int, corte_numero_inicio:int, corte_numero_fin:int, ingreso:str, ingreso_mayor:str, ingreso_menor:str) -> list:
-
+    def hacer_consulta_entrada(self, id:int, tarifa_preferente:str, fecha_inicio_entrada:str, fecha_fin_entrada:str, fecha_inicio_salida:str, fecha_fin_salida:str, tiempo_dentro:str, tiempo_dentro_inicio:str, tiempo_dentro_fin:str, tipo_promocion:str, corte_numero:int, corte_numero_inicio:int, corte_numero_fin:int, ingreso:str, ingreso_mayor:str, ingreso_menor:str) -> list:
         """
         Realiza una consulta SQL con los valores proporcionados por el usuario y devuelve una lista de registros obtenidos.
 
         Args:
-        fecha_inicio_entrada (str): fecha de inicio de entrada en formato yyyy-mm-dd hh:mm:ss.
-        fecha_fin_entrada (str): fecha de fin de entrada en formato yyyy-mm-dd hh:mm:ss.
-        fecha_inicio_salida (str): fecha de inicio de salida en formato yyyy-mm-dd hh:mm:ss.
-        fecha_fin_salida (str): fecha de fin de salida en formato yyyy-mm-dd hh:mm:ss.
-        corte_numero (int): número de corte a consultar.
         id (int): ID del registro a consultar.
+        tarifa_preferente (str): valor de la tarifa preferente para consultar.
+        fecha_inicio_entrada (str): fecha de inicio de entrada en formato yyyy-mm-dd hh:mm:ss para consultar.
+        fecha_fin_entrada (str): fecha de fin de entrada en formato yyyy-mm-dd hh:mm:ss para consultar.
+        fecha_inicio_salida (str): fecha de inicio de salida en formato yyyy-mm-dd hh:mm:ss para consultar.
+        fecha_fin_salida (str): fecha de fin de salida en formato yyyy-mm-dd hh:mm:ss para consultar.
+        tiempo_dentro (str): duración de tiempo dentro del estacionamiento en formato "hh:mm:ss" para consultar.
+        tiempo_dentro_inicio (str): duración de tiempo dentro del estacionamiento en formato "hh:mm:ss" para consultar, con un rango de inicio.
+        tiempo_dentro_fin (str): duración de tiempo dentro del estacionamiento en formato "hh:mm:ss" para consultar, con un rango final.
+        tipo_promocion (str): tipo de promoción para consultar.
+        corte_numero (int): número de corte a consultar.
+        corte_numero_inicio (int): número de corte a consultar, con un rango de inicio.
+        corte_numero_fin (int): número de corte a consultar, con un rango final.
+        ingreso (str): valor de ingreso para consultar.
+        ingreso_mayor (str): valor de ingreso mayor para consultar.
+        ingreso_menor (str): valor de ingreso menor para consultar.
 
         Returns:
         list: una lista de registros obtenidos por la consulta.
 
         Raises:
         ValueError: si los campos para la consulta están vacíos.
-        TypeError: si el formato de la fecha ingresada no es correcto o la fecha ingresada no es válida.
+        TypeError: si el dato ingresado no es válido.
         """
+
         
         try:
             parametros = {}
@@ -86,8 +94,9 @@ class EntradasController:
             self.fecha_fin_salida = fecha_fin_salida
 
             self.tiempo_dentro = tiempo_dentro
-            self.tiempo_dentro_mayor = tiempo_dentro_mayor
-            self.tiempo_dentro_menor = tiempo_dentro_menor
+            self.tiempo_dentro_inicio = tiempo_dentro_inicio
+            self.tiempo_dentro_fin = tiempo_dentro_fin
+
 
             self.corte_numero = corte_numero
             self.corte_numero_inicio = corte_numero_inicio
@@ -99,15 +108,19 @@ class EntradasController:
 
 
             # Validar y agregar los parámetros a la consulta
+            ##########################################################################################################
             if id != '': parametros['id'] = int(id)
+            ##########################################################################################################
 
-
+            ##########################################################################################################
             if tarifa_preferente != '': parametros['tarifa_preferente'] = str(tarifa_preferente)
+            ##########################################################################################################
 
-
+            ##########################################################################################################
             if tipo_promocion != '': parametros['tipo_promocion'] = str(tipo_promocion)
+            ##########################################################################################################
 
-
+            ##########################################################################################################
             if fecha_inicio_entrada != '':
                 if len(fecha_inicio_entrada) != 19:
                     raise ValueError('Error, La cantidad de caracteres no corresponde al formato de fecha')
@@ -136,19 +149,19 @@ class EntradasController:
             if 'fecha_inicio_salida' in parametros and 'fecha_fin_salida' in parametros:
                 if parametros['fecha_inicio_salida'] > parametros['fecha_fin_salida']:
                     raise ValueError("La fecha de inicio debe ser menor o igual que la fecha final.")
+            ##########################################################################################################
 
+            ##########################################################################################################
+            if tiempo_dentro != '' and tiempo_dentro != '0:00:00': parametros['tiempo_dentro'] = str(tiempo_dentro)
+            if tiempo_dentro_inicio != '' and tiempo_dentro_inicio != '0:00:00': parametros['tiempo_dentro_inicio'] = str(tiempo_dentro_inicio)
+            if tiempo_dentro_fin != '' and tiempo_dentro_fin != '0:00:00': parametros['tiempo_dentro_fin'] = str(tiempo_dentro_fin)
 
+            if 'tiempo_dentro_inicio' in parametros and 'tiempo_dentro_fin' in parametros:
+                if parametros['tiempo_dentro_inicio'] > parametros['tiempo_dentro_fin']:
+                    raise ValueError("El tiempo de inicio debe ser menor o igual que el tiempo final.")
+            ##########################################################################################################
 
-
-
-
-            if tiempo_dentro != '': parametros['tiempo_dentro'] = str(tiempo_dentro)
-            if tiempo_dentro_mayor != '': parametros['tiempo_dentro_mayor'] = int(tiempo_dentro_mayor)
-            if tiempo_dentro_menor != '': parametros['tiempo_dentro_menor'] = int(tiempo_dentro_menor)
-
-
-
-
+            ##########################################################################################################
             if corte_numero != '':parametros['corte_numero'] = int(corte_numero)
             if corte_numero_inicio != '':parametros['corte_numero_inicio'] = int(corte_numero_inicio)
             if corte_numero_fin != '':parametros['corte_numero_fin'] = int(corte_numero_fin)
@@ -156,9 +169,9 @@ class EntradasController:
             if 'corte_numero_inicio' in parametros and 'corte_numero_fin' in parametros:
                 if parametros['corte_numero_inicio'] > parametros['corte_numero_fin']:
                     raise ValueError("El corte de inicio debe ser menor o igual que el corte final.")
+            ##########################################################################################################
 
-
-
+            ##########################################################################################################
             if ingreso != '':parametros['ingreso'] = round(float(ingreso), 1)
             if ingreso_mayor != '':parametros['ingreso_mayor'] = round(float(ingreso_mayor), 1)
             if ingreso_menor != '':parametros['ingreso_menor'] = round(float(ingreso_menor), 1)
@@ -166,7 +179,7 @@ class EntradasController:
             if 'ingreso_mayor' in parametros and 'ingreso_menor' in parametros:
                 if parametros['ingreso_menor'] > parametros['ingreso_mayor']:
                     raise ValueError("El ingreso menor debe de ser menor al ingreso mayor.")
-
+            ##########################################################################################################
 
 
 
@@ -179,18 +192,10 @@ class EntradasController:
             return registros
 
 
-
-
-
-
-
-
-
-
         except ValueError as e:
             messagebox.showwarning('Error', f'Error: {e}\nPor favor introduzca un dato válido para realizar la consulta.')
         except TypeError as e:
-            messagebox.showwarning('Error', f'Error: {e}\nEl formato de la fecha ingresada no es correcto o la fecha ingresada no es válida')
+            messagebox.showwarning('Error', f'Error: {e}\nEl dato ingresado no es válido')
 
 
     def realizar_reporte(self, registros):
@@ -262,4 +267,20 @@ class EntradasController:
         except ValueError as e:messagebox.showerror('Error', f'Error: {e}\nPara realizar un reporte primero tiene que realizar una consulta que contenga registros')
         except exceptions.FileCreateError as e:messagebox.showerror('Error', f'Error: El reporte no se puede generar, seleccione el directorio para guardar el reporte y vuelva a intentar')
 
+
+    def format_datetime(self, hour, minute, second):
+        """
+        Función que da formato a hora seleccionada.
+
+        Args:
+            hour (int): Hora seleccionada en formato de 24 horas.
+            minute (int): Minutos seleccionados.
+            second (int): Segundos seleccionados.
+
+        Returns:
+            str: Cadena que representa hora seleccionada en formato HH:MM:SS.
+        """
+
+        time_str = f"{hour:01}:{minute:02}:{second:02}"
+        return time_str
 

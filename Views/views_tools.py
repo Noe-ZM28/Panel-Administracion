@@ -74,9 +74,9 @@ class Calendar_date:
         # Creamos tres cuadros de entrada de tipo Spinbox para seleccionar la hora, minutos y segundos
         self.hour = Spinbox(self.ftwo, from_=0, to=23, wrap=True, textvariable=self.hour, width=2, state="readonly", font=f, justify=CENTER)
 
-        self.min = Spinbox(self.ftwo, from_=0, to=59, wrap=True, textvariable=self.min, font=f, width=2, justify=CENTER)
+        self.min = Spinbox(self.ftwo, from_=0, to=59, wrap=True, textvariable=self.min, font=f, width=2, state="readonly", justify=CENTER)
 
-        self.sec = Spinbox(self.ftwo,from_=0, to=59, wrap=True, textvariable=self.sec, width=2, font=f, justify=CENTER)
+        self.sec = Spinbox(self.ftwo,from_=0, to=59, wrap=True, textvariable=self.sec, width=2, font=f, state="readonly", justify=CENTER)
 
         # Añadimos los cuadros de entrada a la ventana
         self.hour.pack(side=LEFT, fill=X, expand=True)

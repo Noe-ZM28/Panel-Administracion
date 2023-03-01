@@ -2,7 +2,10 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import StringVar
+from tkinter import IntVar
 from tkinter import PhotoImage
+from tkinter import Spinbox
+
 from PIL import ImageTk, Image
 
 
@@ -27,17 +30,14 @@ class Panel_Entradas:
         # Establece la tabla que se visualizará por defecto
         self.ver_tabla = 'Entradas'
 
-
         # Crea la ventana principal
         self.panel = tk.Tk()
 
         self.theme = theme
         if self.theme != None:
             #temas xd
-            
             style = ThemedStyle(self.panel)
             style.theme_use(self.theme)
-
 
         ancho_max = self.panel.winfo_screenwidth()
         alto_max = self.panel.winfo_screenheight() - 100
@@ -49,10 +49,8 @@ class Panel_Entradas:
 
         self.panel.title(f'Panel de administración reporte general - Cortes')
 
-
         # Configura la columna principal del panel para que use todo el espacio disponible
         self.panel.columnconfigure(0, weight=1)
-
 
         # Crea las variables para la consulta simple
 
@@ -60,32 +58,24 @@ class Panel_Entradas:
 
         self.variable_tipo_tarifa_preferente = StringVar()
 
-
         self.variable_fecha_inicio_entrada = StringVar()
         self.variable_fecha_fin_entrada = StringVar()
         self.variable_fecha_inicio_salida = StringVar()
         self.variable_fecha_fin_salida = StringVar()
 
-
         self.variable_tiempo_dentro = StringVar()
-        self.variable_tiempo_dentro_mayor = StringVar()
-        self.variable_tiempo_dentro_menor = StringVar()
-
+        self.variable_tiempo_dentro_inicio = StringVar()
+        self.variable_tiempo_dentro_fin = StringVar()
 
         self.variable_tipo_promocion = StringVar()
-
 
         self.variable_corte_numero = StringVar()
         self.variable_corte_inicio = StringVar()
         self.variable_corte_fin = StringVar()
 
-
         self.variable_importe = StringVar()
         self.variable_importe_inicio = StringVar()
         self.variable_importe_final = StringVar()
-
-
-
 
 
 
@@ -124,6 +114,7 @@ class Panel_Entradas:
         # Crea las variables para almacenar los registros y las consultas a la base de datos
         self.registros = None
         self.query = Queries()
+        self.controlador_entrada = EntradasController(self.theme)
         self.message = None
         self.tabla = None
 
@@ -132,8 +123,6 @@ class Panel_Entradas:
         self.view_tabla()
         self.view_campos_consulta()
 
-
-        self.controlador_entrada = EntradasController(self.theme)
 
 
         # Inicia el loop principal de la ventana
@@ -280,6 +269,7 @@ class Panel_Entradas:
 
 
             ##########################################################################################################
+            #####################################################
             # Crear un LabelFrame para las entradas
             seccion_entrada = ttk.LabelFrame(seccion_fechas, text='Entradas')
             seccion_entrada.grid(row=3, column=0, padx=5, pady=5, sticky='nsew')
@@ -319,14 +309,12 @@ class Panel_Entradas:
             # Empaqueta los campos de texto y las leyendas en el LabelFrame de las entradas
             self.campo_texto_entrada_fecha_inicio.grid(row=0, column=2, padx=5, pady=5,sticky='nsew')
             self.campo_texto_entrada_fecha_fin.grid(row=1, column=2, padx=5, pady=5, sticky='nsew')
+            #####################################################
 
-
-
+            #####################################################
             # Crear un LabelFrame para las salidas
             seccion_salida = ttk.LabelFrame(seccion_fechas, text='Salidas')
             seccion_salida.grid(row=4, column=0, padx=5, pady=5, sticky='nsew')
-
-
 
             # Crear el boton para el calendario salida inicio
             boton_calendario_inicio_salida = ttk.Button(seccion_salida, image=self.icono_calendario, 
@@ -336,7 +324,6 @@ class Panel_Entradas:
                                                                                             variable=self.variable_fecha_inicio_salida,
                                                                                             campo_texto=self.campo_texto_salida_fecha_inicio))
             boton_calendario_inicio_salida.grid(row=0, column=0, sticky=tk.W)
-
 
             # Crear los campos de texto para las salidas
             self.campo_texto_salida_fecha_inicio = ttk.Label(seccion_salida, text='')
@@ -363,13 +350,81 @@ class Panel_Entradas:
             # Empaqueta los campos de texto y las leyendas en el LabelFrame de las salidas
             self.campo_texto_salida_fecha_inicio.grid(row=0, column=2, padx=5, pady=5, sticky='nsew')
             self.campo_texto_salida_fecha_fin.grid(row=1, column=2, padx=5, pady=5, sticky='nsew')
+            ##########################################################################################################
 
 
+            ##########################################################################################################
             seccion_tiempo_dentro = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Tiempo dentro')
             seccion_tiempo_dentro.grid(row=0, column=1, padx=5, pady=5, sticky=tk.NW)
 
-            etiqueta_fecha_fin_salida = ttk.Label(seccion_tiempo_dentro, text='Fecha fin:')
-            etiqueta_fecha_fin_salida.grid(row=0, column=0, sticky=tk.NW)
+           #####################################################
+            self.variable_auxiliar_tiempo_dentro_hora = IntVar()
+            self.variable_variable_tiempo_dentro_minuto = IntVar()
+            self.variable_variable_tiempo_dentro_segundo = IntVar()
+
+            # Etiqueta que indica la función de los cuadros de entrada
+            etiqueta_hora = ttk.Label(seccion_tiempo_dentro, text="Tiempo: ")
+            etiqueta_hora.grid(row=0, column=0, padx=5, pady=5, sticky=tk.NW)
+            # Creamos tres cuadros de entrada de tipo Spinbox para seleccionar la hora, minutos y segundos
+            self.hora_tiempo = ttk.Spinbox(seccion_tiempo_dentro, from_=0, to=23, wrap=True, textvariable=self.variable_auxiliar_tiempo_dentro_hora, width=2, state="readonly", justify=tk.CENTER, font=("Times", 12))
+            self.hora_tiempo.grid(row=0, column=1, padx=5, pady=5, sticky=tk.NW)
+            self.hora_tiempo.configure(foreground="black")
+
+
+            self.minuto_tiempo = ttk.Spinbox(seccion_tiempo_dentro, from_=0, to=59, wrap=True, textvariable=self.variable_variable_tiempo_dentro_minuto, width=2, state="readonly", justify=tk.CENTER, font=("Times", 12))
+            self.minuto_tiempo.grid(row=0, column=2, padx=5, pady=5, sticky=tk.NW)
+            self.minuto_tiempo.configure(foreground="black")
+
+
+            self.segundo_tiempo = ttk.Spinbox(seccion_tiempo_dentro,from_=0, to=59, wrap=True, textvariable=self.variable_variable_tiempo_dentro_segundo, width=2, state="readonly", justify=tk.CENTER, font=("Times", 12))
+            self.segundo_tiempo.grid(row=0, column=3, padx=5, pady=5, sticky=tk.NW)
+            self.segundo_tiempo.configure(foreground="black")
+            #####################################################
+
+            #####################################################
+            self.variable_auxiliar_tiempo_dentro_hora_inicio = IntVar()
+            self.variable_variable_tiempo_dentro_minuto_inicio = IntVar()
+            self.variable_variable_tiempo_dentro_segundo_inicio = IntVar()
+
+            etiqueta_hora = ttk.Label(seccion_tiempo_dentro, text="Tiempo inicio: ")
+            etiqueta_hora.grid(row=1, column=0, padx=5, pady=5, sticky=tk.NW)
+            # Creamos tres cuadros de entrada de tipo Spinbox para seleccionar la hora, minutos y segundos
+            self.hora_tiempo_inicio = ttk.Spinbox(seccion_tiempo_dentro, from_=0, to=23, wrap=True, textvariable=self.variable_auxiliar_tiempo_dentro_hora_inicio, width=2, state="readonly", justify=tk.CENTER, font=("Times", 12))
+            self.hora_tiempo_inicio.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NW)
+            self.hora_tiempo_inicio.configure(foreground="black")
+
+
+            self.minuto_tiempo_inicio = ttk.Spinbox(seccion_tiempo_dentro, from_=0, to=59, wrap=True, textvariable=self.variable_variable_tiempo_dentro_minuto_inicio, width=2, state="readonly", justify=tk.CENTER, font=("Times", 12))
+            self.minuto_tiempo_inicio.grid(row=1, column=2, padx=5, pady=5, sticky=tk.NW)
+            self.minuto_tiempo_inicio.configure(foreground="black")
+
+
+            self.segundo_tiempo_inicio = ttk.Spinbox(seccion_tiempo_dentro,from_=0, to=59, wrap=True, textvariable=self.variable_variable_tiempo_dentro_segundo_inicio, width=2, state="readonly", justify=tk.CENTER, font=("Times", 12))
+            self.segundo_tiempo_inicio.grid(row=1, column=3, padx=5, pady=5, sticky=tk.NW)
+            self.segundo_tiempo_inicio.configure(foreground="black")
+            #####################################################
+
+            #####################################################
+            self.variable_auxiliar_tiempo_dentro_hora_fin = IntVar()
+            self.variable_variable_tiempo_dentro_minuto_fin = IntVar()
+            self.variable_variable_tiempo_dentro_segundo_fin = IntVar()
+
+            etiqueta_hora = ttk.Label(seccion_tiempo_dentro, text="Tiempo final: ")
+            etiqueta_hora.grid(row=2, column=0, padx=5, pady=5, sticky=tk.NW)
+            # Creamos tres cuadros de entrada de tipo Spinbox para seleccionar la hora, minutos y segundos
+            self.hora_tiempo_final = ttk.Spinbox(seccion_tiempo_dentro, from_=0, to=23, wrap=True, textvariable=self.variable_auxiliar_tiempo_dentro_hora_fin, width=2, state="readonly", justify=tk.CENTER, font=("", 12))
+            self.hora_tiempo_final.grid(row=2, column=1, padx=5, pady=5, sticky=tk.NW)
+            self.hora_tiempo_final.configure(foreground="black")
+
+
+            self.minuto_tiempo_final = ttk.Spinbox(seccion_tiempo_dentro, from_=0, to=59, wrap=True, textvariable=self.variable_variable_tiempo_dentro_minuto_fin, width=2, state="readonly", justify=tk.CENTER, font=("", 12))
+            self.minuto_tiempo_final.grid(row=2, column=2, padx=5, pady=5, sticky=tk.NW)
+            self.minuto_tiempo_final.configure(foreground="black")
+
+
+            self.segundo_tiempo_final = ttk.Spinbox(seccion_tiempo_dentro,from_=0, to=59, wrap=True, textvariable=self.variable_variable_tiempo_dentro_segundo_fin, width=2, state="readonly", justify=tk.CENTER, font=("", 12))
+            self.segundo_tiempo_final.grid(row=2, column=3, padx=5, pady=5, sticky=tk.NW)
+            self.segundo_tiempo_final.configure(foreground="black")
             ##########################################################################################################
 
 
@@ -456,18 +511,6 @@ class Panel_Entradas:
                 self.lista_promociones.insert(tk.END, promocion)
             ##########################################################################################################
 
-
-
-
-
-
-
-
-
-
-
-
-
             ##########################################################################################################
             # Crea un LabelFrame para los botones de desconectar y salir
             seccion_botones_consulta = ttk.LabelFrame(self.seccion_formulario_datos , text='Botones consulta')
@@ -491,12 +534,6 @@ class Panel_Entradas:
         view_consulta_avanzada(self)
 
 
-
-
-
-
-
-
     def view_tabla(self):
         """
         Crea una tabla en la interfaz y la llena con los datos de la base de datos.
@@ -511,7 +548,7 @@ class Panel_Entradas:
 
         seccion_tabla = ttk.LabelFrame(self.panel, text = '')
         seccion_tabla.columnconfigure(0, weight=1, uniform='tabla')
-        seccion_tabla.rowconfigure(0, weight=1)
+        seccion_tabla.rowconfigure(0, weight=1, uniform='tabla')
         seccion_tabla.grid_propagate(True)
         seccion_tabla.grid(row=1, column=0, sticky='nsew')
 
@@ -550,7 +587,16 @@ class Panel_Entradas:
 
 
 
+
     def mostrar_campos_simple(self):
+        """
+        Muestra los campos de entrada de la consulta simple en la interfaz gráfica.
+
+        Esta función se encarga de mostrar los campos de entrada de la consulta simple en la interfaz gráfica,
+        y ocultar la sección de consulta avanzada y la sección de formulario de datos si es que están visibles.
+        Además, llama a la función "vaciar_campos()" para limpiar los campos de entrada de texto y variables
+        de control en la interfaz gráfica.
+        """
         if self.seccion_formulario_datos.winfo_ismapped():
             self.seccion_consulta_simple.grid_forget()  # ocultar el labelframe
             self.seccion_consulta_avanzada.grid_forget()
@@ -561,7 +607,16 @@ class Panel_Entradas:
             self.seccion_consulta_simple.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')  # mostrar el labelframe 
             self.seccion_formulario_datos.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NSEW)
 
+
     def mostrar_campos_avanzado(self):
+        """
+        Muestra los campos de entrada de la consulta avanzada en la interfaz gráfica.
+
+        Esta función se encarga de mostrar los campos de entrada de la consulta avanzada en la interfaz gráfica,
+        y ocultar la sección de consulta simple y la sección de formulario de datos si es que están visibles.
+        Además, llama a la función "vaciar_campos()" para limpiar los campos de entrada de texto y variables
+        de control en la interfaz gráfica.
+        """
         if self.seccion_formulario_datos.winfo_ismapped():
             self.seccion_consulta_simple.grid_forget()  # ocultar el labelframe
             self.seccion_consulta_avanzada.grid_forget()
@@ -574,7 +629,6 @@ class Panel_Entradas:
 
 
 
-
     def ver_tabla_completa(self):
         '''Método para visualizar la tabla completa sin restricciones.'''
         #Advierte sobre la cantidad de registros
@@ -584,7 +638,6 @@ class Panel_Entradas:
             
             # Llena la tabla con los registros
             self.llenar_tabla(self.registros)
-
 
     def llenar_tabla(self, registros):
         '''Llena la tabla con los registros que cumplen con los criterios de búsqueda.
@@ -600,8 +653,6 @@ class Panel_Entradas:
             for registro in registros:
                 self.tabla.insert('', 'end', values=registro)
 
-
-
     def vaciar_tabla(self):
         """
         Elimina todas las filas de la tabla.
@@ -610,6 +661,10 @@ class Panel_Entradas:
         self.tabla.delete(*self.tabla.get_children())
 
     def limpiar_registros(self):
+        '''
+        Elimina todos los registros de la variable registros y vacia la tabla
+        '''
+
         self.registros = None
         self.vaciar_tabla()
 
@@ -618,21 +673,7 @@ class Panel_Entradas:
         Limpia los campos de entrada de texto y variables de control en la interfaz gráfica.
 
         Esta función se encarga de limpiar los campos de entrada de texto y variables de control en la interfaz gráfica.
-        En particular, los siguientes elementos son limpiados:
-        - campo_texto_corte
-        - campo_texto_folio
-        - campo_texto_entrada_fecha_inicio
-        - campo_texto_entrada_fecha_fin
-        - campo_texto_salida_fecha_fin
-        - campo_texto_salida_fecha_inicio
-        - variable_corte_numero
-        - variable_folio
-        - variable_fecha_inicio_entrada
-        - variable_fecha_fin_entrada
-        - variable_fecha_inicio_salida
-        - variable_fecha_fin_salida
         """
-        # Limpia las variables
         self.variable_folio.set('')
 
 
@@ -646,8 +687,20 @@ class Panel_Entradas:
 
 
         self.variable_tiempo_dentro.set('')
-        self.variable_tiempo_dentro_mayor.set('')
-        self.variable_tiempo_dentro_menor.set('')
+        self.variable_tiempo_dentro_fin.set('')
+        self.variable_tiempo_dentro_inicio.set('')
+
+        self.variable_auxiliar_tiempo_dentro_hora.set('0')
+        self.variable_variable_tiempo_dentro_minuto.set('0')
+        self.variable_variable_tiempo_dentro_segundo.set('0')
+
+        self.variable_auxiliar_tiempo_dentro_hora_inicio.set('0')
+        self.variable_variable_tiempo_dentro_minuto_inicio.set('0')
+        self.variable_variable_tiempo_dentro_segundo_inicio.set('0')
+
+        self.variable_auxiliar_tiempo_dentro_hora_fin.set('0')
+        self.variable_variable_tiempo_dentro_minuto_fin.set('0')
+        self.variable_variable_tiempo_dentro_segundo_fin.set('0')
 
 
         #self.variable_tipo_promocion.set('')
@@ -679,6 +732,11 @@ class Panel_Entradas:
         self.campo_texto_salida_fecha_inicio.config(text="")
 
 
+        self.hora_tiempo.selection_clear()
+        self.minuto_tiempo.selection_clear()
+        self.segundo_tiempo.selection_clear()
+
+
         self.lista_promociones.selection_clear(0, 'end')
         self.lista_desplegable_tipo_promocion.selection_clear()
 
@@ -693,42 +751,58 @@ class Panel_Entradas:
         self.lista_desplegable_ingreso_final.selection_clear()
 
 
-    def hacer_consulta_entrada(self):
-        """
-        Realiza una consulta de entrada con los parámetros proporcionados por el usuario y llena la tabla con los resultados obtenidos.
-        """
-        self.registros = self.controlador_entrada.hacer_consulta_entrada(
-                                                                            id = self.variable_folio.get(),
-                                                                            tarifa_preferente = self.variable_tipo_tarifa_preferente.get(),
-                                                                            tipo_promocion = '',
+        def hacer_consulta_entrada(self):
+                """
+                Realiza una consulta de entrada con los parámetros proporcionados por el usuario y llena la tabla con los resultados obtenidos.
+                """
+                # Se actualiza el valor de la variable de tiempo dentro con los valores de los Spinbox correspondientes
+                self.variable_tiempo_dentro.set(self.controlador_entrada.format_datetime(
+                                                                                        hour = int(self.variable_auxiliar_tiempo_dentro_hora.get()),
+                                                                                        minute = int(self.variable_variable_tiempo_dentro_minuto.get()),
+                                                                                        second = int(self.variable_variable_tiempo_dentro_segundo.get())))
 
-                                                                            fecha_inicio_entrada = self.variable_fecha_inicio_entrada.get(),
-                                                                            fecha_fin_entrada = self.variable_fecha_fin_entrada.get(),
-                                                                            fecha_inicio_salida = self.variable_fecha_inicio_salida.get(),
-                                                                            fecha_fin_salida = self.variable_fecha_fin_salida.get(),
+                # Se actualiza el valor de la variable de tiempo dentro de inicio con los valores de los Spinbox correspondientes
+                self.variable_tiempo_dentro_inicio.set(self.controlador_entrada.format_datetime(
+                                                                                                hour = int(self.variable_auxiliar_tiempo_dentro_hora_inicio.get()),
+                                                                                                minute = int(self.variable_variable_tiempo_dentro_minuto_inicio.get()),
+                                                                                                second = int(self.variable_variable_tiempo_dentro_segundo_inicio.get())))
 
+                # Se actualiza el valor de la variable de tiempo dentro de fin con los valores de los Spinbox correspondientes
+                self.variable_tiempo_dentro_fin.set(self.controlador_entrada.format_datetime(
+                                                                                            hour = int(self.variable_auxiliar_tiempo_dentro_hora_fin.get()),
+                                                                                            minute = int(self.variable_variable_tiempo_dentro_minuto_fin.get()),
+                                                                                            second = int(self.variable_variable_tiempo_dentro_segundo_fin.get())))
 
-                                                                            tiempo_dentro = self.variable_tiempo_dentro.get(),
-                                                                            tiempo_dentro_mayor = self.variable_tiempo_dentro_mayor.get(),
-                                                                            tiempo_dentro_menor = self.variable_tiempo_dentro_menor.get(),
-                                                                          
+                # Se llama a la función de hacer_consulta_entrada del controlador de entrada para obtener los registros correspondientes
+                self.registros = self.controlador_entrada.hacer_consulta_entrada(
+                                                                                    id = self.variable_folio.get(),
+                                                                                    tarifa_preferente = self.variable_tipo_tarifa_preferente.get(),
+                                                                                    tipo_promocion = '',
 
-                                                                            corte_numero = self.variable_corte_numero.get(),
-                                                                            corte_numero_inicio = self.variable_corte_inicio.get(),
-                                                                            corte_numero_fin = self.variable_corte_fin.get(),
+                                                                                    fecha_inicio_entrada = self.variable_fecha_inicio_entrada.get(),
+                                                                                    fecha_fin_entrada = self.variable_fecha_fin_entrada.get(),
+                                                                                    fecha_inicio_salida = self.variable_fecha_inicio_salida.get(),
+                                                                                    fecha_fin_salida = self.variable_fecha_fin_salida.get(),
 
+                                                                                    tiempo_dentro = self.variable_tiempo_dentro.get(),
+                                                                                    tiempo_dentro_fin = self.variable_tiempo_dentro_fin.get(),
+                                                                                    tiempo_dentro_inicio = self.variable_tiempo_dentro_inicio.get(),
+                                                                                
 
-                                                                            ingreso = self.variable_importe.get(),
-                                                                            ingreso_mayor = self.variable_importe_final.get(),
-                                                                            ingreso_menor = self.variable_importe_inicio.get())
+                                                                                    corte_numero = self.variable_corte_numero.get(),
+                                                                                    corte_numero_inicio = self.variable_corte_inicio.get(),
+                                                                                    corte_numero_fin = self.variable_corte_fin.get(),
 
+                                                                                    ingreso = self.variable_importe.get(),
+                                                                                    ingreso_mayor = self.variable_importe_final.get(),
+                                                                                    ingreso_menor = self.variable_importe_inicio.get())
 
-        self.llenar_tabla(self.registros)
+                # Se llena la tabla con los registros obtenidos
+                self.llenar_tabla(self.registros)
 
 
     def desconectar(self):
         pass
-
 
     def salir(self):
         """
