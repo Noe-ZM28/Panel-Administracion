@@ -128,7 +128,6 @@ class Panel_Entradas:
         # Inicia el loop principal de la ventana
         self.panel.mainloop()
 
-
     def view_campos_consulta(self):
         '''Crea y empaqueta los campos de consulta en la ventana.'''
         #Label frame principal
@@ -246,7 +245,7 @@ class Panel_Entradas:
             seccion_botones_consulta.grid(row=0, column=1, padx=5, pady=5, sticky='NW')
 
             # Crea un botón y lo empaqueta en la seccion_botones_consulta
-            boton_consulta = ttk.Button(seccion_botones_consulta, text='Realizar consulta', command=self.hacer_consulta_entrada, width=50)
+            boton_consulta = ttk.Button(seccion_botones_consulta, text='Realizar consulta', command=self.consulta_entrada, width=50)
 
             boton_consulta.grid(row=0, column=0, padx=5, pady=5)
 
@@ -517,7 +516,7 @@ class Panel_Entradas:
             seccion_botones_consulta.grid(row=2, column=1, padx=5, pady=5, sticky='NW')
 
             # Crea un botón y lo empaqueta en la seccion_botones_consulta
-            boton_consulta = ttk.Button(seccion_botones_consulta, text='Realizar consulta', command=self.hacer_consulta_entrada)
+            boton_consulta = ttk.Button(seccion_botones_consulta, text='Realizar consulta', command=self.consulta_entrada)
             boton_consulta.grid(row=0, column=0, padx=5, pady=5)
 
             # Crea un botón y lo empaqueta en la seccion_botones_consulta
@@ -532,7 +531,6 @@ class Panel_Entradas:
 
         view_consulta_simple(self)
         view_consulta_avanzada(self)
-
 
     def view_tabla(self):
         """
@@ -587,7 +585,6 @@ class Panel_Entradas:
 
 
 
-
     def mostrar_campos_simple(self):
         """
         Muestra los campos de entrada de la consulta simple en la interfaz gráfica.
@@ -606,7 +603,6 @@ class Panel_Entradas:
             self.seccion_consulta_avanzada.grid_forget()
             self.seccion_consulta_simple.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')  # mostrar el labelframe 
             self.seccion_formulario_datos.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NSEW)
-
 
     def mostrar_campos_avanzado(self):
         """
@@ -750,55 +746,54 @@ class Panel_Entradas:
         self.lista_desplegable_ingreso_inicio.selection_clear()
         self.lista_desplegable_ingreso_final.selection_clear()
 
+    def consulta_entrada(self):
+            """
+            Realiza una consulta de entrada con los parámetros proporcionados por el usuario y llena la tabla con los resultados obtenidos.
+            """
+            # Se actualiza el valor de la variable de tiempo dentro con los valores de los Spinbox correspondientes
+            self.variable_tiempo_dentro.set(self.controlador_entrada.format_datetime(
+                                                                                    hour = int(self.variable_auxiliar_tiempo_dentro_hora.get()),
+                                                                                    minute = int(self.variable_variable_tiempo_dentro_minuto.get()),
+                                                                                    second = int(self.variable_variable_tiempo_dentro_segundo.get())))
 
-        def hacer_consulta_entrada(self):
-                """
-                Realiza una consulta de entrada con los parámetros proporcionados por el usuario y llena la tabla con los resultados obtenidos.
-                """
-                # Se actualiza el valor de la variable de tiempo dentro con los valores de los Spinbox correspondientes
-                self.variable_tiempo_dentro.set(self.controlador_entrada.format_datetime(
-                                                                                        hour = int(self.variable_auxiliar_tiempo_dentro_hora.get()),
-                                                                                        minute = int(self.variable_variable_tiempo_dentro_minuto.get()),
-                                                                                        second = int(self.variable_variable_tiempo_dentro_segundo.get())))
+            # Se actualiza el valor de la variable de tiempo dentro de inicio con los valores de los Spinbox correspondientes
+            self.variable_tiempo_dentro_inicio.set(self.controlador_entrada.format_datetime(
+                                                                                            hour = int(self.variable_auxiliar_tiempo_dentro_hora_inicio.get()),
+                                                                                            minute = int(self.variable_variable_tiempo_dentro_minuto_inicio.get()),
+                                                                                            second = int(self.variable_variable_tiempo_dentro_segundo_inicio.get())))
 
-                # Se actualiza el valor de la variable de tiempo dentro de inicio con los valores de los Spinbox correspondientes
-                self.variable_tiempo_dentro_inicio.set(self.controlador_entrada.format_datetime(
-                                                                                                hour = int(self.variable_auxiliar_tiempo_dentro_hora_inicio.get()),
-                                                                                                minute = int(self.variable_variable_tiempo_dentro_minuto_inicio.get()),
-                                                                                                second = int(self.variable_variable_tiempo_dentro_segundo_inicio.get())))
+            # Se actualiza el valor de la variable de tiempo dentro de fin con los valores de los Spinbox correspondientes
+            self.variable_tiempo_dentro_fin.set(self.controlador_entrada.format_datetime(
+                                                                                        hour = int(self.variable_auxiliar_tiempo_dentro_hora_fin.get()),
+                                                                                        minute = int(self.variable_variable_tiempo_dentro_minuto_fin.get()),
+                                                                                        second = int(self.variable_variable_tiempo_dentro_segundo_fin.get())))
 
-                # Se actualiza el valor de la variable de tiempo dentro de fin con los valores de los Spinbox correspondientes
-                self.variable_tiempo_dentro_fin.set(self.controlador_entrada.format_datetime(
-                                                                                            hour = int(self.variable_auxiliar_tiempo_dentro_hora_fin.get()),
-                                                                                            minute = int(self.variable_variable_tiempo_dentro_minuto_fin.get()),
-                                                                                            second = int(self.variable_variable_tiempo_dentro_segundo_fin.get())))
+            # Se llama a la función de hacer_consulta_entrada del controlador de entrada para obtener los registros correspondientes
+            self.registros = self.controlador_entrada.hacer_consulta_entrada(
+                                                                                id = self.variable_folio.get(),
+                                                                                tarifa_preferente = self.variable_tipo_tarifa_preferente.get(),
+                                                                                tipo_promocion = '',
 
-                # Se llama a la función de hacer_consulta_entrada del controlador de entrada para obtener los registros correspondientes
-                self.registros = self.controlador_entrada.hacer_consulta_entrada(
-                                                                                    id = self.variable_folio.get(),
-                                                                                    tarifa_preferente = self.variable_tipo_tarifa_preferente.get(),
-                                                                                    tipo_promocion = '',
+                                                                                fecha_inicio_entrada = self.variable_fecha_inicio_entrada.get(),
+                                                                                fecha_fin_entrada = self.variable_fecha_fin_entrada.get(),
+                                                                                fecha_inicio_salida = self.variable_fecha_inicio_salida.get(),
+                                                                                fecha_fin_salida = self.variable_fecha_fin_salida.get(),
 
-                                                                                    fecha_inicio_entrada = self.variable_fecha_inicio_entrada.get(),
-                                                                                    fecha_fin_entrada = self.variable_fecha_fin_entrada.get(),
-                                                                                    fecha_inicio_salida = self.variable_fecha_inicio_salida.get(),
-                                                                                    fecha_fin_salida = self.variable_fecha_fin_salida.get(),
+                                                                                tiempo_dentro = self.variable_tiempo_dentro.get(),
+                                                                                tiempo_dentro_fin = self.variable_tiempo_dentro_fin.get(),
+                                                                                tiempo_dentro_inicio = self.variable_tiempo_dentro_inicio.get(),
+                                                                            
 
-                                                                                    tiempo_dentro = self.variable_tiempo_dentro.get(),
-                                                                                    tiempo_dentro_fin = self.variable_tiempo_dentro_fin.get(),
-                                                                                    tiempo_dentro_inicio = self.variable_tiempo_dentro_inicio.get(),
-                                                                                
+                                                                                corte_numero = self.variable_corte_numero.get(),
+                                                                                corte_numero_inicio = self.variable_corte_inicio.get(),
+                                                                                corte_numero_fin = self.variable_corte_fin.get(),
 
-                                                                                    corte_numero = self.variable_corte_numero.get(),
-                                                                                    corte_numero_inicio = self.variable_corte_inicio.get(),
-                                                                                    corte_numero_fin = self.variable_corte_fin.get(),
+                                                                                ingreso = self.variable_importe.get(),
+                                                                                ingreso_mayor = self.variable_importe_final.get(),
+                                                                                ingreso_menor = self.variable_importe_inicio.get())
 
-                                                                                    ingreso = self.variable_importe.get(),
-                                                                                    ingreso_mayor = self.variable_importe_final.get(),
-                                                                                    ingreso_menor = self.variable_importe_inicio.get())
-
-                # Se llena la tabla con los registros obtenidos
-                self.llenar_tabla(self.registros)
+            # Se llena la tabla con los registros obtenidos
+            self.llenar_tabla(self.registros)
 
 
     def desconectar(self):
