@@ -358,74 +358,60 @@ class Panel_Entradas:
             seccion_tiempo_dentro = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Tiempo dentro')
             seccion_tiempo_dentro.grid(row=0, column=1, padx=5, pady=5, sticky=tk.NW)
 
+            opciones_minutos = [0, 1, 2, 3, 4, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]
+            opciones_horas = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+
+            etiqueta_tiempo_dentro_hora = ttk.Label(seccion_tiempo_dentro,  text='Hrs')
+            etiqueta_tiempo_dentro_hora.grid(row=0, column=1, padx=5, pady=5, sticky=tk.NW)
+            etiqueta_tiempo_dentro_min = ttk.Label(seccion_tiempo_dentro,  text='Min')
+            etiqueta_tiempo_dentro_min.grid(row=0, column=2, padx=5 , pady=5, sticky=tk.NW)
             #####################################################
             self.variable_auxiliar_tiempo_dentro_hora = IntVar()
             self.variable_variable_tiempo_dentro_minuto = IntVar()
-            self.variable_variable_tiempo_dentro_segundo = IntVar()
 
-            # Etiqueta que indica la función de los cuadros de entrada
-            etiqueta_hora = ttk.Label(seccion_tiempo_dentro, text="Tiempo: ")
-            etiqueta_hora.grid(row=0, column=0, padx=5, pady=5, sticky=tk.NW)
-            # Creamos tres cuadros de entrada de tipo Spinbox para seleccionar la hora, minutos y segundos
-            self.hora_tiempo = ttk.Spinbox(seccion_tiempo_dentro, from_=0, to=23, wrap=True, textvariable=self.variable_auxiliar_tiempo_dentro_hora, width=2, state="readonly", justify=tk.CENTER, font=("Times", 12))
-            self.hora_tiempo.grid(row=0, column=1, padx=5, pady=5, sticky=tk.NW)
-            self.hora_tiempo.configure(foreground="black")
+            etiqueta_tiempo_dentro_hora = ttk.Label(seccion_tiempo_dentro,  text='Tiempo: ')
+            etiqueta_tiempo_dentro_hora.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
 
+            self.lista_desplegable_tiempo_dentro_hora = ttk.Combobox(seccion_tiempo_dentro, values=opciones_horas, textvariable=self.variable_auxiliar_tiempo_dentro_hora, state='readonly',width=2 ,height=5)
+            self.lista_desplegable_tiempo_dentro_hora.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NW)
+            self.lista_desplegable_tiempo_dentro_hora.configure(foreground="black")
 
-            self.minuto_tiempo = ttk.Spinbox(seccion_tiempo_dentro, from_=0, to=59, wrap=True, textvariable=self.variable_variable_tiempo_dentro_minuto, width=2, state="readonly", justify=tk.CENTER, font=("Times", 12))
-            self.minuto_tiempo.grid(row=0, column=2, padx=5, pady=5, sticky=tk.NW)
-            self.minuto_tiempo.configure(foreground="black")
-
-
-            self.segundo_tiempo = ttk.Spinbox(seccion_tiempo_dentro,from_=0, to=59, wrap=True, textvariable=self.variable_variable_tiempo_dentro_segundo, width=2, state="readonly", justify=tk.CENTER, font=("Times", 12))
-            self.segundo_tiempo.grid(row=0, column=3, padx=5, pady=5, sticky=tk.NW)
-            self.segundo_tiempo.configure(foreground="black")
+            self.lista_desplegable_tiempo_dentro_minuto = ttk.Combobox(seccion_tiempo_dentro, values=opciones_minutos, textvariable=self.variable_variable_tiempo_dentro_minuto, state='readonly',width=2 ,height=5)
+            self.lista_desplegable_tiempo_dentro_minuto.grid(row=1, column=2, padx=5, pady=5, sticky=tk.NW)
+            self.lista_desplegable_tiempo_dentro_minuto.configure(foreground="black")
             #####################################################
 
             #####################################################
             self.variable_auxiliar_tiempo_dentro_hora_inicio = IntVar()
             self.variable_variable_tiempo_dentro_minuto_inicio = IntVar()
-            self.variable_variable_tiempo_dentro_segundo_inicio = IntVar()
 
-            etiqueta_hora = ttk.Label(seccion_tiempo_dentro, text="Tiempo inicio: ")
-            etiqueta_hora.grid(row=1, column=0, padx=5, pady=5, sticky=tk.NW)
-            # Creamos tres cuadros de entrada de tipo Spinbox para seleccionar la hora, minutos y segundos
-            self.hora_tiempo_inicio = ttk.Spinbox(seccion_tiempo_dentro, from_=0, to=23, wrap=True, textvariable=self.variable_auxiliar_tiempo_dentro_hora_inicio, width=2, state="readonly", justify=tk.CENTER, font=("Times", 12))
-            self.hora_tiempo_inicio.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NW)
-            self.hora_tiempo_inicio.configure(foreground="black")
+            etiqueta_hora = ttk.Label(seccion_tiempo_dentro, text="Tiempo mayor a: ")
+            etiqueta_hora.grid(row=2, column=0, padx=5, pady=5, sticky=tk.NW)
 
+            self.lista_desplegable_tiempo_dentro_hora_inicio = ttk.Combobox(seccion_tiempo_dentro, values=opciones_horas, textvariable=self.variable_auxiliar_tiempo_dentro_hora_inicio, state='readonly',width=2 ,height=5)
+            self.lista_desplegable_tiempo_dentro_hora_inicio.grid(row=2, column=1, padx=5, pady=5, sticky=tk.NW)
+            self.lista_desplegable_tiempo_dentro_hora_inicio.configure(foreground="black")
 
-            self.minuto_tiempo_inicio = ttk.Spinbox(seccion_tiempo_dentro, from_=0, to=59, wrap=True, textvariable=self.variable_variable_tiempo_dentro_minuto_inicio, width=2, state="readonly", justify=tk.CENTER, font=("Times", 12))
-            self.minuto_tiempo_inicio.grid(row=1, column=2, padx=5, pady=5, sticky=tk.NW)
-            self.minuto_tiempo_inicio.configure(foreground="black")
-
-
-            self.segundo_tiempo_inicio = ttk.Spinbox(seccion_tiempo_dentro,from_=0, to=59, wrap=True, textvariable=self.variable_variable_tiempo_dentro_segundo_inicio, width=2, state="readonly", justify=tk.CENTER, font=("Times", 12))
-            self.segundo_tiempo_inicio.grid(row=1, column=3, padx=5, pady=5, sticky=tk.NW)
-            self.segundo_tiempo_inicio.configure(foreground="black")
+            self.lista_desplegable_tiempo_dentro_minuto_inicio = ttk.Combobox(seccion_tiempo_dentro, values=opciones_minutos, textvariable=self.variable_variable_tiempo_dentro_minuto_inicio, state='readonly',width=2 ,height=5)
+            self.lista_desplegable_tiempo_dentro_minuto_inicio.grid(row=2, column=2, padx=5, pady=5, sticky=tk.NW)
+            self.lista_desplegable_tiempo_dentro_minuto_inicio.configure(foreground="black")
             #####################################################
 
             #####################################################
             self.variable_auxiliar_tiempo_dentro_hora_fin = IntVar()
             self.variable_variable_tiempo_dentro_minuto_fin = IntVar()
-            self.variable_variable_tiempo_dentro_segundo_fin = IntVar()
 
-            etiqueta_hora = ttk.Label(seccion_tiempo_dentro, text="Tiempo final: ")
-            etiqueta_hora.grid(row=2, column=0, padx=5, pady=5, sticky=tk.NW)
-            # Creamos tres cuadros de entrada de tipo Spinbox para seleccionar la hora, minutos y segundos
-            self.hora_tiempo_final = ttk.Spinbox(seccion_tiempo_dentro, from_=0, to=23, wrap=True, textvariable=self.variable_auxiliar_tiempo_dentro_hora_fin, width=2, state="readonly", justify=tk.CENTER, font=("", 12))
-            self.hora_tiempo_final.grid(row=2, column=1, padx=5, pady=5, sticky=tk.NW)
-            self.hora_tiempo_final.configure(foreground="black")
+            etiqueta_hora = ttk.Label(seccion_tiempo_dentro, text="Tiempo menor a: ")
+            etiqueta_hora.grid(row=3, column=0, padx=5, pady=5, sticky=tk.NW)
 
+            self.lista_desplegable_tiempo_dentro_hora_fin = ttk.Combobox(seccion_tiempo_dentro, values=opciones_horas, textvariable=self.variable_auxiliar_tiempo_dentro_hora_fin, state='readonly',width=2 ,height=5)
+            self.lista_desplegable_tiempo_dentro_hora_fin.grid(row=3, column=1, padx=5, pady=5, sticky=tk.NW)
+            self.lista_desplegable_tiempo_dentro_hora_fin.configure(foreground="black")
 
-            self.minuto_tiempo_final = ttk.Spinbox(seccion_tiempo_dentro, from_=0, to=59, wrap=True, textvariable=self.variable_variable_tiempo_dentro_minuto_fin, width=2, state="readonly", justify=tk.CENTER, font=("", 12))
-            self.minuto_tiempo_final.grid(row=2, column=2, padx=5, pady=5, sticky=tk.NW)
-            self.minuto_tiempo_final.configure(foreground="black")
-
-
-            self.segundo_tiempo_final = ttk.Spinbox(seccion_tiempo_dentro,from_=0, to=59, wrap=True, textvariable=self.variable_variable_tiempo_dentro_segundo_fin, width=2, state="readonly", justify=tk.CENTER, font=("", 12))
-            self.segundo_tiempo_final.grid(row=2, column=3, padx=5, pady=5, sticky=tk.NW)
-            self.segundo_tiempo_final.configure(foreground="black")
+            self.lista_desplegable_tiempo_dentro_minuto_fin = ttk.Combobox(seccion_tiempo_dentro, values=opciones_minutos, textvariable=self.variable_variable_tiempo_dentro_minuto_fin, state='readonly',width=2 ,height=5)
+            self.lista_desplegable_tiempo_dentro_minuto_fin.grid(row=3, column=2, padx=5, pady=5, sticky=tk.NW)
+            self.lista_desplegable_tiempo_dentro_minuto_fin.configure(foreground="black")
+            #####################################################
             ##########################################################################################################
 
 
@@ -689,15 +675,12 @@ class Panel_Entradas:
 
         self.variable_auxiliar_tiempo_dentro_hora.set('0')
         self.variable_variable_tiempo_dentro_minuto.set('0')
-        self.variable_variable_tiempo_dentro_segundo.set('0')
 
         self.variable_auxiliar_tiempo_dentro_hora_inicio.set('0')
         self.variable_variable_tiempo_dentro_minuto_inicio.set('0')
-        self.variable_variable_tiempo_dentro_segundo_inicio.set('0')
 
         self.variable_auxiliar_tiempo_dentro_hora_fin.set('0')
         self.variable_variable_tiempo_dentro_minuto_fin.set('0')
-        self.variable_variable_tiempo_dentro_segundo_fin.set('0')
 
         # self.variable_tipo_promocion.set('')
         # self.variable_tipo_promocion = ''
@@ -728,9 +711,14 @@ class Panel_Entradas:
         self.campo_texto_salida_fecha_inicio.config(text="")
 
 
-        self.hora_tiempo.selection_clear()
-        self.minuto_tiempo.selection_clear()
-        self.segundo_tiempo.selection_clear()
+        self.lista_desplegable_tiempo_dentro_hora.selection_clear()
+        self.lista_desplegable_tiempo_dentro_minuto.selection_clear()
+
+        self.lista_desplegable_tiempo_dentro_hora_inicio.selection_clear()
+        self.lista_desplegable_tiempo_dentro_minuto_inicio.selection_clear()
+
+        self.lista_desplegable_tiempo_dentro_hora_fin.selection_clear()
+        self.lista_desplegable_tiempo_dentro_minuto_fin.selection_clear()
 
 
         self.lista_promociones.selection_clear(0, 'end')
@@ -759,20 +747,17 @@ class Panel_Entradas:
             # Se actualiza el valor de la variable de tiempo dentro con los valores de los Spinbox correspondientes
             self.variable_tiempo_dentro.set(self.controlador_entrada.format_datetime(
                                                                                     hour = int(self.variable_auxiliar_tiempo_dentro_hora.get()),
-                                                                                    minute = int(self.variable_variable_tiempo_dentro_minuto.get()),
-                                                                                    second = int(self.variable_variable_tiempo_dentro_segundo.get())))
+                                                                                    minute = int(self.variable_variable_tiempo_dentro_minuto.get())))
 
             # Se actualiza el valor de la variable de tiempo dentro de inicio con los valores de los Spinbox correspondientes
             self.variable_tiempo_dentro_inicio.set(self.controlador_entrada.format_datetime(
                                                                                             hour = int(self.variable_auxiliar_tiempo_dentro_hora_inicio.get()),
-                                                                                            minute = int(self.variable_variable_tiempo_dentro_minuto_inicio.get()),
-                                                                                            second = int(self.variable_variable_tiempo_dentro_segundo_inicio.get())))
+                                                                                            minute = int(self.variable_variable_tiempo_dentro_minuto_inicio.get())))
 
             # Se actualiza el valor de la variable de tiempo dentro de fin con los valores de los Spinbox correspondientes
             self.variable_tiempo_dentro_fin.set(self.controlador_entrada.format_datetime(
                                                                                         hour = int(self.variable_auxiliar_tiempo_dentro_hora_fin.get()),
-                                                                                        minute = int(self.variable_variable_tiempo_dentro_minuto_fin.get()),
-                                                                                        second = int(self.variable_variable_tiempo_dentro_segundo_fin.get())))
+                                                                                        minute = int(self.variable_variable_tiempo_dentro_minuto_fin.get())))
 
             # Se llama a la función de hacer_consulta_entrada del controlador de entrada para obtener los registros correspondientes
             self.registros = self.controlador_entrada.hacer_consulta_entrada(

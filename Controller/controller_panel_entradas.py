@@ -271,7 +271,7 @@ class EntradasController:
         except exceptions.FileCreateError as e:messagebox.showerror('Error', f'Error: El reporte no se puede generar, seleccione el directorio para guardar el reporte y vuelva a intentar')
 
 
-    def format_datetime(self, hour, minute, second):
+    def format_datetime(self, hour, minute):
         """
         Función que da formato a hora seleccionada.
 
@@ -283,7 +283,6 @@ class EntradasController:
         Returns:
             str: Cadena que representa hora seleccionada en formato HH:MM:SS.
         """
-
-        time_str = f"{hour:01}:{minute:02}:{second:02}"
+        time_str = f"{hour:01}:{minute:02}:00"
         return time_str
 
