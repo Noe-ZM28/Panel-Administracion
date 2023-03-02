@@ -80,7 +80,6 @@ class EntradasController:
         TypeError: si el dato ingresado no es válido.
         """
 
-        
         try:
             parametros = {}
 
@@ -155,9 +154,14 @@ class EntradasController:
             ##########################################################################################################
 
             ##########################################################################################################
-            if tiempo_dentro != '' and tiempo_dentro != '0:00:00': parametros['tiempo_dentro'] = str(tiempo_dentro)
-            if tiempo_dentro_inicio != '' and tiempo_dentro_inicio != '0:00:00': parametros['tiempo_dentro_inicio'] = str(tiempo_dentro_inicio)
-            if tiempo_dentro_fin != '' and tiempo_dentro_fin != '0:00:00': parametros['tiempo_dentro_fin'] = str(tiempo_dentro_fin)
+            if tiempo_dentro != '' and tiempo_dentro != '0:0:00':
+                parametros['tiempo_dentro'] = str(tiempo_dentro)
+
+            if tiempo_dentro_inicio != '' and tiempo_dentro_inicio != '0:0:00':
+                parametros['tiempo_dentro_inicio'] = str(tiempo_dentro_inicio)
+
+            if tiempo_dentro_fin != '' and tiempo_dentro_fin != '0:0:00':
+                parametros['tiempo_dentro_fin'] = str(tiempo_dentro_fin)
 
             if 'tiempo_dentro_inicio' in parametros and 'tiempo_dentro_fin' in parametros:
                 if parametros['tiempo_dentro_inicio'] > parametros['tiempo_dentro_fin']:
@@ -285,4 +289,3 @@ class EntradasController:
         """
         time_str = f"{hour:01}:{minute:02}:00"
         return time_str
-

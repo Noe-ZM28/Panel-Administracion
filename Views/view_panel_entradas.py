@@ -745,19 +745,15 @@ class Panel_Entradas:
             (self.variable_tipo_tarifa_preferente) = [self.lista_tarifa_preferente.get(i) for i in indices_seleccionados]
 
             # Se actualiza el valor de la variable de tiempo dentro con los valores de los Spinbox correspondientes
-            self.variable_tiempo_dentro.set(self.controlador_entrada.format_datetime(
-                                                                                    hour = int(self.variable_auxiliar_tiempo_dentro_hora.get()),
-                                                                                    minute = int(self.variable_variable_tiempo_dentro_minuto.get())))
+            self.variable_tiempo_dentro.set(f'{int(self.variable_auxiliar_tiempo_dentro_hora.get())}'+':'+f'{int(self.variable_variable_tiempo_dentro_minuto.get())}'+':00')
 
             # Se actualiza el valor de la variable de tiempo dentro de inicio con los valores de los Spinbox correspondientes
-            self.variable_tiempo_dentro_inicio.set(self.controlador_entrada.format_datetime(
-                                                                                            hour = int(self.variable_auxiliar_tiempo_dentro_hora_inicio.get()),
-                                                                                            minute = int(self.variable_variable_tiempo_dentro_minuto_inicio.get())))
-
+            print('valor anterior: '+self.variable_tiempo_dentro_inicio.get())
+            self.variable_tiempo_dentro_inicio.set(f'{int(self.variable_auxiliar_tiempo_dentro_hora_inicio.get())}'+':'+f'{int(self.variable_variable_tiempo_dentro_minuto_inicio.get())}'+':00')
+            print('valor anterior: '+self.variable_tiempo_dentro_inicio.get())
             # Se actualiza el valor de la variable de tiempo dentro de fin con los valores de los Spinbox correspondientes
-            self.variable_tiempo_dentro_fin.set(self.controlador_entrada.format_datetime(
-                                                                                        hour = int(self.variable_auxiliar_tiempo_dentro_hora_fin.get()),
-                                                                                        minute = int(self.variable_variable_tiempo_dentro_minuto_fin.get())))
+            self.variable_tiempo_dentro_fin.set(f'{int(self.variable_variable_tiempo_dentro_minuto_fin.get())}'+':'+f'{int(self.variable_variable_tiempo_dentro_minuto_fin.get())}'+':00')
+
 
             # Se llama a la función de hacer_consulta_entrada del controlador de entrada para obtener los registros correspondientes
             self.registros = self.controlador_entrada.hacer_consulta_entrada(

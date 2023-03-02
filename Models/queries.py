@@ -132,25 +132,25 @@ class Queries:
         if 'tiempo_dentro' in parametros:
             # Si existe el parámetro 'tiempo_dentro' en el diccionario de parámetros,
             # se agrega una condición a la lista de condiciones a evaluar.
-            where.append(f"TiempoTotal = '{parametros['tiempo_dentro']}'")
+            where.append(f"TiempoTotal = '{str(parametros['tiempo_dentro'])}'")
 
         if 'tiempo_dentro_inicio' in parametros and 'tiempo_dentro_fin' in parametros:
             # Si existen los parámetros 'tiempo_dentro_inicio' y 'tiempo_dentro_fin'
             # en el diccionario de parámetros, se agrega una condición a la lista de
             # condiciones a evaluar.
-            where.append(f"TiempoTotal BETWEEN '{parametros['tiempo_dentro_inicio']}' AND '{parametros['tiempo_dentro_fin']}'")
+            where.append(f"TiempoTotal BETWEEN '{str(parametros['tiempo_dentro_inicio'])}' AND '{str(parametros['tiempo_dentro_fin'])}'")
 
         elif 'tiempo_dentro_inicio' in parametros:
             # Si existe únicamente el parámetro 'tiempo_dentro_inicio' en el
             # diccionario de parámetros, se agrega una condición a la lista de
             # condiciones a evaluar.
-            where.append(f"TiempoTotal >= '{parametros['tiempo_dentro_inicio']}'")
+            where.append(f"TiempoTotal >= '{str(parametros['tiempo_dentro_inicio'])}'")
 
         elif 'tiempo_dentro_fin' in parametros:
             # Si existe únicamente el parámetro 'tiempo_dentro_fin' en el
             # diccionario de parámetros, se agrega una condición a la lista de
             # condiciones a evaluar.
-            where.append(f"TiempoTotal <= '{parametros['tiempo_dentro_fin']}'")
+            where.append(f"TiempoTotal <= '{str(parametros['tiempo_dentro_fin'])}'")
 
         ############################################################################################################################
 
