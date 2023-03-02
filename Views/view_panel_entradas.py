@@ -748,9 +748,8 @@ class Panel_Entradas:
             self.variable_tiempo_dentro.set(f'{int(self.variable_auxiliar_tiempo_dentro_hora.get())}'+':'+f'{int(self.variable_variable_tiempo_dentro_minuto.get())}'+':00')
 
             # Se actualiza el valor de la variable de tiempo dentro de inicio con los valores de los Spinbox correspondientes
-            print('valor anterior: '+self.variable_tiempo_dentro_inicio.get())
             self.variable_tiempo_dentro_inicio.set(f'{int(self.variable_auxiliar_tiempo_dentro_hora_inicio.get())}'+':'+f'{int(self.variable_variable_tiempo_dentro_minuto_inicio.get())}'+':00')
-            print('valor anterior: '+self.variable_tiempo_dentro_inicio.get())
+
             # Se actualiza el valor de la variable de tiempo dentro de fin con los valores de los Spinbox correspondientes
             self.variable_tiempo_dentro_fin.set(f'{int(self.variable_variable_tiempo_dentro_minuto_fin.get())}'+':'+f'{int(self.variable_variable_tiempo_dentro_minuto_fin.get())}'+':00')
 
