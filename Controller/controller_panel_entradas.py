@@ -49,12 +49,13 @@ class EntradasController:
         campo_texto.config(text=fecha)
 
 
-    def hacer_consulta_entrada(self, id:int, tarifa_preferente:str, fecha_inicio_entrada:str, fecha_fin_entrada:str, fecha_inicio_salida:str, fecha_fin_salida:str, tiempo_dentro:str, tiempo_dentro_inicio:str, tiempo_dentro_fin:str, tipo_promocion:str, corte_numero:int, corte_numero_inicio:int, corte_numero_fin:int, ingreso:str, ingreso_mayor:str, ingreso_menor:str) -> list:
+    def hacer_consulta_entrada(self, id:int, tarifa:str, tarifa_preferente:str, fecha_inicio_entrada:str, fecha_fin_entrada:str, fecha_inicio_salida:str, fecha_fin_salida:str, tiempo_dentro:str, tiempo_dentro_inicio:str, tiempo_dentro_fin:str, tipo_promocion:str, corte_numero:int, corte_numero_inicio:int, corte_numero_fin:int, ingreso:str, ingreso_mayor:str, ingreso_menor:str) -> list:
         """
         Realiza una consulta SQL con los valores proporcionados por el usuario y devuelve una lista de registros obtenidos.
 
         Args:
         id (int): ID del registro a consultar.
+        tarifa (str): tarifa a consultar
         tarifa_preferente (str): valor de la tarifa preferente para consultar.
         fecha_inicio_entrada (str): fecha de inicio de entrada en formato yyyy-mm-dd hh:mm:ss para consultar.
         fecha_fin_entrada (str): fecha de fin de entrada en formato yyyy-mm-dd hh:mm:ss para consultar.
@@ -113,7 +114,9 @@ class EntradasController:
             ##########################################################################################################
 
             ##########################################################################################################
-            if tarifa_preferente != '': parametros['tarifa_preferente'] = str(tarifa_preferente)
+            if tarifa != '': parametros['tarifa'] = str(tarifa)
+
+            if tarifa_preferente != []: parametros['tarifa_preferente'] = tuple(tarifa_preferente)
             ##########################################################################################################
 
             ##########################################################################################################

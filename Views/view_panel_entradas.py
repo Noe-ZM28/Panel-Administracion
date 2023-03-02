@@ -56,7 +56,8 @@ class Panel_Entradas:
 
         self.variable_folio = StringVar()
 
-        self.variable_tipo_tarifa_preferente = StringVar()
+        self.variable_tipo_tarifa_preferente = ''
+        self.variable_tarifa_preferente = StringVar()
 
         self.variable_fecha_inicio_entrada = StringVar()
         self.variable_fecha_fin_entrada = StringVar()
@@ -67,6 +68,7 @@ class Panel_Entradas:
         self.variable_tiempo_dentro_inicio = StringVar()
         self.variable_tiempo_dentro_fin = StringVar()
 
+        self.variable_promocion = ''
         self.variable_tipo_promocion = StringVar()
 
         self.variable_corte_numero = StringVar()
@@ -220,7 +222,7 @@ class Panel_Entradas:
 
             opciones = self.query.obtener_lista_de('TarifaPreferente')
             # Crear la lista desplegable
-            self.lista_desplegable_tipo_tarifa_preferente = ttk.Combobox(seccion_formulario_simple,  values=opciones, textvariable=self.variable_tipo_tarifa_preferente, state='readonly')
+            self.lista_desplegable_tipo_tarifa_preferente = ttk.Combobox(seccion_formulario_simple,  values=opciones, textvariable=self.variable_tarifa_preferente, state='readonly')
             self.lista_desplegable_tipo_tarifa_preferente.grid(row=2, column=1, padx=5, pady=5)
             #######################################################################---
 
@@ -260,7 +262,7 @@ class Panel_Entradas:
 
         #Labelframe para consultas avanzadas
         self.seccion_consulta_avanzada = ttk.LabelFrame(self.seccion_formulario_datos, text='Consulta avanzada')
-        
+
         def view_consulta_avanzada(self):
 
             seccion_fechas = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Fechas')
@@ -288,7 +290,7 @@ class Panel_Entradas:
             etiqueta_fecha_inicio_entrada.grid(row=0, column=1, padx=5, pady=5, sticky=tk.W)
         
             # Crear los campos de texto para las entradas
-            self.campo_texto_entrada_fecha_inicio = ttk.Label(seccion_entrada, text='                   ')
+            self.campo_texto_entrada_fecha_inicio = ttk.Label(seccion_entrada, text='')
             self.campo_texto_entrada_fecha_fin = ttk.Label(seccion_entrada, text='')
 
 
@@ -356,7 +358,7 @@ class Panel_Entradas:
             seccion_tiempo_dentro = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Tiempo dentro')
             seccion_tiempo_dentro.grid(row=0, column=1, padx=5, pady=5, sticky=tk.NW)
 
-           #####################################################
+            #####################################################
             self.variable_auxiliar_tiempo_dentro_hora = IntVar()
             self.variable_variable_tiempo_dentro_minuto = IntVar()
             self.variable_variable_tiempo_dentro_segundo = IntVar()
@@ -545,9 +547,9 @@ class Panel_Entradas:
 
         seccion_tabla = ttk.LabelFrame(self.panel, text = '')
         seccion_tabla.columnconfigure(0, weight=1, uniform='tabla')
-        seccion_tabla.rowconfigure(0, weight=1, uniform='tabla')
+        seccion_tabla.rowconfigure(0, weight=1)
         seccion_tabla.grid_propagate(True)
-        seccion_tabla.grid(row=1, column=0, padx=5, pady=5, sticky='nsew') 
+        seccion_tabla.grid(row=1, column=0, sticky='nsew') 
 
 
         # Obtiene los nombres de las columnas de la tabla que se va a mostrar
@@ -671,8 +673,8 @@ class Panel_Entradas:
         """
         self.variable_folio.set('')
 
-
-        self.variable_tipo_tarifa_preferente.set('')
+        self.variable_tarifa_preferente.set('')
+        self.variable_tipo_tarifa_preferente = ''
 
 
         self.variable_fecha_inicio_entrada.set('')
@@ -697,9 +699,8 @@ class Panel_Entradas:
         self.variable_variable_tiempo_dentro_minuto_fin.set('0')
         self.variable_variable_tiempo_dentro_segundo_fin.set('0')
 
-
-        #self.variable_tipo_promocion.set('')
-
+        # self.variable_tipo_promocion.set('')
+        # self.variable_tipo_promocion = ''
 
         self.variable_corte_numero.set('')
         self.variable_corte_inicio.set('')
@@ -749,6 +750,12 @@ class Panel_Entradas:
             """
             Realiza una consulta de entrada con los parámetros proporcionados por el usuario y llena la tabla con los resultados obtenidos.
             """
+
+            # Obtener los índices de los elementos seleccionados
+            indices_seleccionados = self.lista_tarifa_preferente.curselection()
+            # Obtener los valores correspondientes a los índices seleccionados
+            (self.variable_tipo_tarifa_preferente) = [self.lista_tarifa_preferente.get(i) for i in indices_seleccionados]
+
             # Se actualiza el valor de la variable de tiempo dentro con los valores de los Spinbox correspondientes
             self.variable_tiempo_dentro.set(self.controlador_entrada.format_datetime(
                                                                                     hour = int(self.variable_auxiliar_tiempo_dentro_hora.get()),
@@ -770,7 +777,8 @@ class Panel_Entradas:
             # Se llama a la función de hacer_consulta_entrada del controlador de entrada para obtener los registros correspondientes
             self.registros = self.controlador_entrada.hacer_consulta_entrada(
                                                                                 id = self.variable_folio.get(),
-                                                                                tarifa_preferente = self.variable_tipo_tarifa_preferente.get(),
+                                                                                tarifa_preferente = self.variable_tipo_tarifa_preferente,
+                                                                                tarifa = self.variable_tarifa_preferente.get(),
                                                                                 tipo_promocion = '',
 
                                                                                 fecha_inicio_entrada = self.variable_fecha_inicio_entrada.get(),
