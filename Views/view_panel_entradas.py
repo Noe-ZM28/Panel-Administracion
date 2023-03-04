@@ -368,49 +368,49 @@ class Panel_Entradas:
             etiqueta_tiempo_dentro_min = ttk.Label(seccion_tiempo_dentro,  text='Min')
             etiqueta_tiempo_dentro_min.grid(row=0, column=2, padx=5 , pady=5, sticky=tk.NW)
             #####################################################
-            self.variable_auxiliar_tiempo_dentro_hora = IntVar()
-            self.variable_variable_tiempo_dentro_minuto = IntVar()
+            self.variable_tiempo_dentro_hora = IntVar()
+            self.variable_tiempo_dentro_minuto = IntVar()
 
             etiqueta_tiempo_dentro_hora = ttk.Label(seccion_tiempo_dentro,  text='Tiempo: ')
             etiqueta_tiempo_dentro_hora.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
 
-            self.lista_desplegable_tiempo_dentro_hora = ttk.Combobox(seccion_tiempo_dentro, values=opciones_horas, textvariable=self.variable_auxiliar_tiempo_dentro_hora, state='readonly',width=3 ,height=5)
+            self.lista_desplegable_tiempo_dentro_hora = ttk.Combobox(seccion_tiempo_dentro, values=opciones_horas, textvariable=self.variable_tiempo_dentro_hora, state='readonly',width=3 ,height=5)
             self.lista_desplegable_tiempo_dentro_hora.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NW)
             self.lista_desplegable_tiempo_dentro_hora.configure(foreground="black")
 
-            self.lista_desplegable_tiempo_dentro_minuto = ttk.Combobox(seccion_tiempo_dentro, values=opciones_minutos, textvariable=self.variable_variable_tiempo_dentro_minuto, state='readonly',width=3 ,height=5)
+            self.lista_desplegable_tiempo_dentro_minuto = ttk.Combobox(seccion_tiempo_dentro, values=opciones_minutos, textvariable=self.variable_tiempo_dentro_minuto, state='readonly',width=3 ,height=5)
             self.lista_desplegable_tiempo_dentro_minuto.grid(row=1, column=2, padx=5, pady=5, sticky=tk.NW)
             self.lista_desplegable_tiempo_dentro_minuto.configure(foreground="black")
             #####################################################
 
             #####################################################
-            self.variable_auxiliar_tiempo_dentro_hora_inicio = IntVar()
-            self.variable_variable_tiempo_dentro_minuto_inicio = IntVar()
+            self.variable_tiempo_dentro_hora_inicio = IntVar()
+            self.variable_tiempo_dentro_minuto_inicio = IntVar()
 
             etiqueta_hora = ttk.Label(seccion_tiempo_dentro, text="Tiempo mayor a: ")
             etiqueta_hora.grid(row=2, column=0, padx=5, pady=5, sticky=tk.NW)
 
-            self.lista_desplegable_tiempo_dentro_hora_inicio = ttk.Combobox(seccion_tiempo_dentro, values=opciones_horas, textvariable=self.variable_auxiliar_tiempo_dentro_hora_inicio, state='readonly',width=3 ,height=5)
+            self.lista_desplegable_tiempo_dentro_hora_inicio = ttk.Combobox(seccion_tiempo_dentro, values=opciones_horas, textvariable=self.variable_tiempo_dentro_hora_inicio, state='readonly',width=3 ,height=5)
             self.lista_desplegable_tiempo_dentro_hora_inicio.grid(row=2, column=1, padx=5, pady=5, sticky=tk.NW)
             self.lista_desplegable_tiempo_dentro_hora_inicio.configure(foreground="black")
 
-            self.lista_desplegable_tiempo_dentro_minuto_inicio = ttk.Combobox(seccion_tiempo_dentro, values=opciones_minutos, textvariable=self.variable_variable_tiempo_dentro_minuto_inicio, state='readonly',width=3 ,height=5)
+            self.lista_desplegable_tiempo_dentro_minuto_inicio = ttk.Combobox(seccion_tiempo_dentro, values=opciones_minutos, textvariable=self.variable_tiempo_dentro_minuto_inicio, state='readonly',width=3 ,height=5)
             self.lista_desplegable_tiempo_dentro_minuto_inicio.grid(row=2, column=2, padx=5, pady=5, sticky=tk.NW)
             self.lista_desplegable_tiempo_dentro_minuto_inicio.configure(foreground="black")
             #####################################################
 
             #####################################################
-            self.variable_auxiliar_tiempo_dentro_hora_fin = IntVar()
-            self.variable_variable_tiempo_dentro_minuto_fin = IntVar()
+            self.variable_tiempo_dentro_hora_fin = IntVar()
+            self.variable_tiempo_dentro_minuto_fin = IntVar()
 
             etiqueta_hora = ttk.Label(seccion_tiempo_dentro, text="Tiempo menor a: ")
             etiqueta_hora.grid(row=3, column=0, padx=5, pady=5, sticky=tk.NW)
 
-            self.lista_desplegable_tiempo_dentro_hora_fin = ttk.Combobox(seccion_tiempo_dentro, values=opciones_horas, textvariable=self.variable_auxiliar_tiempo_dentro_hora_fin, state='readonly',width=3 ,height=5)
+            self.lista_desplegable_tiempo_dentro_hora_fin = ttk.Combobox(seccion_tiempo_dentro, values=opciones_horas, textvariable=self.variable_tiempo_dentro_hora_fin, state='readonly',width=3 ,height=5)
             self.lista_desplegable_tiempo_dentro_hora_fin.grid(row=3, column=1, padx=5, pady=5, sticky=tk.NW)
             self.lista_desplegable_tiempo_dentro_hora_fin.configure(foreground="black")
 
-            self.lista_desplegable_tiempo_dentro_minuto_fin = ttk.Combobox(seccion_tiempo_dentro, values=opciones_minutos, textvariable=self.variable_variable_tiempo_dentro_minuto_fin, state='readonly',width=3 ,height=5)
+            self.lista_desplegable_tiempo_dentro_minuto_fin = ttk.Combobox(seccion_tiempo_dentro, values=opciones_minutos, textvariable=self.variable_tiempo_dentro_minuto_fin, state='readonly',width=3 ,height=5)
             self.lista_desplegable_tiempo_dentro_minuto_fin.grid(row=3, column=2, padx=5, pady=5, sticky=tk.NW)
             self.lista_desplegable_tiempo_dentro_minuto_fin.configure(foreground="black")
             #####################################################
@@ -681,14 +681,14 @@ class Panel_Entradas:
         self.variable_tiempo_dentro_fin.set('')
         self.variable_tiempo_dentro_inicio.set('')
 
-        self.variable_auxiliar_tiempo_dentro_hora.set('0')
-        self.variable_variable_tiempo_dentro_minuto.set('0')
+        self.variable_tiempo_dentro_hora.set('0')
+        self.variable_tiempo_dentro_minuto.set('0')
 
-        self.variable_auxiliar_tiempo_dentro_hora_inicio.set('0')
-        self.variable_variable_tiempo_dentro_minuto_inicio.set('0')
+        self.variable_tiempo_dentro_hora_inicio.set('0')
+        self.variable_tiempo_dentro_minuto_inicio.set('0')
 
-        self.variable_auxiliar_tiempo_dentro_hora_fin.set('0')
-        self.variable_variable_tiempo_dentro_minuto_fin.set('0')
+        self.variable_tiempo_dentro_hora_fin.set('0')
+        self.variable_tiempo_dentro_minuto_fin.set('0')
 
 
         self.variable_tipo_promocion = ''
@@ -760,13 +760,13 @@ class Panel_Entradas:
 
 
             # Se actualiza el valor de la variable de tiempo dentro con los valores de los Spinbox correspondientes
-            self.variable_tiempo_dentro.set(f'{int(self.variable_auxiliar_tiempo_dentro_hora.get())}'+':'+f'{int(self.variable_variable_tiempo_dentro_minuto.get())}'+':00')
+            self.variable_tiempo_dentro.set(f'{int(self.variable_tiempo_dentro_hora.get())}'+':'+f'{int(self.variable_tiempo_dentro_minuto.get())}'+':00')
 
             # Se actualiza el valor de la variable de tiempo dentro de inicio con los valores de los Spinbox correspondientes
-            self.variable_tiempo_dentro_inicio.set(f'{int(self.variable_auxiliar_tiempo_dentro_hora_inicio.get())}'+':'+f'{int(self.variable_variable_tiempo_dentro_minuto_inicio.get())}'+':00')
+            self.variable_tiempo_dentro_inicio.set(f'{int(self.variable_tiempo_dentro_hora_inicio.get())}'+':'+f'{int(self.variable_tiempo_dentro_minuto_inicio.get())}'+':00')
 
             # Se actualiza el valor de la variable de tiempo dentro de fin con los valores de los Spinbox correspondientes
-            self.variable_tiempo_dentro_fin.set(f'{int(self.variable_variable_tiempo_dentro_minuto_fin.get())}'+':'+f'{int(self.variable_variable_tiempo_dentro_minuto_fin.get())}'+':00')
+            self.variable_tiempo_dentro_fin.set(f'{int(self.variable_tiempo_dentro_hora_fin.get())}'+':'+f'{int(self.variable_tiempo_dentro_minuto_fin.get())}'+':00')
 
 
             # Se llama a la función de hacer_consulta_entrada del controlador de entrada para obtener los registros correspondientes
@@ -785,8 +785,8 @@ class Panel_Entradas:
                                                                                 fecha_fin_salida = self.variable_fecha_fin_salida.get(),
 
                                                                                 tiempo_dentro = self.variable_tiempo_dentro.get(),
-                                                                                tiempo_dentro_fin = self.variable_tiempo_dentro_fin.get(),
                                                                                 tiempo_dentro_inicio = self.variable_tiempo_dentro_inicio.get(),
+                                                                                tiempo_dentro_fin = self.variable_tiempo_dentro_fin.get(),
                                                                             
 
                                                                                 corte_numero = self.variable_corte_numero.get(),

@@ -1,0 +1,2 @@
+Poner como tipo de dato DATE en el campo TiempoTotal de la tabla entradas y tambien poner todo en minusculas, y normalizar correctamente la base de datos en general
+    NOTA: se puede dejar como varchar en el sistema actual, pero solo mientras no se hagan consultas de un tiempo mayor a 10 horas u horas de 2 digitos
