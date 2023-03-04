@@ -103,12 +103,6 @@ class Queries:
         ############################################################################################################################
 
         ############################################################################################################################
-        # Si existe el parámetro 'tipo_promocion' en el diccionario de parámetros,
-        # se agrega una condición a la lista de condiciones a evaluar.
-        if 'tipo_promocion' in parametros:where.append(f"TipoPromocion = '{parametros['tipo_promocion']}'")
-        ############################################################################################################################
-
-        ############################################################################################################################
         # Si se especifica una fecha de inicio y una fecha de fin para entradas, agregamos una cláusula WHERE que seleccione
         # todas las entradas entre esas dos fechas. Si solo se especifica una fecha de inicio o una fecha de fin para entradas,
         # seleccionamos todas las entradas a partir de la fecha de inicio o hasta la fecha de fin, respectivamente.
@@ -151,9 +145,7 @@ class Queries:
             # diccionario de parámetros, se agrega una condición a la lista de
             # condiciones a evaluar.
             where.append(f"TiempoTotal <= '{str(parametros['tiempo_dentro_fin'])}'")
-
         ############################################################################################################################
-
 
         ############################################################################################################################
         # Si se especifica el número de corte, agregamos una cláusula WHERE a la lista
@@ -174,9 +166,7 @@ class Queries:
         # agregamos una cláusula WHERE para números de corte menores o iguales a él
         elif 'corte_numero_fin' in parametros:
             where.append(f"CorteInc <= {parametros['corte_numero_fin']}")
-
         ############################################################################################################################
-
 
         ############################################################################################################################
         # Si se especifica el importe, agregamos una cláusula WHERE a la lista
@@ -194,6 +184,21 @@ class Queries:
         # Si se especifica un importe mínimo, agregamos una cláusula >= a la lista
         elif 'ingreso_menor' in parametros:
             where.append(f"Importe >= '{parametros['ingreso_menor']}'")
+
+        ############################################################################################################################
+
+        ############################################################################################################################
+        # Si existe el parámetro 'promocion' en el diccionario de parámetros,
+        # se agrega una condición a la lista de condiciones a evaluar.
+        if 'promocion' in parametros:where.append(f"TipoPromocion = '{parametros['promocion']}'")
+        # Si existe el parámetro 'tipo_promocion' en el diccionario de parámetros,
+        # se agrega una condición a la lista de condiciones a evaluar.
+        if 'tipo_promocion' in parametros:
+            if len(parametros['tipo_promocion']) == 1:
+                if  parametros['tipo_promocion']:
+                    where.append(f"TipoPromocion = '{str(parametros['tipo_promocion'][0])}'")
+            else: #len(parametros['tipo_promocion']) > 1:
+                    where.append(f"TipoPromocion IN {parametros['tipo_promocion']}")
 
         ############################################################################################################################
 

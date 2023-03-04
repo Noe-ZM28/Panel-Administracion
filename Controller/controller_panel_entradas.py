@@ -49,7 +49,7 @@ class EntradasController:
         campo_texto.config(text=fecha)
 
 
-    def hacer_consulta_entrada(self, id:int, tarifa:str, tarifa_preferente:str, fecha_inicio_entrada:str, fecha_fin_entrada:str, fecha_inicio_salida:str, fecha_fin_salida:str, tiempo_dentro:str, tiempo_dentro_inicio:str, tiempo_dentro_fin:str, tipo_promocion:str, corte_numero:int, corte_numero_inicio:int, corte_numero_fin:int, ingreso:str, ingreso_mayor:str, ingreso_menor:str) -> list:
+    def hacer_consulta_entrada(self, id:int, tarifa:str, tarifa_preferente:str, fecha_inicio_entrada:str, fecha_fin_entrada:str, fecha_inicio_salida:str, fecha_fin_salida:str, tiempo_dentro:str, tiempo_dentro_inicio:str, tiempo_dentro_fin:str, corte_numero:int, corte_numero_inicio:int, corte_numero_fin:int, ingreso:str, ingreso_mayor:str, ingreso_menor:str, tipo_promocion:str, promocion:str) -> list:
         """
         Realiza una consulta SQL con los valores proporcionados por el usuario y devuelve una lista de registros obtenidos.
 
@@ -64,13 +64,14 @@ class EntradasController:
         tiempo_dentro (str): duración de tiempo dentro del estacionamiento en formato "hh:mm:ss" para consultar.
         tiempo_dentro_inicio (str): duración de tiempo dentro del estacionamiento en formato "hh:mm:ss" para consultar, con un rango de inicio.
         tiempo_dentro_fin (str): duración de tiempo dentro del estacionamiento en formato "hh:mm:ss" para consultar, con un rango final.
-        tipo_promocion (str): tipo de promoción para consultar.
         corte_numero (int): número de corte a consultar.
         corte_numero_inicio (int): número de corte a consultar, con un rango de inicio.
         corte_numero_fin (int): número de corte a consultar, con un rango final.
         ingreso (str): valor de ingreso para consultar.
         ingreso_mayor (str): valor de ingreso mayor para consultar.
         ingreso_menor (str): valor de ingreso menor para consultar.
+        tipo_promocion (str): tipo de promoción para consultar.
+        tarifa (str): tarifa a consultar.
 
         Returns:
         list: una lista de registros obtenidos por la consulta.
@@ -86,7 +87,7 @@ class EntradasController:
             # Obtener los valores de los campos de consulta
             self.id = id
             self.tarifa_preferente = tarifa_preferente
-            self.tipo_promocion = tipo_promocion
+
 
             self.fecha_inicio_entrada = fecha_inicio_entrada
             self.fecha_fin_entrada = fecha_fin_entrada
@@ -107,6 +108,9 @@ class EntradasController:
             self.ingreso_menor = ingreso_menor
 
 
+            self.tipo_promocion = tipo_promocion
+            self.promocion = promocion
+
             # Validar y agregar los parámetros a la consulta
             ##########################################################################################################
             if id != '': parametros['id'] = int(id)
@@ -116,10 +120,6 @@ class EntradasController:
             if tarifa != '': parametros['tarifa'] = str(tarifa)
 
             if tarifa_preferente != []: parametros['tarifa_preferente'] = tuple(tarifa_preferente)
-            ##########################################################################################################
-
-            ##########################################################################################################
-            if tipo_promocion != '': parametros['tipo_promocion'] = str(tipo_promocion)
             ##########################################################################################################
 
             ##########################################################################################################
@@ -188,7 +188,11 @@ class EntradasController:
                     raise ValueError("El ingreso menor debe de ser menor al ingreso mayor.")
             ##########################################################################################################
 
+            ##########################################################################################################
+            if promocion != '': parametros['promocion'] = str(promocion)
 
+            if tipo_promocion != []: parametros['tipo_promocion'] = tuple(tipo_promocion)
+            ##########################################################################################################
 
             print (parametros)
             # Validar que se hayan proporcionado parámetros para la consulta

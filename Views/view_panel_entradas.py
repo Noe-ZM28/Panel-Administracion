@@ -68,8 +68,8 @@ class Panel_Entradas:
         self.variable_tiempo_dentro_inicio = StringVar()
         self.variable_tiempo_dentro_fin = StringVar()
 
-        self.variable_promocion = ''
-        self.variable_tipo_promocion = StringVar()
+        self.variable_tipo_promocion = ''
+        self.variable_promocion = StringVar()
 
         self.variable_corte_numero = StringVar()
         self.variable_corte_inicio = StringVar()
@@ -233,9 +233,10 @@ class Panel_Entradas:
             etiqueta_tipo_promocion.grid(row=3, column=0, padx=5, pady=5, sticky=tk.W)
 
 
+            #opciones = self.query.obtener_lista_de('TarifaPreferente')
             opciones = self.query.obtener_lista_de('TipoPromocion')
             # Crear la lista desplegable
-            self.lista_desplegable_tipo_promocion = ttk.Combobox(seccion_formulario_simple,  values=opciones, textvariable=self.variable_tipo_promocion, state='readonly')
+            self.lista_desplegable_tipo_promocion = ttk.Combobox(seccion_formulario_simple,  values=opciones, textvariable=self.variable_promocion, state='readonly')
             self.lista_desplegable_tipo_promocion.grid(row=3, column=1, padx=5, pady=5)
 
             #######################################################################---
@@ -420,7 +421,6 @@ class Panel_Entradas:
             seccion_tarifas = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Tarifas')
             seccion_tarifas.grid(row=0, column=2, padx=5, pady=5, sticky=tk.NW)
             
-            #ARREGLAR ESTO
             self.lista_tarifa_preferente = tk.Listbox(seccion_tarifas, selectmode="multiple", height=5)
             self.lista_tarifa_preferente.grid(row=0, column=0, sticky="nsew")
 
@@ -488,13 +488,20 @@ class Panel_Entradas:
             ##########################################################################################################
             seccion_promociones = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Promociones')
             seccion_promociones.grid(row=1, column=2, padx=5, pady=5, sticky=tk.NW)
-            
-            #ARREGLAR ESTO
+
+
             self.lista_promociones = tk.Listbox(seccion_promociones, selectmode="multiple", height=5)
-            self.variable_tipo_promocion = self.lista_promociones.curselection()
-            self.lista_promociones.grid(row=0, column=0)
+            self.lista_promociones.grid(row=0, column=0, sticky="nsew")
+
+            scrollbar = ttk.Scrollbar(seccion_promociones, orient="vertical", command=self.lista_promociones.yview)
+            scrollbar.grid(row=0, column=1, sticky="ns")
+            self.lista_promociones.configure(yscrollcommand=scrollbar.set)
+
+            seccion_promociones.rowconfigure(0, weight=1)
+            seccion_promociones.columnconfigure(0, weight=1)
 
             promociones = self.query.obtener_lista_de('TipoPromocion')
+            #promociones = self.query.obtener_lista_de('TarifaPreferente')
             for promocion in promociones:
                 self.lista_promociones.insert(tk.END, promocion)
             ##########################################################################################################
@@ -683,8 +690,9 @@ class Panel_Entradas:
         self.variable_auxiliar_tiempo_dentro_hora_fin.set('0')
         self.variable_variable_tiempo_dentro_minuto_fin.set('0')
 
-        # self.variable_tipo_promocion.set('')
-        # self.variable_tipo_promocion = ''
+
+        self.variable_tipo_promocion = ''
+        self.variable_promocion.set('')
 
         self.variable_corte_numero.set('')
         self.variable_corte_inicio.set('')
@@ -745,6 +753,12 @@ class Panel_Entradas:
             # Obtener los valores correspondientes a los índices seleccionados
             (self.variable_tipo_tarifa_preferente) = [self.lista_tarifa_preferente.get(i) for i in indices_seleccionados]
 
+            # Obtener los índices de los elementos seleccionados
+            indices_seleccionados = self.lista_promociones.curselection()
+            # Obtener los valores correspondientes a los índices seleccionados
+            (self.variable_tipo_promocion) = [self.lista_promociones.get(i) for i in indices_seleccionados]
+
+
             # Se actualiza el valor de la variable de tiempo dentro con los valores de los Spinbox correspondientes
             self.variable_tiempo_dentro.set(f'{int(self.variable_auxiliar_tiempo_dentro_hora.get())}'+':'+f'{int(self.variable_variable_tiempo_dentro_minuto.get())}'+':00')
 
@@ -760,7 +774,10 @@ class Panel_Entradas:
                                                                                 id = self.variable_folio.get(),
                                                                                 tarifa_preferente = self.variable_tipo_tarifa_preferente,
                                                                                 tarifa = self.variable_tarifa_preferente.get(),
-                                                                                tipo_promocion = '',
+
+
+                                                                                tipo_promocion = self.variable_tipo_promocion,
+                                                                                promocion = self.variable_promocion.get(),
 
                                                                                 fecha_inicio_entrada = self.variable_fecha_inicio_entrada.get(),
                                                                                 fecha_fin_entrada = self.variable_fecha_fin_entrada.get(),
