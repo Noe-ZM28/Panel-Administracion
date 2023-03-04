@@ -27,24 +27,24 @@ class Queries:
 
     def obtener_lista_de(self, listar, revez=None):
         """
-        Devuelve una lista con los valores únicos de la columna especificada de la tabla 'entradas' de la base de datos.
+        Devuelve una lista con los valores únicos de la columna especificada de la tabla 'Entradas' de la base de datos.
 
         Args:
-        - listar: nombre de la columna de la tabla 'entradas' de la que se quieren obtener los valores únicos.
+        - listar: nombre de la columna de la tabla 'Entradas' de la que se quieren obtener los valores únicos.
         - revez: (opcional) si se especifica 'D', devuelve los valores en orden descendente; si se especifica 'A', los devuelve en orden ascendente; si no se especifica, los devuelve en el orden en que se encuentran en la tabla.
 
         return:
-        - lista_sin_nones: una lista con los valores únicos de la columna especificada de la tabla 'entradas', sin incluir valores 'None'.
+        - lista_sin_nones: una lista con los valores únicos de la columna especificada de la tabla 'Entradas', sin incluir valores 'None'.
         """
         # Si revez es igual a 'D', la consulta se hace en orden descendente.
         if revez == 'D': 
-            query = f"SELECT DISTINCT {listar} FROM entradas ORDER BY {listar} DESC;"
+            query = f"SELECT DISTINCT {listar} FROM Entradas ORDER BY {listar} DESC;"
         # Si revez es igual a 'A', la consulta se hace en orden ascendente.
         elif revez == 'A': 
-            query = f"SELECT DISTINCT {listar} FROM entradas ORDER BY {listar} ASC;"
+            query = f"SELECT DISTINCT {listar} FROM Entradas ORDER BY {listar} ASC;"
         # Si revez no está definido, se realiza una consulta simple.
         if revez == None: 
-            query = f"SELECT DISTINCT {listar} FROM entradas;" 
+            query = f"SELECT DISTINCT {listar} FROM Entradas;" 
 
         # Se ejecuta la consulta y se obtiene el resultado.
         resultado = self.data_base.execute_query(query)

@@ -248,16 +248,16 @@ class Panel_Entradas:
             seccion_botones_consulta.grid(row=0, column=1, padx=5, pady=5, sticky='NW')
 
             # Crea un botón y lo empaqueta en la seccion_botones_consulta
-            boton_consulta = ttk.Button(seccion_botones_consulta, text='Realizar consulta', command=self.consulta_entrada, width=50)
+            boton_consulta = ttk.Button(seccion_botones_consulta, text='Realizar consulta', command=self.consulta_entrada)
 
             boton_consulta.grid(row=0, column=0, padx=5, pady=5)
 
             # Crea un botón y lo empaqueta en la seccion_botones_consulta
-            boton_limpiar_campos = ttk.Button(seccion_botones_consulta,  text='Limpiar campos', command = self.vaciar_campos, width=50)
+            boton_limpiar_campos = ttk.Button(seccion_botones_consulta,  text='Limpiar campos', command = self.vaciar_campos)
             boton_limpiar_campos.grid(row=1, column=0, padx=5, pady=5)
 
             # Crea un botón y lo empaqueta en la seccion_botones_consulta
-            boton_limpiar_campos = ttk.Button(seccion_botones_consulta,  text='Vaciar tabla', command = self.vaciar_tabla, width=50)
+            boton_limpiar_campos = ttk.Button(seccion_botones_consulta,  text='Vaciar tabla', command = self.vaciar_tabla)
             boton_limpiar_campos.grid(row=2, column=0, padx=5, pady=5)
 
 
@@ -374,11 +374,11 @@ class Panel_Entradas:
             etiqueta_tiempo_dentro_hora = ttk.Label(seccion_tiempo_dentro,  text='Tiempo: ')
             etiqueta_tiempo_dentro_hora.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
 
-            self.lista_desplegable_tiempo_dentro_hora = ttk.Combobox(seccion_tiempo_dentro, values=opciones_horas, textvariable=self.variable_auxiliar_tiempo_dentro_hora, state='readonly',width=2 ,height=5)
+            self.lista_desplegable_tiempo_dentro_hora = ttk.Combobox(seccion_tiempo_dentro, values=opciones_horas, textvariable=self.variable_auxiliar_tiempo_dentro_hora, state='readonly',width=3 ,height=5)
             self.lista_desplegable_tiempo_dentro_hora.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NW)
             self.lista_desplegable_tiempo_dentro_hora.configure(foreground="black")
 
-            self.lista_desplegable_tiempo_dentro_minuto = ttk.Combobox(seccion_tiempo_dentro, values=opciones_minutos, textvariable=self.variable_variable_tiempo_dentro_minuto, state='readonly',width=2 ,height=5)
+            self.lista_desplegable_tiempo_dentro_minuto = ttk.Combobox(seccion_tiempo_dentro, values=opciones_minutos, textvariable=self.variable_variable_tiempo_dentro_minuto, state='readonly',width=3 ,height=5)
             self.lista_desplegable_tiempo_dentro_minuto.grid(row=1, column=2, padx=5, pady=5, sticky=tk.NW)
             self.lista_desplegable_tiempo_dentro_minuto.configure(foreground="black")
             #####################################################
@@ -390,11 +390,11 @@ class Panel_Entradas:
             etiqueta_hora = ttk.Label(seccion_tiempo_dentro, text="Tiempo mayor a: ")
             etiqueta_hora.grid(row=2, column=0, padx=5, pady=5, sticky=tk.NW)
 
-            self.lista_desplegable_tiempo_dentro_hora_inicio = ttk.Combobox(seccion_tiempo_dentro, values=opciones_horas, textvariable=self.variable_auxiliar_tiempo_dentro_hora_inicio, state='readonly',width=2 ,height=5)
+            self.lista_desplegable_tiempo_dentro_hora_inicio = ttk.Combobox(seccion_tiempo_dentro, values=opciones_horas, textvariable=self.variable_auxiliar_tiempo_dentro_hora_inicio, state='readonly',width=3 ,height=5)
             self.lista_desplegable_tiempo_dentro_hora_inicio.grid(row=2, column=1, padx=5, pady=5, sticky=tk.NW)
             self.lista_desplegable_tiempo_dentro_hora_inicio.configure(foreground="black")
 
-            self.lista_desplegable_tiempo_dentro_minuto_inicio = ttk.Combobox(seccion_tiempo_dentro, values=opciones_minutos, textvariable=self.variable_variable_tiempo_dentro_minuto_inicio, state='readonly',width=2 ,height=5)
+            self.lista_desplegable_tiempo_dentro_minuto_inicio = ttk.Combobox(seccion_tiempo_dentro, values=opciones_minutos, textvariable=self.variable_variable_tiempo_dentro_minuto_inicio, state='readonly',width=3 ,height=5)
             self.lista_desplegable_tiempo_dentro_minuto_inicio.grid(row=2, column=2, padx=5, pady=5, sticky=tk.NW)
             self.lista_desplegable_tiempo_dentro_minuto_inicio.configure(foreground="black")
             #####################################################
@@ -406,11 +406,11 @@ class Panel_Entradas:
             etiqueta_hora = ttk.Label(seccion_tiempo_dentro, text="Tiempo menor a: ")
             etiqueta_hora.grid(row=3, column=0, padx=5, pady=5, sticky=tk.NW)
 
-            self.lista_desplegable_tiempo_dentro_hora_fin = ttk.Combobox(seccion_tiempo_dentro, values=opciones_horas, textvariable=self.variable_auxiliar_tiempo_dentro_hora_fin, state='readonly',width=2 ,height=5)
+            self.lista_desplegable_tiempo_dentro_hora_fin = ttk.Combobox(seccion_tiempo_dentro, values=opciones_horas, textvariable=self.variable_auxiliar_tiempo_dentro_hora_fin, state='readonly',width=3 ,height=5)
             self.lista_desplegable_tiempo_dentro_hora_fin.grid(row=3, column=1, padx=5, pady=5, sticky=tk.NW)
             self.lista_desplegable_tiempo_dentro_hora_fin.configure(foreground="black")
 
-            self.lista_desplegable_tiempo_dentro_minuto_fin = ttk.Combobox(seccion_tiempo_dentro, values=opciones_minutos, textvariable=self.variable_variable_tiempo_dentro_minuto_fin, state='readonly',width=2 ,height=5)
+            self.lista_desplegable_tiempo_dentro_minuto_fin = ttk.Combobox(seccion_tiempo_dentro, values=opciones_minutos, textvariable=self.variable_variable_tiempo_dentro_minuto_fin, state='readonly',width=3 ,height=5)
             self.lista_desplegable_tiempo_dentro_minuto_fin.grid(row=3, column=2, padx=5, pady=5, sticky=tk.NW)
             self.lista_desplegable_tiempo_dentro_minuto_fin.configure(foreground="black")
             #####################################################
