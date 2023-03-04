@@ -487,7 +487,7 @@ class Panel_Entradas:
 
             ##########################################################################################################
             seccion_promociones = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Promociones')
-            seccion_promociones.grid(row=1, column=2, padx=5, pady=5, sticky=tk.NW)
+            seccion_promociones.grid(row=0, column=3, padx=5, pady=5, sticky=tk.NW)
 
 
             self.lista_promociones = tk.Listbox(seccion_promociones, selectmode="multiple", height=5)
@@ -508,8 +508,8 @@ class Panel_Entradas:
 
             ##########################################################################################################
             # Crea un LabelFrame para los botones de desconectar y salir
-            seccion_botones_consulta = ttk.LabelFrame(self.seccion_formulario_datos , text='Botones consulta')
-            seccion_botones_consulta.grid(row=2, column=1, padx=5, pady=5, sticky='NW')
+            seccion_botones_consulta = ttk.LabelFrame(self.seccion_consulta_avanzada , text='Botones consulta')
+            seccion_botones_consulta.grid(row=1, column=3, padx=5, pady=5, sticky='NW')
 
             # Crea un botón y lo empaqueta en la seccion_botones_consulta
             boton_consulta = ttk.Button(seccion_botones_consulta, text='Realizar consulta', command=self.consulta_entrada)
@@ -743,31 +743,43 @@ class Panel_Entradas:
         self.lista_desplegable_ingreso_inicio.selection_clear()
         self.lista_desplegable_ingreso_final.selection_clear()
 
+    def obtener_variables(self):
+        """
+        Esta función se encarga de obtener las variables necesarias para crear un objeto de reserva
+        a partir de los valores seleccionados por el usuario en la interfaz gráfica.
+
+        La función utiliza widgets de tkinter para obtener los valores seleccionados por el usuario,
+        y los almacena en variables que son utilizadas por otras funciones para crear el objeto de reserva.
+
+        La función no toma argumentos, ya que utiliza variables de clase para almacenar los valores.
+
+        """
+
+        # Obtener los índices de los elementos seleccionados en la lista de tarifa preferente
+        indices_seleccionados = self.lista_tarifa_preferente.curselection()
+        # Obtener los valores correspondientes a los índices seleccionados
+        (self.variable_tipo_tarifa_preferente) = [self.lista_tarifa_preferente.get(i) for i in indices_seleccionados]
+
+        # Obtener los índices de los elementos seleccionados en la lista de promociones
+        indices_seleccionados = self.lista_promociones.curselection()
+        # Obtener los valores correspondientes a los índices seleccionados
+        (self.variable_tipo_promocion) = [self.lista_promociones.get(i) for i in indices_seleccionados]
+
+        # Obtener el tiempo dentro en formato HH:MM:SS
+        self.variable_tiempo_dentro.set(f'{int(self.variable_tiempo_dentro_hora.get())}'+':'+f'{int(self.variable_tiempo_dentro_minuto.get())}'+':00')
+
+        # Obtener la hora de inicio del tiempo dentro en formato HH:MM:SS
+        self.variable_tiempo_dentro_inicio.set(f'{int(self.variable_tiempo_dentro_hora_inicio.get())}'+':'+f'{int(self.variable_tiempo_dentro_minuto_inicio.get())}'+':00')
+
+        # Obtener la hora de finalización del tiempo dentro en formato HH:MM:SS
+        self.variable_tiempo_dentro_fin.set(f'{int(self.variable_tiempo_dentro_hora_fin.get())}'+':'+f'{int(self.variable_tiempo_dentro_minuto_fin.get())}'+':00')
+
+
     def consulta_entrada(self):
             """
             Realiza una consulta de entrada con los parámetros proporcionados por el usuario y llena la tabla con los resultados obtenidos.
             """
-
-            # Obtener los índices de los elementos seleccionados
-            indices_seleccionados = self.lista_tarifa_preferente.curselection()
-            # Obtener los valores correspondientes a los índices seleccionados
-            (self.variable_tipo_tarifa_preferente) = [self.lista_tarifa_preferente.get(i) for i in indices_seleccionados]
-
-            # Obtener los índices de los elementos seleccionados
-            indices_seleccionados = self.lista_promociones.curselection()
-            # Obtener los valores correspondientes a los índices seleccionados
-            (self.variable_tipo_promocion) = [self.lista_promociones.get(i) for i in indices_seleccionados]
-
-
-            # Se actualiza el valor de la variable de tiempo dentro con los valores de los Spinbox correspondientes
-            self.variable_tiempo_dentro.set(f'{int(self.variable_tiempo_dentro_hora.get())}'+':'+f'{int(self.variable_tiempo_dentro_minuto.get())}'+':00')
-
-            # Se actualiza el valor de la variable de tiempo dentro de inicio con los valores de los Spinbox correspondientes
-            self.variable_tiempo_dentro_inicio.set(f'{int(self.variable_tiempo_dentro_hora_inicio.get())}'+':'+f'{int(self.variable_tiempo_dentro_minuto_inicio.get())}'+':00')
-
-            # Se actualiza el valor de la variable de tiempo dentro de fin con los valores de los Spinbox correspondientes
-            self.variable_tiempo_dentro_fin.set(f'{int(self.variable_tiempo_dentro_hora_fin.get())}'+':'+f'{int(self.variable_tiempo_dentro_minuto_fin.get())}'+':00')
-
+            self.obtener_variables()
 
             # Se llama a la función de hacer_consulta_entrada del controlador de entrada para obtener los registros correspondientes
             self.registros = self.controlador_entrada.hacer_consulta_entrada(
@@ -778,6 +790,7 @@ class Panel_Entradas:
 
                                                                                 tipo_promocion = self.variable_tipo_promocion,
                                                                                 promocion = self.variable_promocion.get(),
+
 
                                                                                 fecha_inicio_entrada = self.variable_fecha_inicio_entrada.get(),
                                                                                 fecha_fin_entrada = self.variable_fecha_fin_entrada.get(),
