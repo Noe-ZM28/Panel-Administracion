@@ -157,15 +157,17 @@ class Panel_Entradas:
         boton_ver_todo.grid(row=0, column=1, sticky=tk.NSEW, padx=5, pady=5)
 
         # Configurar las columnas intermedias con un tamaño mínimo
-        seccion_menu_consulta.columnconfigure(2, minsize=50)
+        seccion_menu_consulta.columnconfigure(3, minsize=100)
+        seccion_menu_consulta.columnconfigure(4, minsize=100)
+        seccion_menu_consulta.columnconfigure(5, minsize=100)
 
-        boton_generar_reporte = ttk.Button(seccion_menu_consulta, text='Generar reporte', width=15,
+        boton_generar_reporte = ttk.Button(seccion_menu_consulta, text='Generar reporte', compound='left',
         command = lambda:
                         {
                             self.controlador_entrada.realizar_reporte(registros = self.registros),
                             self.vaciar_campos()
                         })
-        boton_generar_reporte.grid(row=0, column=3, sticky=tk.NE, pady=5)
+        boton_generar_reporte.grid(row=0, column=6, pady=5)
 
 
         # Crea un LabelFrame para los botones de desconectar y salir
@@ -509,18 +511,18 @@ class Panel_Entradas:
             ##########################################################################################################
             # Crea un LabelFrame para los botones de desconectar y salir
             seccion_botones_consulta = ttk.LabelFrame(self.seccion_consulta_avanzada , text='Botones consulta')
-            seccion_botones_consulta.grid(row=1, column=3, padx=5, pady=5, sticky='NW')
+            seccion_botones_consulta.grid(row=1, column=3, padx=5, pady=5, sticky=tk.NE)
 
             # Crea un botón y lo empaqueta en la seccion_botones_consulta
-            boton_consulta = ttk.Button(seccion_botones_consulta, text='Realizar consulta', command=self.consulta_entrada)
+            boton_consulta = ttk.Button(seccion_botones_consulta, text='Realizar consulta', command=self.consulta_entrada, width=16)
             boton_consulta.grid(row=0, column=0, padx=5, pady=5)
 
             # Crea un botón y lo empaqueta en la seccion_botones_consulta
-            boton_limpiar_campos = ttk.Button(seccion_botones_consulta,  text='Limpiar campos', command = self.vaciar_campos)
+            boton_limpiar_campos = ttk.Button(seccion_botones_consulta,  text='Limpiar campos', command = self.vaciar_campos, width=16)
             boton_limpiar_campos.grid(row=1, column=0, padx=5, pady=5)
 
             # Crea un botón y lo empaqueta en la seccion_botones_consulta
-            boton_limpiar_campos = ttk.Button(seccion_botones_consulta,  text='Vaciar tabla', command = self.limpiar_registros)
+            boton_limpiar_campos = ttk.Button(seccion_botones_consulta,  text='Vaciar tabla', command = self.limpiar_registros, width=16)
             boton_limpiar_campos.grid(row=2, column=0, padx=5, pady=5)
             ##########################################################################################################
 
