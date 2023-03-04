@@ -241,9 +241,9 @@ class EntradasController:
             # Establecer el nombre de las columnas en la primera fila
             for i in range(len(columnas)):
                 worksheet.write(0, i, columnas[i])
-            
+
             formato_moneda = workbook.add_format({'num_format': '$#,##0.00'})
-            
+
             # Escribir los registros
             for i, registro in enumerate(self.registros):
                 for j, valor in enumerate(registro):
@@ -265,8 +265,17 @@ class EntradasController:
             ultima_fila = len(self.registros) + 1
             num_registros = len(self.registros)
             if num_registros > 0:
-                suma_importe = f'=SUM({xlsxwriter.utility.xl_rowcol_to_cell(1, columna_importe)}:{xlsxwriter.utility.xl_rowcol_to_cell(num_registros, columna_importe)})'
-                worksheet.write_formula(num_registros+4, columna_importe, suma_importe, cell_format=formato_moneda)
+                # suma_importe = f'=SUM({xlsxwriter.utility.xl_rowcol_to_cell(1, columna_importe)}:{xlsxwriter.utility.xl_rowcol_to_cell(num_registros, columna_importe)})'
+                # worksheet.write_formula(num_registros+4, columna_importe, suma_importe, cell_format=formato_moneda)
+                # Calcular la suma del importe
+                suma_importe = sum(registro[columnas.index('Importe')] for registro in self.registros)
+
+                # Escribir la suma en la hoja de cálculo
+                worksheet.write(len(self.registros)+1, columnas.index('Importe'), suma_importe, formato_moneda)
+
+
+
+
 
             # Cerrar el archivo de Excel
             workbook.close()

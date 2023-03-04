@@ -511,7 +511,7 @@ class Panel_Entradas:
             ##########################################################################################################
             # Crea un LabelFrame para los botones de desconectar y salir
             seccion_botones_consulta = ttk.LabelFrame(self.seccion_consulta_avanzada , text='Botones consulta')
-            seccion_botones_consulta.grid(row=1, column=3, padx=5, pady=5, sticky=tk.NE)
+            seccion_botones_consulta.grid(row=1, column=3, padx=5, pady=5, sticky=tk.NW)
 
             # Crea un botón y lo empaqueta en la seccion_botones_consulta
             boton_consulta = ttk.Button(seccion_botones_consulta, text='Realizar consulta', command=self.consulta_entrada, width=16)
