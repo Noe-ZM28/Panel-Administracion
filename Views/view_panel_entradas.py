@@ -283,14 +283,15 @@ class Panel_Entradas:
                                                                                             fecha=self.fecha_hora_inicio_entrada,
                                                                                             variable=self.variable_fecha_inicio_entrada,
                                                                                             campo_texto=self.campo_texto_entrada_fecha_inicio))
-            boton_calendario_inicio_entrada.grid(row=0, column=0, sticky=tk.W)
+            boton_calendario_inicio_entrada.grid(row=0, column=0, pady=5, sticky=tk.W)
+            boton_calendario_inicio_entrada.grid(row=0, column=0, pady=5, sticky=tk.W)
 
             # Crear las leyendas para los campos de texto de las entradas
-            etiqueta_fecha_inicio_entrada = ttk.Label(seccion_entrada, text='Fecha inicio:', width=12, anchor=tk.W)
-            etiqueta_fecha_inicio_entrada.grid(row=0, column=1, padx=5, pady=5, sticky=tk.W)
+            etiqueta_fecha_inicio_entrada = ttk.Label(seccion_entrada, text='Fecha mayor a:', width=14)
+            etiqueta_fecha_inicio_entrada.grid(row=0, column=1, pady=5, sticky=tk.W)
         
             # Crear los campos de texto para las entradas
-            self.campo_texto_entrada_fecha_inicio = ttk.Label(seccion_entrada, text='')
+            self.campo_texto_entrada_fecha_inicio = ttk.Label(seccion_entrada, text='', width=19)
             self.campo_texto_entrada_fecha_fin = ttk.Label(seccion_entrada, text='')
 
 
@@ -302,14 +303,14 @@ class Panel_Entradas:
                                                                                             variable=self.variable_fecha_fin_entrada,
                                                                                             campo_texto=self.campo_texto_entrada_fecha_fin))
 
-            boton_calendario_fin_entrada.grid(row=1, column=0, sticky=tk.W)
+            boton_calendario_fin_entrada.grid(row=1, column=0, pady=5, sticky=tk.W)
 
-            etiqueta_fecha_fin_entrada = ttk.Label(seccion_entrada, text='Fecha fin:')
-            etiqueta_fecha_fin_entrada.grid(row=1, column=1, padx=5, pady=5, sticky=tk.W)
+            etiqueta_fecha_fin_entrada = ttk.Label(seccion_entrada, text='Fecha menor a:', width=14)
+            etiqueta_fecha_fin_entrada.grid(row=1, column=1, pady=5, sticky=tk.W)
 
             # Empaqueta los campos de texto y las leyendas en el LabelFrame de las entradas
-            self.campo_texto_entrada_fecha_inicio.grid(row=0, column=2, padx=5, pady=5,sticky='nsew')
-            self.campo_texto_entrada_fecha_fin.grid(row=1, column=2, padx=5, pady=5, sticky='nsew')
+            self.campo_texto_entrada_fecha_inicio.grid(row=0, column=2, pady=5,sticky=tk.NW)
+            self.campo_texto_entrada_fecha_fin.grid(row=1, column=2, pady=5, sticky=tk.NW)
             #####################################################
 
             #####################################################
@@ -331,8 +332,8 @@ class Panel_Entradas:
             self.campo_texto_salida_fecha_fin = ttk.Label(seccion_salida, text='')
 
             # Crear las leyendas para los campos de texto de las salidas
-            etiqueta_fecha_inicio_salida = ttk.Label(seccion_salida, text='Fecha inicio:')
-            etiqueta_fecha_inicio_salida.grid(row=0, column=1, padx=5, pady=5, sticky=tk.W)
+            etiqueta_fecha_inicio_salida = ttk.Label(seccion_salida, text='Fecha mayor a:', width=14)
+            etiqueta_fecha_inicio_salida.grid(row=0, column=1, pady=5, sticky=tk.W)
 
 
             # Crear el boton para el calendario salida fin
@@ -345,12 +346,12 @@ class Panel_Entradas:
             
             boton_calendario_fin_salida.grid(row=1, column=0, sticky=tk.W)
 
-            etiqueta_fecha_fin_salida = ttk.Label(seccion_salida, text='Fecha fin:')
-            etiqueta_fecha_fin_salida.grid(row=1, column=1, padx=5, pady=5, sticky=tk.W)
+            etiqueta_fecha_fin_salida = ttk.Label(seccion_salida, text='Fecha menor a:', width=14)
+            etiqueta_fecha_fin_salida.grid(row=1, column=1, pady=5, sticky=tk.W)
 
             # Empaqueta los campos de texto y las leyendas en el LabelFrame de las salidas
-            self.campo_texto_salida_fecha_inicio.grid(row=0, column=2, padx=5, pady=5, sticky='nsew')
-            self.campo_texto_salida_fecha_fin.grid(row=1, column=2, padx=5, pady=5, sticky='nsew')
+            self.campo_texto_salida_fecha_inicio.grid(row=0, column=2, pady=5, sticky=tk.NW)
+            self.campo_texto_salida_fecha_fin.grid(row=1, column=2, pady=5, sticky=tk.NW)
             ##########################################################################################################
 
 
@@ -449,12 +450,12 @@ class Panel_Entradas:
             self.lista_desplegable_corte = ttk.Combobox(seccion_cortes,  values=opciones, textvariable=self.variable_corte_numero, state='readonly', height=5)
             self.lista_desplegable_corte.grid(row=0, column=1, padx=5, pady=5)
 
-            etiqueta_corte_inicio = ttk.Label(seccion_cortes,  text='Corte inicio: ')
+            etiqueta_corte_inicio = ttk.Label(seccion_cortes,  text='Corte mayor a: ')
             etiqueta_corte_inicio.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
             self.lista_desplegable_corte_inicio = ttk.Combobox(seccion_cortes,  values=opciones, textvariable=self.variable_corte_inicio, state='readonly', height=5)
             self.lista_desplegable_corte_inicio.grid(row=1, column=1, padx=5, pady=5)
 
-            etiqueta_corte_final = ttk.Label(seccion_cortes,  text='Corte final: ')
+            etiqueta_corte_final = ttk.Label(seccion_cortes,  text='Corte menor a: ')
             etiqueta_corte_final.grid(row=2, column=0, padx=5, pady=5, sticky=tk.W)
             self.lista_desplegable_corte_final = ttk.Combobox(seccion_cortes,  values=opciones, textvariable=self.variable_corte_fin, state='readonly', height=5)
             self.lista_desplegable_corte_final.grid(row=2, column=1, padx=5, pady=5)
@@ -473,12 +474,12 @@ class Panel_Entradas:
             self.lista_desplegable_ingreso = ttk.Combobox(seccion_importe,  values=opciones, textvariable=self.variable_importe, state='readonly', height=5)
             self.lista_desplegable_ingreso.grid(row=0, column=1, padx=5, pady=5)
 
-            etiqueta_importe_inicio = ttk.Label(seccion_importe,  text='Importe inicio: ')
+            etiqueta_importe_inicio = ttk.Label(seccion_importe,  text='Importe mayor a: ')
             etiqueta_importe_inicio.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
             self.lista_desplegable_ingreso_inicio = ttk.Combobox(seccion_importe,  values=opciones, textvariable=self.variable_importe_inicio, state='readonly', height=5)
             self.lista_desplegable_ingreso_inicio.grid(row=1, column=1, padx=5, pady=5)
 
-            etiqueta_importe_final = ttk.Label(seccion_importe,  text='Importe final: ')
+            etiqueta_importe_final = ttk.Label(seccion_importe,  text='Importe menor a: ')
             etiqueta_importe_final.grid(row=2, column=0, padx=5, pady=5, sticky=tk.W)
             self.lista_desplegable_ingreso_final = ttk.Combobox(seccion_importe,  values=opciones, textvariable=self.variable_importe_final, state='readonly', height=5)
             self.lista_desplegable_ingreso_final.grid(row=2, column=1, padx=5, pady=5)
