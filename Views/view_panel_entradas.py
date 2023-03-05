@@ -115,6 +115,7 @@ class Panel_Entradas:
 
         # Crea las variables para almacenar los registros y las consultas a la base de datos
         self.registros = None
+        self.parametros = ''
         self.query = Queries()
         self.controlador_entrada = EntradasController(self.theme)
         self.message = None
@@ -164,7 +165,7 @@ class Panel_Entradas:
         boton_generar_reporte = ttk.Button(seccion_menu_consulta, text='Generar reporte', compound='left',
         command = lambda:
                         {
-                            self.controlador_entrada.realizar_reporte(registros = self.registros),
+                            self.controlador_entrada.realizar_reporte(registros = self.registros, parametros = self.parametros),
                             self.vaciar_campos()
                         })
         boton_generar_reporte.grid(row=0, column=6, pady=5)
@@ -659,6 +660,7 @@ class Panel_Entradas:
         '''
 
         self.registros = None
+        self.parametros = ''
         self.vaciar_tabla()
 
     def vaciar_campos(self):
@@ -784,7 +786,7 @@ class Panel_Entradas:
             self.obtener_variables()
 
             # Se llama a la función de hacer_consulta_entrada del controlador de entrada para obtener los registros correspondientes
-            self.registros = self.controlador_entrada.hacer_consulta_entrada(
+            self.registros, self.parametros = self.controlador_entrada.hacer_consulta_entrada(
                                                                                 id = self.variable_folio.get(),
                                                                                 tarifa_preferente = self.variable_tipo_tarifa_preferente,
                                                                                 tarifa = self.variable_tarifa_preferente.get(),

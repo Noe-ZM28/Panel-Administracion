@@ -199,13 +199,13 @@ class EntradasController:
             if tipo_promocion != []: parametros['tipo_promocion'] = tuple(tipo_promocion)
             ##########################################################################################################
 
-            print (parametros)
+            #print(parametros)
             # Validar que se hayan proporcionado parámetros para la consulta
             if parametros == {}:raise ValueError('Los campos están vacíos')
 
             # Realizar la consulta y devolver la lista de registros obtenidos
             registros = self.query.hacer_consulta_sql_entradas(parametros)
-            return registros
+            return registros, parametros
 
 
         except ValueError as e:
@@ -214,7 +214,7 @@ class EntradasController:
             messagebox.showwarning('Error', f'Error: {e}\nEl dato ingresado no es válido')
 
 
-    def realizar_reporte(self, registros):
+    def realizar_reporte(self, registros, parametros):
         """
         Realiza un reporte de los registros obtenidos en una consulta y lo guarda en un archivo de Excel.
 
@@ -227,12 +227,12 @@ class EntradasController:
             exceptions.FileCreateError: Si el archivo de Excel no se puede crear.
         """
         self.registros = registros
+        self.parametros = parametros
 
         # Obtener las columnas de la tabla
         #columnas = self.query.obtener_campos_tabla()
         columnas = ['Folio', 'Entrada', 'Salida', 'Tiempo', 'Importe', 'N° Corte', 'Placas', 'Tarifa', 'Promocion']
 
-        FILA_INICIO = 10
 
         try:
             # Verificar que se haya realizado una consulta antes de generar un reporte
@@ -257,6 +257,24 @@ class EntradasController:
             formato_columnas = workbook.add_format({'bold': True, 'align':'center', 'text_wrap':True, 'border':1, 'pattern':1, 'bg_color':'#D9D9D9'})
             formato_celdas_texto = workbook.add_format( {'bold': False, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white'})
             formato_celdas_moneda = workbook.add_format({'num_format': '$#,##0.00', 'bold': False, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white'})
+
+            # Escribe los parámetros en la hoja de cálculo
+            ultima_fila = 3
+            for i, (clave, valor) in enumerate(self.parametros.items()):
+                fila = i + 4
+                worksheet.write(fila, 3, clave)
+                if isinstance(valor, tuple):
+                    for j, elem in enumerate(valor):
+                        worksheet.write(fila, 4+j, elem)
+                else:
+                    worksheet.write(fila, 4, valor)
+                ultima_fila = fila
+
+            # Guarda el número de la última fila después de haber escrito los parámetros
+            ultima_fila = worksheet.dim_rowmax
+            print(ultima_fila)
+
+            FILA_INICIO = ultima_fila + 3
 
             # Establecer el nombre y ancho de las columnas en función del contenido
             for i, columna in enumerate(columnas):
@@ -288,9 +306,9 @@ class EntradasController:
 
             suma_importe = sum(registro[columnas.index('Importe')] for registro in self.registros)
 
-            worksheet.write('C7', 'Total de ingresos:')
+            worksheet.write('B7', 'Total de ingresos:')
             # Escribir la suma en la hoja de cálculo
-            worksheet.write('D7', suma_importe, formato_celdas_moneda)
+            worksheet.write('C7', suma_importe, formato_celdas_moneda)
 
             # Cerrar el archivo de Excel
             workbook.close()
