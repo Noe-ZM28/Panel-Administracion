@@ -1,5 +1,9 @@
 from Views.views_tools import Calendar_date
 from Models.queries import Queries
+from Config.config_tools import tools
+
+import PIL
+
 
 import tkinter as tk
 from tkinter import filedialog
@@ -22,6 +26,7 @@ class EntradasController:
         Constructor de la clase. Crea la ventana principal, la tabla y los campos de consulta.
         '''
         self.query = Queries()
+        self.tools_instance = tools()
         self.theme = theme
 
 
@@ -223,6 +228,12 @@ class EntradasController:
         """
         self.registros = registros
 
+        # Obtener las columnas de la tabla
+        #columnas = self.query.obtener_campos_tabla()
+        columnas = ['Folio', 'Entrada', 'Salida', 'Tiempo', 'Importe', 'N° Corte', 'Placas', 'Tarifa', 'Promocion']
+
+        FILA_INICIO = 10
+
         try:
             # Verificar que se haya realizado una consulta antes de generar un reporte
             if self.registros is None: raise TypeError('Primero genera una consulta antes de generar un reporte')
@@ -233,16 +244,29 @@ class EntradasController:
 
             # Crear un archivo de Excel y escribir los registros
             workbook = xlsxwriter.Workbook(ruta_archivo, {'remove_timezone': True})
-            worksheet = workbook.add_worksheet()
+            worksheet = workbook.add_worksheet('Reporte')
 
-            # Obtener las columnas de la tabla
-            columnas = self.query.obtener_campos_tabla()
 
-            # Establecer el nombre de las columnas en la primera fila
-            for i in range(len(columnas)):
-                worksheet.write(0, i, columnas[i])
+            # Agregar la imagen en la esquina superior izquierda de la hoja de Excel
+            imagen_path = self.tools_instance.read_path_config_file('images', 'logo_pase')
+            imagen = PIL.Image.open(imagen_path)
+            imagen_width, imagen_height = imagen.size
 
-            formato_moneda = workbook.add_format({'num_format': '$#,##0.00'})
+            worksheet.insert_image(0, 0, imagen_path, {'x_offset': 0, 'y_offset': 0, 'x_scale': 1, 'y_scale': 1})
+
+            formato_columnas = workbook.add_format({'bold': True, 'align':'center', 'text_wrap':True, 'border':1, 'pattern':1, 'bg_color':'#D9D9D9'})
+            formato_celdas_texto = workbook.add_format( {'bold': False, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white'})
+            formato_celdas_moneda = workbook.add_format({'num_format': '$#,##0.00', 'bold': False, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white'})
+
+            # Establecer el nombre y ancho de las columnas en función del contenido
+            for i, columna in enumerate(columnas):
+                worksheet.write(FILA_INICIO - 1, i, columnas[i], formato_columnas)
+                max_longitud = max([len(str(registro[i])) for registro in self.registros] + [len(columna)]) + 1
+                worksheet.set_column(i, i, max_longitud)
+
+            #Establece el tamaño del campo tiempo a 8
+            worksheet.set_column(3, 3, 8)
+
 
             # Escribir los registros
             for i, registro in enumerate(self.registros):
@@ -251,31 +275,22 @@ class EntradasController:
                     if columnas[j] == 'Entrada' or columnas[j] == 'Salida':
                         fecha_hora = datetime.strptime(valor.strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
                         fecha_hora_str = datetime.strftime(fecha_hora, '%Y-%m-%d %H:%M:%S')
-                        worksheet.write(i+1, j, fecha_hora_str)
+
+                        worksheet.write(i + FILA_INICIO, j, fecha_hora_str, formato_celdas_texto)
+
                     # Si el campo es "Importe", aplicar el formato de moneda
                     elif columnas[j] == 'Importe':
-                        
-                        worksheet.write(i+1, j, valor, formato_moneda)
+                        worksheet.write(i + FILA_INICIO, j, valor, formato_celdas_moneda)
+
                     else:
-                        worksheet.write(i+1, j, valor)
+                        worksheet.write(i + FILA_INICIO, j, valor, formato_celdas_texto)
 
 
-            # Escribir la fórmula de suma
-            columna_importe = columnas.index('Importe')
-            ultima_fila = len(self.registros) + 1
-            num_registros = len(self.registros)
-            if num_registros > 0:
-                # suma_importe = f'=SUM({xlsxwriter.utility.xl_rowcol_to_cell(1, columna_importe)}:{xlsxwriter.utility.xl_rowcol_to_cell(num_registros, columna_importe)})'
-                # worksheet.write_formula(num_registros+4, columna_importe, suma_importe, cell_format=formato_moneda)
-                # Calcular la suma del importe
-                suma_importe = sum(registro[columnas.index('Importe')] for registro in self.registros)
+            suma_importe = sum(registro[columnas.index('Importe')] for registro in self.registros)
 
-                # Escribir la suma en la hoja de cálculo
-                worksheet.write(len(self.registros)+1, columnas.index('Importe'), suma_importe, formato_moneda)
-
-
-
-
+            worksheet.write('C7', 'Total de ingresos:')
+            # Escribir la suma en la hoja de cálculo
+            worksheet.write('D7', suma_importe, formato_celdas_moneda)
 
             # Cerrar el archivo de Excel
             workbook.close()
@@ -286,7 +301,6 @@ class EntradasController:
         except TypeError as e:messagebox.showerror('Error', f'Error: {e}\nPara realizar un reporte primero tiene que realizar una consulta')
         except ValueError as e:messagebox.showerror('Error', f'Error: {e}\nPara realizar un reporte primero tiene que realizar una consulta que contenga registros')
         except exceptions.FileCreateError as e:messagebox.showerror('Error', f'Error: El reporte no se puede generar, seleccione el directorio para guardar el reporte y vuelva a intentar')
-
 
     def format_datetime(self, hour, minute):
         """

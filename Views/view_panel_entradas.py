@@ -312,8 +312,8 @@ class Panel_Entradas:
             etiqueta_fecha_fin_entrada.grid(row=1, column=1, pady=5, sticky=tk.W)
 
             # Empaqueta los campos de texto y las leyendas en el LabelFrame de las entradas
-            self.campo_texto_entrada_fecha_inicio.grid(row=0, column=2, pady=5,sticky=tk.NW)
-            self.campo_texto_entrada_fecha_fin.grid(row=1, column=2, pady=5, sticky=tk.NW)
+            self.campo_texto_entrada_fecha_inicio.grid(row=0, column=2, pady=5,sticky=tk.W)
+            self.campo_texto_entrada_fecha_fin.grid(row=1, column=2, pady=5, sticky=tk.W)
             #####################################################
 
             #####################################################
@@ -353,8 +353,8 @@ class Panel_Entradas:
             etiqueta_fecha_fin_salida.grid(row=1, column=1, pady=5, sticky=tk.W)
 
             # Empaqueta los campos de texto y las leyendas en el LabelFrame de las salidas
-            self.campo_texto_salida_fecha_inicio.grid(row=0, column=2, pady=5, sticky=tk.NW)
-            self.campo_texto_salida_fecha_fin.grid(row=1, column=2, pady=5, sticky=tk.NW)
+            self.campo_texto_salida_fecha_inicio.grid(row=0, column=2, pady=5, sticky=tk.W)
+            self.campo_texto_salida_fecha_fin.grid(row=1, column=2, pady=5, sticky=tk.W)
             ##########################################################################################################
 
 
