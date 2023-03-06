@@ -228,16 +228,17 @@ class EntradasController:
         """
         self.registros = registros
         self.parametros = parametros
+        print(self.parametros)
 
         # Obtener las columnas de la tabla
         #columnas = self.query.obtener_campos_tabla()
-        columnas = ['Folio', 'Entrada', 'Salida', 'Tiempo', 'Importe', 'N° Corte', 'Placas', 'Tarifa', 'Promocion']
+        columnas = ['N° boleto', 'Entrada', 'Salida', 'Tiempo', 'Importe', 'N° Corte', 'Placas', 'Tarifa', 'Promocion']
 
 
         try:
             # Verificar que se haya realizado una consulta antes de generar un reporte
             if self.registros is None: raise TypeError('Primero genera una consulta antes de generar un reporte')
-            if len(self.registros) == 0: raise ValueError('La consulta esta vacia y no se puede generar un reporte')
+            # if len(self.registros) == 0: raise ValueError('La consulta esta vacia y no se puede generar un reporte')
 
             # Obtener la ruta y el nombre del archivo donde se guardará el reporte
             ruta_archivo = filedialog.asksaveasfilename(defaultextension='.xlsx', initialfile=f'reporte_')
@@ -245,6 +246,8 @@ class EntradasController:
             # Crear un archivo de Excel y escribir los registros
             workbook = xlsxwriter.Workbook(ruta_archivo, {'remove_timezone': True})
             worksheet = workbook.add_worksheet('Reporte')
+            worksheet.set_landscape()
+
 
 
             # Agregar la imagen en la esquina superior izquierda de la hoja de Excel
@@ -257,22 +260,61 @@ class EntradasController:
             formato_columnas = workbook.add_format({'bold': True, 'align':'center', 'text_wrap':True, 'border':1, 'pattern':1, 'bg_color':'#D9D9D9'})
             formato_celdas_texto = workbook.add_format( {'bold': False, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white'})
             formato_celdas_moneda = workbook.add_format({'num_format': '$#,##0.00', 'bold': False, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white'})
+            formato_celdas_total_ingreso= workbook.add_format({'num_format': '$#,##0.00', 'bold': True, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white', 'bg_color':'#D9D9D9'})
+            formato_titulo = workbook.add_format({'bold': True, 'font_size': 14, 'align': 'center'})
+            formato_subtitulo = workbook.add_format({'bold': True, 'font_size': 12, 'align': 'center', 'bg_color':'#D9D9D9'})
 
-            # Escribe los parámetros en la hoja de cálculo
-            ultima_fila = 3
+
+            # Agregar título en CE - E3
+            titulo = "REPORTE"
+            worksheet.merge_range('A3:J3', titulo, formato_titulo)
+
+            subtitulo = "Datos del periodo"
+            worksheet.merge_range('D6:H6', subtitulo, formato_subtitulo)
+
+
+
+            # Define un diccionario con los nuevos nombres de clave
+            nuevos_nombres = {
+                'id': 'N° boleto',
+                'tarifa': 'Tarifa',
+                'tarifa_preferente': 'Tarifas',
+                'fecha_inicio_entrada': 'Fecha de entrada mayor a',
+                'fecha_fin_entrada': 'Fecha de entrada menor a',
+                'fecha_inicio_salida': 'Fecha de salida mayor a',
+                'fecha_fin_salida': 'Fecha de salida menor a',
+                'tiempo_dentro': 'Tiempo dentro igual a',
+                'tiempo_dentro_inicio': 'Tiempo dentro mayor a',
+                'tiempo_dentro_fin': 'Tiempo dentro menor a',
+                'corte_numero': 'N° Corte',
+                'corte_numero_inicio': 'N° Corte mayor a',
+                'corte_numero_fin': 'N° Corte menor a',
+                'ingreso': 'Importe',
+                'ingreso_mayor': 'Importe mayor a',
+                'ingreso_menor': 'Importe menor a',
+                'tipo_promocion': 'Promociones',
+                'promocion': 'Promocion'
+            }
+
+            # Escribe los parámetros en la hoja de cálculo con los nuevos nombres
+            ultima_fila = 5
             for i, (clave, valor) in enumerate(self.parametros.items()):
-                fila = i + 4
-                worksheet.write(fila, 3, clave)
+                fila = i + 6
+                nuevo_nombre = nuevos_nombres.get(clave, clave)
+                worksheet.write(fila, 3, nuevo_nombre)
                 if isinstance(valor, tuple):
-                    for j, elem in enumerate(valor):
-                        worksheet.write(fila, 4+j, elem)
+                    valor = ','.join(str(elem) for elem in valor)
+                    worksheet.write(fila, 3, clave + ': ' + valor)
                 else:
                     worksheet.write(fila, 4, valor)
+                worksheet.merge_range(fila, 3, fila, 4, '')
+                worksheet.write(fila, 3, nuevo_nombre, formato_columnas)
+                if not isinstance(valor, tuple):
+                    worksheet.write(fila, 5, valor)
                 ultima_fila = fila
 
             # Guarda el número de la última fila después de haber escrito los parámetros
             ultima_fila = worksheet.dim_rowmax
-            print(ultima_fila)
 
             FILA_INICIO = ultima_fila + 3
 
@@ -308,7 +350,7 @@ class EntradasController:
 
             worksheet.write('B7', 'Total de ingresos:')
             # Escribir la suma en la hoja de cálculo
-            worksheet.write('C7', suma_importe, formato_celdas_moneda)
+            worksheet.write('C7', suma_importe, formato_celdas_total_ingreso)
 
             # Cerrar el archivo de Excel
             workbook.close()

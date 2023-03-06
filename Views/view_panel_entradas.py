@@ -550,7 +550,8 @@ class Panel_Entradas:
 
 
         # Obtiene los nombres de las columnas de la tabla que se va a mostrar
-        columnas = self.query.obtener_campos_tabla()
+        #columnas = self.query.obtener_campos_tabla()
+        columnas = ['N° boleto', 'Entrada', 'Salida', 'Tiempo', 'Importe', 'N° Corte', 'Placas', 'Tarifa', 'Promocion']
 
         # Crea un Treeview con una columna por cada campo de la tabla
         self.tabla = ttk.Treeview(seccion_tabla, columns=(columnas))
@@ -563,7 +564,7 @@ class Panel_Entradas:
             self.tabla.column(f'#{i}', width=100)
             i = i + 1
         self.tabla.column('#0', width=0, stretch=False)
-        self.tabla.column('#1', width=40, stretch=False)
+        self.tabla.column('#1', width=60, stretch=False)
 
         # Inserta datos
         #self.ver_tabla_completa()
