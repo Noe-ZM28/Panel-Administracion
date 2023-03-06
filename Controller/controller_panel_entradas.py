@@ -257,9 +257,11 @@ class EntradasController:
 
             worksheet.insert_image(0, 0, imagen_path, {'x_offset': 0, 'y_offset': 0, 'x_scale': 1, 'y_scale': 1})
 
-            formato_columnas = workbook.add_format({'bold': True, 'align':'center', 'text_wrap':True, 'border':1, 'pattern':1, 'bg_color':'#D9D9D9'})
-            formato_celdas_texto = workbook.add_format( {'bold': False, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white'})
-            formato_celdas_moneda = workbook.add_format({'num_format': '$#,##0.00', 'bold': False, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white'})
+            formato_columnas = workbook.add_format({'bold': True, 'align':'left', 'valign':'vcenter', 'text_wrap':True, 'border':1, 'pattern':1, 'bg_color':'#D9D9D9'})
+            formato_columnas_blanco = workbook.add_format({'bold': True, 'align':'left', 'valign':'vcenter', 'text_wrap':True, 'border':1, 'pattern':1, 'bg_color':'white'})
+            formato_celdas_texto = workbook.add_format({'bold': False, 'align':'right', 'valign':'vcenter', 'text_wrap':True, 'border':1, 'pattern':1, 'bg_color':'white'})
+
+            formato_celdas_moneda = workbook.add_format({'num_format': '$#,##0.00', 'bold': True, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white'})
             formato_celdas_total_ingreso= workbook.add_format({'num_format': '$#,##0.00', 'bold': True, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white', 'bg_color':'#D9D9D9'})
             formato_titulo = workbook.add_format({'bold': True, 'font_size': 14, 'align': 'center'})
             formato_subtitulo = workbook.add_format({'bold': True, 'font_size': 12, 'align': 'center', 'bg_color':'#D9D9D9'})
@@ -270,7 +272,7 @@ class EntradasController:
             worksheet.merge_range('A3:J3', titulo, formato_titulo)
 
             subtitulo = "Datos del periodo"
-            worksheet.merge_range('D6:H6', subtitulo, formato_subtitulo)
+            worksheet.merge_range('D5:I5', subtitulo, formato_subtitulo)
 
 
 
@@ -290,8 +292,8 @@ class EntradasController:
                 'corte_numero_inicio': 'N° Corte mayor a',
                 'corte_numero_fin': 'N° Corte menor a',
                 'ingreso': 'Importe',
-                'ingreso_mayor': 'Importe mayor a',
-                'ingreso_menor': 'Importe menor a',
+                'ingreso_mayor': 'Importe menor a',
+                'ingreso_menor': 'Importe mayor a',
                 'tipo_promocion': 'Promociones',
                 'promocion': 'Promocion'
             }
@@ -300,23 +302,34 @@ class EntradasController:
             ultima_fila = 5
             for i, (clave, valor) in enumerate(self.parametros.items()):
                 fila = i + 6
-                nuevo_nombre = nuevos_nombres.get(clave, clave)
-                worksheet.write(fila, 3, nuevo_nombre)
+                nuevo_nombre = nuevos_nombres.get(clave, valor)
+                worksheet.merge_range(fila, 3, fila, 5, nuevo_nombre, formato_columnas)
+
                 if isinstance(valor, tuple):
                     valor = ','.join(str(elem) for elem in valor)
-                    worksheet.write(fila, 3, clave + ': ' + valor)
+                    worksheet.merge_range(fila, 6, fila, 8, valor, formato_celdas_texto)
                 else:
-                    worksheet.write(fila, 4, valor)
-                worksheet.merge_range(fila, 3, fila, 4, '')
-                worksheet.write(fila, 3, nuevo_nombre, formato_columnas)
-                if not isinstance(valor, tuple):
-                    worksheet.write(fila, 5, valor)
+                    if nuevo_nombre in ['Importe', 'Importe mayor a', 'Importe menor a']:
+                        worksheet.merge_range(fila, 6, fila, 8, valor, formato_celdas_moneda)
+                    else:
+                        worksheet.merge_range(fila, 6, fila, 8, valor, formato_celdas_texto)
                 ultima_fila = fila
 
             # Guarda el número de la última fila después de haber escrito los parámetros
             ultima_fila = worksheet.dim_rowmax
 
-            FILA_INICIO = ultima_fila + 3
+            # Calcula la suma de la columna importe
+            suma_importe = sum(registro[columnas.index('Importe')] for registro in self.registros)
+
+            # Escribe la suma en la hoja de cálculo
+            worksheet.merge_range(ultima_fila + 2, 3, ultima_fila + 2, 5, 'Total de ingresos:', formato_columnas_blanco)
+            worksheet.merge_range(ultima_fila + 2, 6, ultima_fila + 2, 8, suma_importe, formato_celdas_total_ingreso)
+
+
+
+
+
+            FILA_INICIO = ultima_fila + 7
 
             # Establecer el nombre y ancho de las columnas en función del contenido
             for i, columna in enumerate(columnas):
@@ -346,16 +359,13 @@ class EntradasController:
                         worksheet.write(i + FILA_INICIO, j, valor, formato_celdas_texto)
 
 
-            suma_importe = sum(registro[columnas.index('Importe')] for registro in self.registros)
-
-            worksheet.write('B7', 'Total de ingresos:')
-            # Escribir la suma en la hoja de cálculo
-            worksheet.write('C7', suma_importe, formato_celdas_total_ingreso)
 
             # Cerrar el archivo de Excel
             workbook.close()
             os.chmod(ruta_archivo, 0o777)
+            #self.tools_instance.convert_excel_to_pdf(ruta_archivo, f'{ruta_archivo[:-5]}.pdf')
             messagebox.showinfo('Mensaje', 'El reporte fue generado con exito')
+
 
         #Manejo de errores
         except TypeError as e:messagebox.showerror('Error', f'Error: {e}\nPara realizar un reporte primero tiene que realizar una consulta')
