@@ -101,6 +101,9 @@ class Panel_Entradas:
         icono_desconectar = tools_instance.read_path_config_file('images', 'icono_desconectar')
         self.icono_desconectar = PhotoImage(file=icono_desconectar).subsample(50)
 
+        icono_borrar = tools_instance.read_path_config_file('images', 'icono_borrar')
+        self.icono_borrar = PhotoImage(file=icono_borrar).subsample(25)
+
 
         # Crea las variables para el manejo de calendario
         self.calendario_fecha_inicio_entrada = None
@@ -166,7 +169,6 @@ class Panel_Entradas:
         command = lambda:
                         {
                             self.controlador_entrada.realizar_reporte(registros = self.registros, parametros = self.parametros),
-                            self.vaciar_campos()
                         })
         boton_generar_reporte.grid(row=0, column=6, pady=5)
 
@@ -201,8 +203,16 @@ class Panel_Entradas:
             etiqueta_folio.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
 
             # Crear los campos de texto para la consulta de folio
-            self.campo_texto_folio = tk.Entry(seccion_formulario_simple,  textvariable=self.variable_folio)
-            self.campo_texto_folio.grid(row=0, column=1, padx=5, pady=5)
+            # self.campo_texto_folio = tk.Entry(seccion_formulario_simple,  textvariable=self.variable_folio)
+            # self.campo_texto_folio.grid(row=0, column=1, padx=5, pady=5)
+
+            opciones = self.query.obtener_lista_de('id')
+            # Crear la lista desplegable
+            self.lista_desplegable_boleto = ttk.Combobox(seccion_formulario_simple,  values=opciones, textvariable=self.variable_folio, state='readonly', height=5)
+            self.lista_desplegable_boleto.grid(row=0, column=1, padx=5, pady=5)
+
+            boton_borrar_folio = ttk.Button(seccion_formulario_simple, image=self.icono_borrar)
+            boton_borrar_folio.grid(row=0, column=2, pady=5, sticky=tk.NW)
             #######################################################################---
 
             #######################################################################---
@@ -215,6 +225,9 @@ class Panel_Entradas:
             # Crear la lista desplegable
             self.lista_desplegable_corte = ttk.Combobox(seccion_formulario_simple,  values=opciones, textvariable=self.variable_corte_numero, state='readonly', height=5)
             self.lista_desplegable_corte.grid(row=1, column=1, padx=5, pady=5)
+
+            boton_borrar_corte = ttk.Button(seccion_formulario_simple, image=self.icono_borrar)
+            boton_borrar_corte.grid(row=1, column=2, pady=5, sticky=tk.NW)
             #######################################################################---
 
             #######################################################################---
@@ -227,6 +240,9 @@ class Panel_Entradas:
             # Crear la lista desplegable
             self.lista_desplegable_tipo_tarifa_preferente = ttk.Combobox(seccion_formulario_simple,  values=opciones, textvariable=self.variable_tarifa_preferente, state='readonly')
             self.lista_desplegable_tipo_tarifa_preferente.grid(row=2, column=1, padx=5, pady=5)
+
+            boton_borrar_tarifa_preferente = ttk.Button(seccion_formulario_simple, image=self.icono_borrar)
+            boton_borrar_tarifa_preferente.grid(row=2, column=2, pady=5, sticky=tk.NW)
             #######################################################################---
 
 
@@ -242,6 +258,8 @@ class Panel_Entradas:
             self.lista_desplegable_tipo_promocion = ttk.Combobox(seccion_formulario_simple,  values=opciones, textvariable=self.variable_promocion, state='readonly')
             self.lista_desplegable_tipo_promocion.grid(row=3, column=1, padx=5, pady=5)
 
+            boton_borrar_tarifa_promocion = ttk.Button(seccion_formulario_simple, image=self.icono_borrar)
+            boton_borrar_tarifa_promocion.grid(row=3, column=2, pady=5, sticky=tk.NW)
             #######################################################################---
 
 
@@ -270,15 +288,14 @@ class Panel_Entradas:
         def view_consulta_avanzada(self):
 
             seccion_fechas = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Fechas')
-            seccion_fechas.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
+            seccion_fechas.grid(row=0, column=0, padx=5, pady=5, sticky=tk.NW)
 
 
             ##########################################################################################################
             #####################################################
             # Crear un LabelFrame para las entradas
             seccion_entrada = ttk.LabelFrame(seccion_fechas, text='Entradas')
-            seccion_entrada.grid(row=3, column=0, padx=5, pady=5, sticky='nsew')
-
+            seccion_entrada.grid(row=3, column=0, padx=5, pady=5, sticky=tk.NW)
 
             # Crear el boton para el calendario entrada inicio
             boton_calendario_inicio_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
@@ -288,17 +305,19 @@ class Panel_Entradas:
                                                                                             variable=self.variable_fecha_inicio_entrada,
                                                                                             campo_texto=self.campo_texto_entrada_fecha_inicio))
             boton_calendario_inicio_entrada.grid(row=0, column=0, pady=5, sticky=tk.W)
-            boton_calendario_inicio_entrada.grid(row=0, column=0, pady=5, sticky=tk.W)
 
             # Crear las leyendas para los campos de texto de las entradas
-            etiqueta_fecha_inicio_entrada = ttk.Label(seccion_entrada, text='Fecha mayor a:', width=14)
+            etiqueta_fecha_inicio_entrada = ttk.Label(seccion_entrada, text='Fecha inicio:')
             etiqueta_fecha_inicio_entrada.grid(row=0, column=1, pady=5, sticky=tk.W)
         
             # Crear los campos de texto para las entradas
             self.campo_texto_entrada_fecha_inicio = ttk.Label(seccion_entrada, text='', width=19)
-            self.campo_texto_entrada_fecha_fin = ttk.Label(seccion_entrada, text='')
+            self.campo_texto_entrada_fecha_inicio.grid(row=0, column=2, pady=5,sticky=tk.W)
 
-
+            boton_borrar_fecha_fin_inicio = ttk.Button(seccion_entrada, image=self.icono_borrar)
+            boton_borrar_fecha_fin_inicio.grid(row=0, column=3, pady=5, sticky=tk.NW)
+            ##########################
+            ##########################
             # Crear el boton para el calendario entrada fin
             boton_calendario_fin_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
                                                     command=lambda:self.controlador_entrada.actualizar_fecha(
@@ -306,21 +325,24 @@ class Panel_Entradas:
                                                                                             fecha=self.fecha_hora_fin_entrada,
                                                                                             variable=self.variable_fecha_fin_entrada,
                                                                                             campo_texto=self.campo_texto_entrada_fecha_fin))
-
             boton_calendario_fin_entrada.grid(row=1, column=0, pady=5, sticky=tk.W)
 
-            etiqueta_fecha_fin_entrada = ttk.Label(seccion_entrada, text='Fecha menor a:', width=14)
+            # Crear las leyendas para los campos de texto de las entradas
+            etiqueta_fecha_fin_entrada = ttk.Label(seccion_entrada, text='Fecha final:')
             etiqueta_fecha_fin_entrada.grid(row=1, column=1, pady=5, sticky=tk.W)
 
-            # Empaqueta los campos de texto y las leyendas en el LabelFrame de las entradas
-            self.campo_texto_entrada_fecha_inicio.grid(row=0, column=2, pady=5,sticky=tk.W)
+            # Crear los campos de texto para las entradas
+            self.campo_texto_entrada_fecha_fin = ttk.Label(seccion_entrada, text='')
             self.campo_texto_entrada_fecha_fin.grid(row=1, column=2, pady=5, sticky=tk.W)
-            #####################################################
+
+            boton_borrar_fecha_fin_entrada = ttk.Button(seccion_entrada, image=self.icono_borrar)
+            boton_borrar_fecha_fin_entrada.grid(row=1, column=3, pady=5, sticky=tk.NW)
+            ##########################
 
             #####################################################
             # Crear un LabelFrame para las salidas
             seccion_salida = ttk.LabelFrame(seccion_fechas, text='Salidas')
-            seccion_salida.grid(row=4, column=0, padx=5, pady=5, sticky='nsew')
+            seccion_salida.grid(row=4, column=0, padx=5, pady=5, sticky=tk.NW)
 
             # Crear el boton para el calendario salida inicio
             boton_calendario_inicio_salida = ttk.Button(seccion_salida, image=self.icono_calendario, 
@@ -331,15 +353,19 @@ class Panel_Entradas:
                                                                                             campo_texto=self.campo_texto_salida_fecha_inicio))
             boton_calendario_inicio_salida.grid(row=0, column=0, sticky=tk.W)
 
-            # Crear los campos de texto para las salidas
-            self.campo_texto_salida_fecha_inicio = ttk.Label(seccion_salida, text='')
-            self.campo_texto_salida_fecha_fin = ttk.Label(seccion_salida, text='')
-
             # Crear las leyendas para los campos de texto de las salidas
-            etiqueta_fecha_inicio_salida = ttk.Label(seccion_salida, text='Fecha mayor a:', width=14)
+            etiqueta_fecha_inicio_salida = ttk.Label(seccion_salida, text='Fecha inicio:')
             etiqueta_fecha_inicio_salida.grid(row=0, column=1, pady=5, sticky=tk.W)
 
+            # Crear los campos de texto para las salidas
+            self.campo_texto_salida_fecha_inicio = ttk.Label(seccion_salida, text='', width=19)
+            self.campo_texto_salida_fecha_inicio.grid(row=0, column=2, pady=5, sticky=tk.W)
 
+            boton_borrar_fecha_inicio_salida = ttk.Button(seccion_salida, image=self.icono_borrar)
+            boton_borrar_fecha_inicio_salida.grid(row=0, column=3, pady=5, sticky=tk.NW)
+            ##########################
+
+            ##########################
             # Crear el boton para el calendario salida fin
             boton_calendario_fin_salida = ttk.Button(seccion_salida, image=self.icono_calendario, 
                                                     command=lambda: self.controlador_entrada.actualizar_fecha(
@@ -347,15 +373,18 @@ class Panel_Entradas:
                                                                                             fecha=self.fecha_hora_fin_salida,
                                                                                             variable=self.variable_fecha_fin_salida,
                                                                                             campo_texto=self.campo_texto_salida_fecha_fin))
-            
             boton_calendario_fin_salida.grid(row=1, column=0, sticky=tk.W)
 
-            etiqueta_fecha_fin_salida = ttk.Label(seccion_salida, text='Fecha menor a:', width=14)
+            etiqueta_fecha_fin_salida = ttk.Label(seccion_salida, text='Fecha final:')
             etiqueta_fecha_fin_salida.grid(row=1, column=1, pady=5, sticky=tk.W)
 
-            # Empaqueta los campos de texto y las leyendas en el LabelFrame de las salidas
-            self.campo_texto_salida_fecha_inicio.grid(row=0, column=2, pady=5, sticky=tk.W)
+            self.campo_texto_salida_fecha_fin = ttk.Label(seccion_salida, text='')
             self.campo_texto_salida_fecha_fin.grid(row=1, column=2, pady=5, sticky=tk.W)
+
+            boton_borrar_fecha_fin_salida = ttk.Button(seccion_salida, image=self.icono_borrar)
+            boton_borrar_fecha_fin_salida.grid(row=1, column=3, pady=5, sticky=tk.NW)
+            ##########################
+            #####################################################
             ##########################################################################################################
 
 
@@ -378,44 +407,53 @@ class Panel_Entradas:
             etiqueta_tiempo_dentro_hora.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
 
             self.lista_desplegable_tiempo_dentro_hora = ttk.Combobox(seccion_tiempo_dentro, values=opciones_horas, textvariable=self.variable_tiempo_dentro_hora, state='readonly',width=3 ,height=5)
-            self.lista_desplegable_tiempo_dentro_hora.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NW)
+            self.lista_desplegable_tiempo_dentro_hora.grid(row=1, column=1, padx=5, pady=5, sticky=tk.W)
             self.lista_desplegable_tiempo_dentro_hora.configure(foreground="black")
 
             self.lista_desplegable_tiempo_dentro_minuto = ttk.Combobox(seccion_tiempo_dentro, values=opciones_minutos, textvariable=self.variable_tiempo_dentro_minuto, state='readonly',width=3 ,height=5)
-            self.lista_desplegable_tiempo_dentro_minuto.grid(row=1, column=2, padx=5, pady=5, sticky=tk.NW)
+            self.lista_desplegable_tiempo_dentro_minuto.grid(row=1, column=2, padx=5, pady=5, sticky=tk.W)
             self.lista_desplegable_tiempo_dentro_minuto.configure(foreground="black")
+
+            boton_borrar_tiempo_dentro_minuto = ttk.Button(seccion_tiempo_dentro, image=self.icono_borrar)
+            boton_borrar_tiempo_dentro_minuto.grid(row=1, column=3, pady=5, sticky=tk.W)
             #####################################################
 
             #####################################################
             self.variable_tiempo_dentro_hora_inicio = IntVar()
             self.variable_tiempo_dentro_minuto_inicio = IntVar()
 
-            etiqueta_hora = ttk.Label(seccion_tiempo_dentro, text="Tiempo mayor a: ")
-            etiqueta_hora.grid(row=2, column=0, padx=5, pady=5, sticky=tk.NW)
+            etiqueta_hora = ttk.Label(seccion_tiempo_dentro, text="Tiempo inicio: ")
+            etiqueta_hora.grid(row=2, column=0, padx=5, pady=5, sticky=tk.W)
 
             self.lista_desplegable_tiempo_dentro_hora_inicio = ttk.Combobox(seccion_tiempo_dentro, values=opciones_horas, textvariable=self.variable_tiempo_dentro_hora_inicio, state='readonly',width=3 ,height=5)
-            self.lista_desplegable_tiempo_dentro_hora_inicio.grid(row=2, column=1, padx=5, pady=5, sticky=tk.NW)
+            self.lista_desplegable_tiempo_dentro_hora_inicio.grid(row=2, column=1, padx=5, pady=5, sticky=tk.W)
             self.lista_desplegable_tiempo_dentro_hora_inicio.configure(foreground="black")
 
             self.lista_desplegable_tiempo_dentro_minuto_inicio = ttk.Combobox(seccion_tiempo_dentro, values=opciones_minutos, textvariable=self.variable_tiempo_dentro_minuto_inicio, state='readonly',width=3 ,height=5)
-            self.lista_desplegable_tiempo_dentro_minuto_inicio.grid(row=2, column=2, padx=5, pady=5, sticky=tk.NW)
+            self.lista_desplegable_tiempo_dentro_minuto_inicio.grid(row=2, column=2, padx=5, pady=5, sticky=tk.W)
             self.lista_desplegable_tiempo_dentro_minuto_inicio.configure(foreground="black")
+
+            boton_borrar_tiempo_dentro_minuto_inicio = ttk.Button(seccion_tiempo_dentro, image=self.icono_borrar)
+            boton_borrar_tiempo_dentro_minuto_inicio.grid(row=2, column=3, pady=5, sticky=tk.W)
             #####################################################
 
             #####################################################
             self.variable_tiempo_dentro_hora_fin = IntVar()
             self.variable_tiempo_dentro_minuto_fin = IntVar()
 
-            etiqueta_hora = ttk.Label(seccion_tiempo_dentro, text="Tiempo menor a: ")
-            etiqueta_hora.grid(row=3, column=0, padx=5, pady=5, sticky=tk.NW)
+            etiqueta_hora = ttk.Label(seccion_tiempo_dentro, text="Tiempo final: ")
+            etiqueta_hora.grid(row=3, column=0, padx=5, pady=5, sticky=tk.W)
 
             self.lista_desplegable_tiempo_dentro_hora_fin = ttk.Combobox(seccion_tiempo_dentro, values=opciones_horas, textvariable=self.variable_tiempo_dentro_hora_fin, state='readonly',width=3 ,height=5)
-            self.lista_desplegable_tiempo_dentro_hora_fin.grid(row=3, column=1, padx=5, pady=5, sticky=tk.NW)
+            self.lista_desplegable_tiempo_dentro_hora_fin.grid(row=3, column=1, padx=5, pady=5, sticky=tk.W)
             self.lista_desplegable_tiempo_dentro_hora_fin.configure(foreground="black")
 
             self.lista_desplegable_tiempo_dentro_minuto_fin = ttk.Combobox(seccion_tiempo_dentro, values=opciones_minutos, textvariable=self.variable_tiempo_dentro_minuto_fin, state='readonly',width=3 ,height=5)
-            self.lista_desplegable_tiempo_dentro_minuto_fin.grid(row=3, column=2, padx=5, pady=5, sticky=tk.NW)
+            self.lista_desplegable_tiempo_dentro_minuto_fin.grid(row=3, column=2, padx=5, pady=5, sticky=tk.W)
             self.lista_desplegable_tiempo_dentro_minuto_fin.configure(foreground="black")
+
+            boton_borrar_tiempo_dentro_minuto_fin = ttk.Button(seccion_tiempo_dentro, image=self.icono_borrar)
+            boton_borrar_tiempo_dentro_minuto_fin.grid(row=3, column=3, pady=5, sticky=tk.W)
             #####################################################
             ##########################################################################################################
 
@@ -425,7 +463,7 @@ class Panel_Entradas:
             seccion_tarifas.grid(row=0, column=2, padx=5, pady=5, sticky=tk.NW)
             
             self.lista_tarifa_preferente = tk.Listbox(seccion_tarifas, selectmode="multiple", height=5)
-            self.lista_tarifa_preferente.grid(row=0, column=0, sticky="nsew")
+            self.lista_tarifa_preferente.grid(row=0, column=0, sticky=tk.NW)
 
             scrollbar = ttk.Scrollbar(seccion_tarifas, orient="vertical", command=self.lista_tarifa_preferente.yview)
             scrollbar.grid(row=0, column=1, sticky="ns")
@@ -437,6 +475,9 @@ class Panel_Entradas:
             promociones = self.query.obtener_lista_de('TarifaPreferente')
             for promocion in promociones:
                 self.lista_tarifa_preferente.insert(tk.END, promocion)
+
+            boton_borrar_tiempo_dentro_minuto_fin = ttk.Button(seccion_tarifas, image=self.icono_borrar)
+            boton_borrar_tiempo_dentro_minuto_fin.grid(row=0, column=2, pady=5, sticky=tk.W)
             ##########################################################################################################
 
 
@@ -452,49 +493,60 @@ class Panel_Entradas:
             etiqueta_corte.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
             self.lista_desplegable_corte = ttk.Combobox(seccion_cortes,  values=opciones, textvariable=self.variable_corte_numero, state='readonly', height=5)
             self.lista_desplegable_corte.grid(row=0, column=1, padx=5, pady=5)
+            boton_borrar_corte = ttk.Button(seccion_cortes, image=self.icono_borrar)
+            boton_borrar_corte.grid(row=0, column=2, pady=5, sticky=tk.W)
 
-            etiqueta_corte_inicio = ttk.Label(seccion_cortes,  text='Corte mayor a: ')
+
+            etiqueta_corte_inicio = ttk.Label(seccion_cortes,  text='Corte inicio: ')
             etiqueta_corte_inicio.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
             self.lista_desplegable_corte_inicio = ttk.Combobox(seccion_cortes,  values=opciones, textvariable=self.variable_corte_inicio, state='readonly', height=5)
             self.lista_desplegable_corte_inicio.grid(row=1, column=1, padx=5, pady=5)
+            boton_borrar_corte_inicio = ttk.Button(seccion_cortes, image=self.icono_borrar)
+            boton_borrar_corte_inicio.grid(row=1, column=2, pady=5, sticky=tk.W)
 
-            etiqueta_corte_final = ttk.Label(seccion_cortes,  text='Corte menor a: ')
+
+            etiqueta_corte_final = ttk.Label(seccion_cortes,  text='Corte final: ')
             etiqueta_corte_final.grid(row=2, column=0, padx=5, pady=5, sticky=tk.W)
             self.lista_desplegable_corte_final = ttk.Combobox(seccion_cortes,  values=opciones, textvariable=self.variable_corte_fin, state='readonly', height=5)
             self.lista_desplegable_corte_final.grid(row=2, column=1, padx=5, pady=5)
+            boton_borrar_corte_final = ttk.Button(seccion_cortes, image=self.icono_borrar)
+            boton_borrar_corte_final.grid(row=2, column=2, pady=5, sticky=tk.W)
             ##########################################################################################################
 
             ##########################################################################################################
             seccion_importe = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Importe')
             seccion_importe.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NW)
 
-
             opciones = self.query.obtener_lista_de('Importe', 'A')
-
 
             etiqueta_importe = ttk.Label(seccion_importe,  text='Importe: ')
             etiqueta_importe.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
             self.lista_desplegable_ingreso = ttk.Combobox(seccion_importe,  values=opciones, textvariable=self.variable_importe, state='readonly', height=5)
             self.lista_desplegable_ingreso.grid(row=0, column=1, padx=5, pady=5)
+            boton_borrar_importe = ttk.Button(seccion_importe, image=self.icono_borrar)
+            boton_borrar_importe.grid(row=0, column=2, pady=5, sticky=tk.W)
 
-            etiqueta_importe_inicio = ttk.Label(seccion_importe,  text='Importe mayor a: ')
+            etiqueta_importe_inicio = ttk.Label(seccion_importe,  text='Importe inicio: ')
             etiqueta_importe_inicio.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
             self.lista_desplegable_ingreso_inicio = ttk.Combobox(seccion_importe,  values=opciones, textvariable=self.variable_importe_inicio, state='readonly', height=5)
             self.lista_desplegable_ingreso_inicio.grid(row=1, column=1, padx=5, pady=5)
+            boton_borrar_importe_inicio = ttk.Button(seccion_importe, image=self.icono_borrar)
+            boton_borrar_importe_inicio.grid(row=1, column=2, pady=5, sticky=tk.W)
 
-            etiqueta_importe_final = ttk.Label(seccion_importe,  text='Importe menor a: ')
+            etiqueta_importe_final = ttk.Label(seccion_importe,  text='Importe final: ')
             etiqueta_importe_final.grid(row=2, column=0, padx=5, pady=5, sticky=tk.W)
             self.lista_desplegable_ingreso_final = ttk.Combobox(seccion_importe,  values=opciones, textvariable=self.variable_importe_final, state='readonly', height=5)
             self.lista_desplegable_ingreso_final.grid(row=2, column=1, padx=5, pady=5)
+            boton_borrar_importe_final = ttk.Button(seccion_importe, image=self.icono_borrar)
+            boton_borrar_importe_final.grid(row=2, column=2, pady=5, sticky=tk.W)
             ##########################################################################################################
 
             ##########################################################################################################
             seccion_promociones = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Promociones')
             seccion_promociones.grid(row=0, column=3, padx=5, pady=5, sticky=tk.NW)
 
-
             self.lista_promociones = tk.Listbox(seccion_promociones, selectmode="multiple", height=5)
-            self.lista_promociones.grid(row=0, column=0, sticky="nsew")
+            self.lista_promociones.grid(row=0, column=0, sticky=tk.W)
 
             scrollbar = ttk.Scrollbar(seccion_promociones, orient="vertical", command=self.lista_promociones.yview)
             scrollbar.grid(row=0, column=1, sticky="ns")
@@ -507,6 +559,9 @@ class Panel_Entradas:
             #promociones = self.query.obtener_lista_de('TarifaPreferente')
             for promocion in promociones:
                 self.lista_promociones.insert(tk.END, promocion)
+
+            boton_borrar_promociones = ttk.Button(seccion_promociones, image=self.icono_borrar)
+            boton_borrar_promociones.grid(row=0, column=3, pady=5, sticky=tk.W)
             ##########################################################################################################
 
             ##########################################################################################################
@@ -601,7 +656,7 @@ class Panel_Entradas:
         else:
             self.seccion_consulta_avanzada.grid_forget()
             self.seccion_consulta_simple.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')  # mostrar el labelframe 
-            self.seccion_formulario_datos.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NSEW)
+            self.seccion_formulario_datos.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NW)
 
     def mostrar_campos_avanzado(self):
         """
@@ -620,7 +675,7 @@ class Panel_Entradas:
         else:
             self.seccion_consulta_simple.grid_forget()
             self.seccion_consulta_avanzada.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')  # mostrar el labelframe 
-            self.seccion_formulario_datos.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NSEW)
+            self.seccion_formulario_datos.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NW)
 
 
 
@@ -712,7 +767,7 @@ class Panel_Entradas:
 
 
         # Limpia los campos de consulta
-        self.campo_texto_folio.delete(0, 'end')
+        self.lista_desplegable_boleto.selection_clear()
 
         self.lista_desplegable_tipo_tarifa_preferente.selection_clear()
         self.lista_tarifa_preferente.selection_clear(0, 'end')
