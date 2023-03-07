@@ -370,12 +370,6 @@ class EntradasController:
 
                         worksheet.write(i + FILA_INICIO, j, tiempo_str, formato_celdas_texto)
 
-
-
-
-
-
-
                     else:
                         worksheet.write(i + FILA_INICIO, j, valor, formato_celdas_texto)
 

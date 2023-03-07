@@ -12,8 +12,12 @@
                 "icono_calendario":"Public/Images/icono_calendario.png",
                 "icono_salir": "Public/Images/icono_salir.png",
                 "icono_desconectar": "Public/Images/icono_desconectar.png",
+                "icono_borrar": "Public/Images/icono_borrar.png",
                 "logo_pase": "Public/Images/logo_pase.jpg",
-                "image5": ""
+                "image1": "",
+                "image2": "",
+                "image3": "",
+                "image4": ""
             }]
         }
     ]
