@@ -262,6 +262,8 @@ class EntradasController:
             formato_celdas_texto = workbook.add_format({'bold': False, 'align':'right', 'valign':'vcenter', 'text_wrap':True, 'border':1, 'pattern':1, 'bg_color':'white'})
 
             formato_celdas_moneda = workbook.add_format({'num_format': '$#,##0.00', 'bold': True, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white'})
+            formato_celdas_tiempo = workbook.add_format({'num_format': 'h]:mm:ss', 'bold': False, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white'})
+
             formato_celdas_total_ingreso= workbook.add_format({'num_format': '$#,##0.00', 'bold': True, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white', 'bg_color':'#D9D9D9'})
             formato_titulo = workbook.add_format({'bold': True, 'font_size': 14, 'align': 'center'})
             formato_subtitulo = workbook.add_format({'bold': True, 'font_size': 12, 'align': 'center', 'bg_color':'#D9D9D9'})
@@ -285,7 +287,7 @@ class EntradasController:
                 'fecha_fin_entrada': 'Fecha de entrada menor a',
                 'fecha_inicio_salida': 'Fecha de salida mayor a',
                 'fecha_fin_salida': 'Fecha de salida menor a',
-                'tiempo_dentro': 'Tiempo dentro igual a',
+                'tiempo_dentro': 'Tiempo dentro',
                 'tiempo_dentro_inicio': 'Tiempo dentro mayor a',
                 'tiempo_dentro_fin': 'Tiempo dentro menor a',
                 'corte_numero': 'N° Corte',
@@ -311,6 +313,9 @@ class EntradasController:
                 else:
                     if nuevo_nombre in ['Importe', 'Importe mayor a', 'Importe menor a']:
                         worksheet.merge_range(fila, 6, fila, 8, valor, formato_celdas_moneda)
+
+                    # if nuevo_nombre in ['Tiempo dentro', 'Tiempo dentro mayor a', 'Tiempo dentro menor a']:
+                    #     worksheet.merge_range(fila, 6, fila, 8, valor, formato_celdas_tiempo)
                     else:
                         worksheet.merge_range(fila, 6, fila, 8, valor, formato_celdas_texto)
                 ultima_fila = fila
@@ -324,9 +329,6 @@ class EntradasController:
             # Escribe la suma en la hoja de cálculo
             worksheet.merge_range(ultima_fila + 2, 3, ultima_fila + 2, 5, 'Total de ingresos:', formato_columnas_blanco)
             worksheet.merge_range(ultima_fila + 2, 6, ultima_fila + 2, 8, suma_importe, formato_celdas_total_ingreso)
-
-
-
 
 
             FILA_INICIO = ultima_fila + 7
@@ -354,6 +356,13 @@ class EntradasController:
                     # Si el campo es "Importe", aplicar el formato de moneda
                     elif columnas[j] == 'Importe':
                         worksheet.write(i + FILA_INICIO, j, valor, formato_celdas_moneda)
+
+                    elif columnas[j] == 'Tiempo':
+                        tiempo_base = datetime(1900, 1, 1)
+                        tiempo = tiempo_base + valor
+                        tiempo_str = datetime.strftime(tiempo, '%H:%M:%S')
+                        worksheet.write(i + FILA_INICIO, j, tiempo_str, formato_celdas_texto)
+
 
                     else:
                         worksheet.write(i + FILA_INICIO, j, valor, formato_celdas_texto)
