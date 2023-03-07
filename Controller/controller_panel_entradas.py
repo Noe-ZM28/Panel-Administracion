@@ -4,18 +4,16 @@ from Config.config_tools import tools
 
 import PIL
 
-
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
-
 from tkinter import ttk
-
 
 import xlsxwriter
 from xlsxwriter import exceptions
 
 from datetime import datetime
+from datetime import timedelta
 
 import os
 
@@ -358,15 +356,28 @@ class EntradasController:
                         worksheet.write(i + FILA_INICIO, j, valor, formato_celdas_moneda)
 
                     elif columnas[j] == 'Tiempo':
-                        tiempo_base = datetime(1900, 1, 1)
-                        tiempo = tiempo_base + valor
-                        tiempo_str = datetime.strftime(tiempo, '%H:%M:%S')
+                        if isinstance(valor, str):
+                            print('El tiempo es tipo TEXTO')
+                            valor = datetime.strptime(valor, '%H:%M:%S')
+                            tiempo = datetime.combine(datetime.min, valor.time()) - datetime.min
+                            tiempo_str = datetime.strftime(datetime(1, 1, 1) + tiempo, '%H:%M:%S')
+                        else:
+                            print('El tiempo es tipo TIEMPO')
+                            tiempo_base = datetime(1900, 1, 1)
+                            segundos = valor.total_seconds()
+                            tiempo = tiempo_base + timedelta(seconds=segundos)
+                            tiempo_str = datetime.strftime(tiempo, '%H:%M:%S')
+
                         worksheet.write(i + FILA_INICIO, j, tiempo_str, formato_celdas_texto)
+
+
+
+
+
 
 
                     else:
                         worksheet.write(i + FILA_INICIO, j, valor, formato_celdas_texto)
-
 
 
             # Cerrar el archivo de Excel
@@ -380,18 +391,3 @@ class EntradasController:
         except TypeError as e:messagebox.showerror('Error', f'Error: {e}\nPara realizar un reporte primero tiene que realizar una consulta')
         except ValueError as e:messagebox.showerror('Error', f'Error: {e}\nPara realizar un reporte primero tiene que realizar una consulta que contenga registros')
         except exceptions.FileCreateError as e:messagebox.showerror('Error', f'Error: El reporte no se puede generar, seleccione el directorio para guardar el reporte y vuelva a intentar')
-
-    def format_datetime(self, hour, minute):
-        """
-        Función que da formato a hora seleccionada.
-
-        Args:
-            hour (int): Hora seleccionada en formato de 24 horas.
-            minute (int): Minutos seleccionados.
-            second (int): Segundos seleccionados.
-
-        Returns:
-            str: Cadena que representa hora seleccionada en formato HH:MM:SS.
-        """
-        time_str = f"{hour:01}:{minute:02}:00"
-        return time_str
