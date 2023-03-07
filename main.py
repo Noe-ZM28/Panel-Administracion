@@ -10,4 +10,3 @@ from Views.view_panel_entradas import Panel_Entradas
 
 #Ejemplo para correr el panel
 app = Panel_Entradas()
-
