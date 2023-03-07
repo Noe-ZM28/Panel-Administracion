@@ -60,3 +60,6 @@ class tools:
         except FileNotFoundError:
             print(f'El archivo "{json_path}" no se pudo abrir.')
             return None
+
+    def convert_excel_to_pdf(self, excel_file_path, pdf_file_path):
+        pass
