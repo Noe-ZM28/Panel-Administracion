@@ -1,0 +1,95 @@
+pantallafull.py
+    6
+
+    Este programa es igual en todos salvo por el nombre del programa que abren una vez que realizan el login.
+
+    Nota: Probablemente necesite renombrarlo como un login ya que solo tiene esa función.
+
+operacion.py
+    62
+
+    Tiene lijeras diferencias entre los demas, para ello deberia de utilizar la siguiente función para evitar repetir codigo y poder reutilizarlo tambien
+
+
+    #NOTA IMPLEMENTAR ESTE CODIGO PARA OPTIMIZAR ESTE CODIGO
+
+
+    # import mysql.connector
+
+    # def execute_query(query, parameters=None):
+    #     connection = mysql.connector.connect(
+    #         host="host_name",
+    #         user="username",
+    #         password="password",
+    #         database="database_name"
+    #     )
+
+    #     cursor = connection.cursor()
+
+    #     if parameters is None:
+    #         cursor.execute(query)
+    #     else:
+    #         cursor.execute(query, parameters)
+
+    #     result = cursor.fetchall()
+
+    #     connection.commit()
+    #     cursor.close()
+    #     connection.close()
+
+    #     return result
+
+
+    # result = execute_query("SELECT * FROM users")
+    # for row in result:
+    #     print(row)
+
+
+    # parameters = ('John Doe',)
+    # result = execute_query("SELECT * FROM users WHERE name=%s", parameters)
+    # for row in result:
+    #     print(row)
+
+    # parameters = ('Jane Doe', 'jane.doe@example.com')
+    # result = execute_query("INSERT INTO users (name, email) VALUES (%s, %s)", parameters)
+    # print("Inserted", cursor.rowcount, "rows")
+
+
+
+    prestar atención a Tenayuca-Salida-CobroTPV, es el mas organizado y a CobroTPV
+    Nota:
+
+
+
+cobroFONLow.py
+    5
+
+    Son bastante diferentes entre ellos, en especial cuando tienen que detectar cosas como los pines y la ieza de metal que se levanta, quizas deba separar eso tambien en un modulo aparte, necesito separar la interface dentro de una clase y cada parte de la interface en submodulos ya que son reutilizables, y hacer lo mismo para los reportes por fechas independientemente del tipo
+    
+
+    Nota: Este es mas complicado que los otros, necesito hacer un diagrama para tener todo mas claro e identificar como realizar mejoras o directamente rehacerlo
+
+SalidaFONLow.py
+    2
+
+    En este caso son bastante similares respecto a su funcionalidad y estructura
+
+    Nota: necesitare ayuda en esta parte con la parte de electronica
+
+EntradaFO.py
+    14
+
+    Al igual que con el anterior, no son muy diferente entre ellos ya que solo cambian los pines y su configuración asi cmo lo que eso implica
+
+    Nota: al igual que con los anteriores, necesitare ayuda con estas partes
+
+formulariooperacion.py
+    28
+
+    ya que utilizan el mismo codigo los 3 anteriores, las diferencias mas importantes radican en los pines utilizando la libreria RPi.GPIO y sus condicionales
+
+    Nota: 
+
+
+Generalidades: necesito un diagrama lo mas amplio posible del software, los numeros de los pines tambien pueden ponerse en un archivo de configuracion
+
