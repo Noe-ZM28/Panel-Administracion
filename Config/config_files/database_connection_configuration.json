@@ -16,10 +16,10 @@
         },
         {
             "name_config": "Configuracion 3",
-            "host": "192.168.0.1",
-            "user": "",
-            "password": "",
-            "database": ""
+            "host": "187.170.220.44",
+            "user": "Aurelio",
+            "password": "RG980320",
+            "database": "Parqueadero1"
         }
     ]
 }

@@ -342,7 +342,7 @@ class Panel_Entradas:
             #####################################################
             # Crear un LabelFrame para las salidas
             seccion_salida = ttk.LabelFrame(seccion_fechas, text='Salidas')
-            seccion_salida.grid(row=4, column=0, padx=5, pady=5, sticky=tk.NW)
+            #seccion_salida.grid(row=4, column=0, padx=5, pady=5, sticky=tk.NW)
 
             # Crear el boton para el calendario salida inicio
             boton_calendario_inicio_salida = ttk.Button(seccion_salida, image=self.icono_calendario, 
@@ -543,7 +543,7 @@ class Panel_Entradas:
 
             ##########################################################################################################
             seccion_promociones = ttk.LabelFrame(self.seccion_consulta_avanzada, text='Promociones')
-            seccion_promociones.grid(row=0, column=3, padx=5, pady=5, sticky=tk.NW)
+            #seccion_promociones.grid(row=0, column=3, padx=5, pady=5, sticky=tk.NW)
 
             self.lista_promociones = tk.Listbox(seccion_promociones, selectmode="multiple", height=5)
             self.lista_promociones.grid(row=0, column=0, sticky=tk.W)
@@ -567,7 +567,7 @@ class Panel_Entradas:
             ##########################################################################################################
             # Crea un LabelFrame para los botones de desconectar y salir
             seccion_botones_consulta = ttk.LabelFrame(self.seccion_consulta_avanzada , text='Botones consulta')
-            seccion_botones_consulta.grid(row=1, column=3, padx=5, pady=5, sticky=tk.NW)
+            seccion_botones_consulta.grid(row=1, column=2, padx=5, pady=5, sticky=tk.NW)
 
             # Crea un botón y lo empaqueta en la seccion_botones_consulta
             boton_consulta = ttk.Button(seccion_botones_consulta, text='Realizar consulta', command=self.consulta_entrada, width=16)
