@@ -9,8 +9,6 @@ sys.path.append(proyecto_dir)
 from Views.view_panel_entradas import Panel_Entradas
 from Views.view_login import Login
 
-#app = Login()
-
 theme_aquativo = 'aquativo'
 theme_arc = 'arc'
 theme_black = 'black'
