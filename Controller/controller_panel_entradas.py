@@ -52,7 +52,7 @@ class EntradasController:
         campo_texto.config(text=fecha)
 
 
-    def hacer_consulta_entrada(self, id:int, tarifa:str, tarifa_preferente:str, fecha_inicio_entrada:str, fecha_fin_entrada:str, fecha_inicio_salida:str, fecha_fin_salida:str, tiempo_dentro:str, tiempo_dentro_inicio:str, tiempo_dentro_fin:str, corte_numero:int, corte_numero_inicio:int, corte_numero_fin:int, ingreso:str, ingreso_mayor:str, ingreso_menor:str, tipo_promocion:str, promocion:str) -> list:
+    def hacer_consulta_entrada(self, id:int, tarifa:str, tarifa_preferente:str, fecha_inicio_entrada:str, fecha_fin_entrada:str, tiempo_dentro:str, tiempo_dentro_inicio:str, tiempo_dentro_fin:str, corte_numero:int, corte_numero_inicio:int, corte_numero_fin:int, ingreso:str, ingreso_mayor:str, ingreso_menor:str) -> list:
         """
         Realiza una consulta SQL con los valores proporcionados por el usuario y devuelve una lista de registros obtenidos.
 
@@ -62,8 +62,6 @@ class EntradasController:
         tarifa_preferente (str): valor de la tarifa preferente para consultar.
         fecha_inicio_entrada (str): fecha de inicio de entrada en formato yyyy-mm-dd hh:mm:ss para consultar.
         fecha_fin_entrada (str): fecha de fin de entrada en formato yyyy-mm-dd hh:mm:ss para consultar.
-        fecha_inicio_salida (str): fecha de inicio de salida en formato yyyy-mm-dd hh:mm:ss para consultar.
-        fecha_fin_salida (str): fecha de fin de salida en formato yyyy-mm-dd hh:mm:ss para consultar.
         tiempo_dentro (str): duración de tiempo dentro del estacionamiento en formato "hh:mm:ss" para consultar.
         tiempo_dentro_inicio (str): duración de tiempo dentro del estacionamiento en formato "hh:mm:ss" para consultar, con un rango de inicio.
         tiempo_dentro_fin (str): duración de tiempo dentro del estacionamiento en formato "hh:mm:ss" para consultar, con un rango final.
@@ -73,8 +71,6 @@ class EntradasController:
         ingreso (str): valor de ingreso para consultar.
         ingreso_mayor (str): valor de ingreso mayor para consultar.
         ingreso_menor (str): valor de ingreso menor para consultar.
-        tipo_promocion (str): tipo de promoción para consultar.
-        tarifa (str): tarifa a consultar.
 
         Returns:
         list: una lista de registros obtenidos por la consulta.
@@ -94,8 +90,6 @@ class EntradasController:
 
             self.fecha_inicio_entrada = fecha_inicio_entrada
             self.fecha_fin_entrada = fecha_fin_entrada
-            self.fecha_inicio_salida = fecha_inicio_salida
-            self.fecha_fin_salida = fecha_fin_salida
 
             self.tiempo_dentro = tiempo_dentro
             self.tiempo_dentro_inicio = tiempo_dentro_inicio
@@ -111,8 +105,6 @@ class EntradasController:
             self.ingreso_menor = ingreso_menor
 
 
-            self.tipo_promocion = tipo_promocion
-            self.promocion = promocion
 
             # Validar y agregar los parámetros a la consulta
             ##########################################################################################################
@@ -138,21 +130,6 @@ class EntradasController:
 
             if 'fecha_inicio_entrada' in parametros and 'fecha_fin_entrada' in parametros:
                 if parametros['fecha_inicio_entrada'] > parametros['fecha_fin_entrada']:
-                    raise ValueError("La fecha de inicio debe ser menor o igual que la fecha final.")
-
-
-            if fecha_inicio_salida != '':
-                if len(fecha_inicio_salida) != 19:
-                    raise ValueError('Error, La cantidad de caracteres no corresponde al formato de fecha')
-                parametros['fecha_inicio_salida'] = str(fecha_inicio_salida)
-
-            if fecha_fin_salida != '':
-                if len(fecha_fin_salida) != 19:
-                    raise ValueError('Error, La cantidad de caracteres no corresponde al formato de fecha')
-                parametros['fecha_fin_salida'] = str(fecha_fin_salida)
-
-            if 'fecha_inicio_salida' in parametros and 'fecha_fin_salida' in parametros:
-                if parametros['fecha_inicio_salida'] > parametros['fecha_fin_salida']:
                     raise ValueError("La fecha de inicio debe ser menor o igual que la fecha final.")
             ##########################################################################################################
 
@@ -190,13 +167,6 @@ class EntradasController:
                 if parametros['ingreso_menor'] > parametros['ingreso_mayor']:
                     raise ValueError("El ingreso menor debe de ser menor al ingreso mayor.")
             ##########################################################################################################
-
-            ##########################################################################################################
-            if promocion != '': parametros['promocion'] = str(promocion)
-
-            if tipo_promocion != []: parametros['tipo_promocion'] = tuple(tipo_promocion)
-            ##########################################################################################################
-
             #print(parametros)
             # Validar que se hayan proporcionado parámetros para la consulta
             if parametros == {}:raise ValueError('Los campos están vacíos')
@@ -230,7 +200,7 @@ class EntradasController:
 
         # Obtener las columnas de la tabla
         #columnas = self.query.obtener_campos_tabla()
-        columnas = ['N° boleto', 'Entrada', 'Salida', 'Tiempo', 'Importe', 'N° Corte', 'Placas', 'Tarifa', 'Promocion']
+        columnas = ['N° boleto', 'Entrada', 'Salida', 'Tiempo', 'Importe', 'N° Corte', 'Placas', 'Tarifa']
 
 
         try:
@@ -279,23 +249,21 @@ class EntradasController:
             # Define un diccionario con los nuevos nombres de clave
             nuevos_nombres = {
                 'id': 'N° boleto',
-                'tarifa': 'Tarifa',
-                'tarifa_preferente': 'Tarifas',
-                'fecha_inicio_entrada': 'Fecha de entrada mayor a',
-                'fecha_fin_entrada': 'Fecha de entrada menor a',
-                'fecha_inicio_salida': 'Fecha de salida mayor a',
-                'fecha_fin_salida': 'Fecha de salida menor a',
+                'tarifa': 'Promocion',
+                'tarifa_preferente': 'Promociones',
+                'fecha_inicio_entrada': 'Fecha de entrada inicio',
+                'fecha_fin_entrada': 'Fecha de entrada final',
+                'fecha_inicio_salida': 'Fecha de salida inicio',
+                'fecha_fin_salida': 'Fecha de salida final',
                 'tiempo_dentro': 'Tiempo dentro',
-                'tiempo_dentro_inicio': 'Tiempo dentro mayor a',
-                'tiempo_dentro_fin': 'Tiempo dentro menor a',
+                'tiempo_dentro_inicio': 'Tiempo dentro inicio',
+                'tiempo_dentro_fin': 'Tiempo dentro final',
                 'corte_numero': 'N° Corte',
-                'corte_numero_inicio': 'N° Corte mayor a',
-                'corte_numero_fin': 'N° Corte menor a',
+                'corte_numero_inicio': 'N° Corte inicio',
+                'corte_numero_fin': 'N° Corte final',
                 'ingreso': 'Importe',
-                'ingreso_mayor': 'Importe menor a',
-                'ingreso_menor': 'Importe mayor a',
-                'tipo_promocion': 'Promociones',
-                'promocion': 'Promocion'
+                'ingreso_mayor': 'Importe final',
+                'ingreso_menor': 'Importe inicio',
             }
 
             # Escribe los parámetros en la hoja de cálculo con los nuevos nombres
@@ -309,10 +277,10 @@ class EntradasController:
                     valor = ','.join(str(elem) for elem in valor)
                     worksheet.merge_range(fila, 6, fila, 8, valor, formato_celdas_texto)
                 else:
-                    if nuevo_nombre in ['Importe', 'Importe mayor a', 'Importe menor a']:
+                    if nuevo_nombre in ['Importe', 'Importe inicio', 'Importe final']:
                         worksheet.merge_range(fila, 6, fila, 8, valor, formato_celdas_moneda)
 
-                    # if nuevo_nombre in ['Tiempo dentro', 'Tiempo dentro mayor a', 'Tiempo dentro menor a']:
+                    # if nuevo_nombre in ['Tiempo dentro', 'Tiempo dentro inicio', 'Tiempo dentro final']:
                     #     worksheet.merge_range(fila, 6, fila, 8, valor, formato_celdas_tiempo)
                     else:
                         worksheet.merge_range(fila, 6, fila, 8, valor, formato_celdas_texto)
@@ -357,12 +325,10 @@ class EntradasController:
 
                     elif columnas[j] == 'Tiempo':
                         if isinstance(valor, str):
-                            print('El tiempo es tipo TEXTO')
                             valor = datetime.strptime(valor, '%H:%M:%S')
                             tiempo = datetime.combine(datetime.min, valor.time()) - datetime.min
                             tiempo_str = datetime.strftime(datetime(1, 1, 1) + tiempo, '%H:%M:%S')
                         else:
-                            print('El tiempo es tipo TIEMPO')
                             tiempo_base = datetime(1900, 1, 1)
                             segundos = valor.total_seconds()
                             tiempo = tiempo_base + timedelta(seconds=segundos)
