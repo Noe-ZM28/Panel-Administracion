@@ -32,7 +32,7 @@ class database_connection:
         # Establece la conexión a la base de datos
         self.connect()
 
-    def connect(self, name_config="Configuracion 3"):
+    def connect(self, name_config="Configuracion 1"):
         """
         Realiza la conexión a la base de datos de MySQL con los parámetros especificados en el archivo de configuración.
         Asigna el objeto de conexión a una variable de instancia `connection`.
