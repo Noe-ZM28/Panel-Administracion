@@ -1,0 +1,28 @@
+Poner como tipo de dato DATE en el campo TiempoTotal de la tabla entradas y tambien poner todo en minusculas, y normalizar correctamente la base de datos en general
+    NOTA: se puede dejar como varchar en el sistema actual, pero solo mientras no se hagan consultas de un tiempo mayor a 10 horas u horas de 2 digitos
+
+
+'id' -> 'N° boleto'
+'tarifa' -> 'Tarifa'
+'tarifa_preferente' -> 'Tarifas'
+'fecha_inicio_entrada' -> 'Fecha de entrada mayor a'
+'fecha_fin_entrada' -> 'Fecha de entrada menor a'
+'fecha_inicio_salida' -> 'Fecha de salida mayor a'
+'fecha_fin_salida' -> 'Fecha de salida menor a'
+'tiempo_dentro' -> 'Tiempo'
+'tiempo_dentro_inicio' -> 'Tiempo dentro mayor a'
+'tiempo_dentro_fin' -> 'Tiempo dentro menor a'
+'corte_numero' -> 'N° Corte'
+'corte_numero_inicio' -> 'N° Corte mayor a'
+'corte_numero_fin' -> 'N° Corte menor a'
+'ingreso' -> Importe
+'ingreso_mayor' -> 'Importe mayor a'
+'ingreso_menor' -> 'Importe menor a'
+'tipo_promocion' -> 'Promociones'
+'promocion' -> 'Promocion'
+
+ ['', 'Entrada', 'Salida', '', 'Importe', '', 'Placas', '', '']
+
+
+
+BETWEEN '2023-03-05 00:00:00' AND '2023-03-05 00:00:00' AND Salida BETWEEN '2023-03-05 00:00:00' AND '2023-03-05 00:00:00' AND TiempoTotal = '1:0:00' AND TiempoTotal BETWEEN '1:0:00' AND '1:0:00' AND CorteInc = 335 AND CorteInc BETWEEN 335 AND 335 AND Importe = '5.0' AND Importe BETWEEN '20.0' AND '30.0';

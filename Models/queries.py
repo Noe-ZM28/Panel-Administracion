@@ -27,24 +27,24 @@ class Queries:
 
     def obtener_lista_de(self, listar, revez=None):
         """
-        Devuelve una lista con los valores únicos de la columna especificada de la tabla 'entradas' de la base de datos.
+        Devuelve una lista con los valores únicos de la columna especificada de la tabla 'Entradas' de la base de datos.
 
         Args:
-        - listar: nombre de la columna de la tabla 'entradas' de la que se quieren obtener los valores únicos.
+        - listar: nombre de la columna de la tabla 'Entradas' de la que se quieren obtener los valores únicos.
         - revez: (opcional) si se especifica 'D', devuelve los valores en orden descendente; si se especifica 'A', los devuelve en orden ascendente; si no se especifica, los devuelve en el orden en que se encuentran en la tabla.
 
         return:
-        - lista_sin_nones: una lista con los valores únicos de la columna especificada de la tabla 'entradas', sin incluir valores 'None'.
+        - lista_sin_nones: una lista con los valores únicos de la columna especificada de la tabla 'Entradas', sin incluir valores 'None'.
         """
         # Si revez es igual a 'D', la consulta se hace en orden descendente.
         if revez == 'D': 
-            query = f"SELECT DISTINCT {listar} FROM entradas ORDER BY {listar} DESC;"
+            query = f"SELECT DISTINCT {listar} FROM Entradas ORDER BY {listar} DESC;"
         # Si revez es igual a 'A', la consulta se hace en orden ascendente.
         elif revez == 'A': 
-            query = f"SELECT DISTINCT {listar} FROM entradas ORDER BY {listar} ASC;"
+            query = f"SELECT DISTINCT {listar} FROM Entradas ORDER BY {listar} ASC;"
         # Si revez no está definido, se realiza una consulta simple.
         if revez == None: 
-            query = f"SELECT DISTINCT {listar} FROM entradas;" 
+            query = f"SELECT DISTINCT {listar} FROM Entradas;" 
 
         # Se ejecuta la consulta y se obtiene el resultado.
         resultado = self.data_base.execute_query(query)
@@ -61,7 +61,7 @@ class Queries:
 
         :return: Todos los registros de la tabla.
         """
-        query = f"SELECT id, Entrada, Salida, TiempoTotal, Importe, CorteInc, Placas, TarifaPreferente, TipoPromocion FROM Entradas;"
+        query = f"SELECT id, Entrada, Salida, TiempoTotal, Importe, CorteInc, Placas, TarifaPreferente FROM Entradas;"
         print(query)
         registros = self.data_base.execute_query(query)
         return registros
@@ -73,8 +73,6 @@ class Queries:
         Args:
         fecha_inicio_entrada (str): fecha de inicio en formato YYYY-MM-DD para entradas.
         fecha_fin_entrada (str): fecha de fin en formato YYYY-MM-DD para entradas.
-        fecha_inicio_salida (str): fecha de inicio en formato YYYY-MM-DD para salidas.
-        fecha_fin_salida (str): fecha de fin en formato YYYY-MM-DD para salidas.
         corte_numero (int): número de corte.
         id (int): número de id.
 
@@ -111,15 +109,6 @@ class Queries:
 
         elif 'fecha_inicio_entrada' in parametros:where.append(f"Entrada >= '{parametros['fecha_inicio_entrada']}'")
         elif 'fecha_fin_entrada' in parametros:where.append(f"Entrada <= '{parametros['fecha_fin_entrada']}'")
-        ##############################################################
-        # Si se especifica una fecha de inicio y una fecha de fin para salidas, agregamos una cláusula WHERE que seleccione
-        # todas las salidas entre esas dos fechas. Si solo se especifica una fecha de inicio o una fecha de fin para salidas,
-        # seleccionamos todas las salidas a partir de la fecha de inicio o hasta la fecha de fin, respectivamente.
-        if 'fecha_inicio_salida' in parametros and 'fecha_fin_salida' in parametros:
-            where.append(f"Salida BETWEEN '{parametros['fecha_inicio_salida']}' AND '{parametros['fecha_fin_salida']}'")
-
-        elif 'fecha_inicio_salida' in parametros:where.append(f"Salida >= '{parametros['fecha_inicio_salida']}'")
-        elif  'fecha_fin_salida' in parametros:where.append(f"Salida <= '{parametros['fecha_fin_salida']}'")
         ############################################################################################################################
 
         ############################################################################################################################
@@ -188,21 +177,6 @@ class Queries:
         ############################################################################################################################
 
         ############################################################################################################################
-        # Si existe el parámetro 'promocion' en el diccionario de parámetros,
-        # se agrega una condición a la lista de condiciones a evaluar.
-        if 'promocion' in parametros:where.append(f"TipoPromocion = '{parametros['promocion']}'")
-        # Si existe el parámetro 'tipo_promocion' en el diccionario de parámetros,
-        # se agrega una condición a la lista de condiciones a evaluar.
-        if 'tipo_promocion' in parametros:
-            if len(parametros['tipo_promocion']) == 1:
-                if  parametros['tipo_promocion']:
-                    where.append(f"TipoPromocion = '{str(parametros['tipo_promocion'][0])}'")
-            else: #len(parametros['tipo_promocion']) > 1:
-                    where.append(f"TipoPromocion IN {parametros['tipo_promocion']}")
-
-        ############################################################################################################################
-
-        ############################################################################################################################
         # Si tenemos al menos una cláusula WHERE, las unimos con el operador AND y agregamos la cláusula WHERE
         # completa a nuestra consulta SQL. De lo contrario, simplemente dejamos la cláusula WHERE vacía.
         if where:
@@ -212,7 +186,7 @@ class Queries:
         ############################################################################################################################
         
         # Devolvemos la consulta SQL completa
-        query =  f"SELECT id, Entrada, Salida, TiempoTotal, Importe, CorteInc, Placas, TarifaPreferente, TipoPromocion FROM Entradas {where_clause};"
+        query =  f"SELECT id, Entrada, Salida, TiempoTotal, Importe, CorteInc, Placas, TarifaPreferente FROM Entradas {where_clause};"
         print(query)
         registros = self.data_base.execute_query(query)
 

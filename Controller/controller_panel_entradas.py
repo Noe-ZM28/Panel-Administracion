@@ -1,17 +1,19 @@
 from Views.views_tools import Calendar_date
 from Models.queries import Queries
+from Config.config_tools import tools
+
+import PIL
 
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
-
 from tkinter import ttk
-
 
 import xlsxwriter
 from xlsxwriter import exceptions
 
 from datetime import datetime
+from datetime import timedelta
 
 import os
 
@@ -22,6 +24,7 @@ class EntradasController:
         Constructor de la clase. Crea la ventana principal, la tabla y los campos de consulta.
         '''
         self.query = Queries()
+        self.tools_instance = tools()
         self.theme = theme
 
 
@@ -49,7 +52,7 @@ class EntradasController:
         campo_texto.config(text=fecha)
 
 
-    def hacer_consulta_entrada(self, id:int, tarifa:str, tarifa_preferente:str, fecha_inicio_entrada:str, fecha_fin_entrada:str, fecha_inicio_salida:str, fecha_fin_salida:str, tiempo_dentro:str, tiempo_dentro_inicio:str, tiempo_dentro_fin:str, corte_numero:int, corte_numero_inicio:int, corte_numero_fin:int, ingreso:str, ingreso_mayor:str, ingreso_menor:str, tipo_promocion:str, promocion:str) -> list:
+    def hacer_consulta_entrada(self, id:int, tarifa:str, tarifa_preferente:str, fecha_inicio_entrada:str, fecha_fin_entrada:str, tiempo_dentro:str, tiempo_dentro_inicio:str, tiempo_dentro_fin:str, corte_numero:int, corte_numero_inicio:int, corte_numero_fin:int, ingreso:str, ingreso_mayor:str, ingreso_menor:str) -> list:
         """
         Realiza una consulta SQL con los valores proporcionados por el usuario y devuelve una lista de registros obtenidos.
 
@@ -59,8 +62,6 @@ class EntradasController:
         tarifa_preferente (str): valor de la tarifa preferente para consultar.
         fecha_inicio_entrada (str): fecha de inicio de entrada en formato yyyy-mm-dd hh:mm:ss para consultar.
         fecha_fin_entrada (str): fecha de fin de entrada en formato yyyy-mm-dd hh:mm:ss para consultar.
-        fecha_inicio_salida (str): fecha de inicio de salida en formato yyyy-mm-dd hh:mm:ss para consultar.
-        fecha_fin_salida (str): fecha de fin de salida en formato yyyy-mm-dd hh:mm:ss para consultar.
         tiempo_dentro (str): duración de tiempo dentro del estacionamiento en formato "hh:mm:ss" para consultar.
         tiempo_dentro_inicio (str): duración de tiempo dentro del estacionamiento en formato "hh:mm:ss" para consultar, con un rango de inicio.
         tiempo_dentro_fin (str): duración de tiempo dentro del estacionamiento en formato "hh:mm:ss" para consultar, con un rango final.
@@ -70,8 +71,6 @@ class EntradasController:
         ingreso (str): valor de ingreso para consultar.
         ingreso_mayor (str): valor de ingreso mayor para consultar.
         ingreso_menor (str): valor de ingreso menor para consultar.
-        tipo_promocion (str): tipo de promoción para consultar.
-        tarifa (str): tarifa a consultar.
 
         Returns:
         list: una lista de registros obtenidos por la consulta.
@@ -91,8 +90,6 @@ class EntradasController:
 
             self.fecha_inicio_entrada = fecha_inicio_entrada
             self.fecha_fin_entrada = fecha_fin_entrada
-            self.fecha_inicio_salida = fecha_inicio_salida
-            self.fecha_fin_salida = fecha_fin_salida
 
             self.tiempo_dentro = tiempo_dentro
             self.tiempo_dentro_inicio = tiempo_dentro_inicio
@@ -108,8 +105,6 @@ class EntradasController:
             self.ingreso_menor = ingreso_menor
 
 
-            self.tipo_promocion = tipo_promocion
-            self.promocion = promocion
 
             # Validar y agregar los parámetros a la consulta
             ##########################################################################################################
@@ -135,21 +130,6 @@ class EntradasController:
 
             if 'fecha_inicio_entrada' in parametros and 'fecha_fin_entrada' in parametros:
                 if parametros['fecha_inicio_entrada'] > parametros['fecha_fin_entrada']:
-                    raise ValueError("La fecha de inicio debe ser menor o igual que la fecha final.")
-
-
-            if fecha_inicio_salida != '':
-                if len(fecha_inicio_salida) != 19:
-                    raise ValueError('Error, La cantidad de caracteres no corresponde al formato de fecha')
-                parametros['fecha_inicio_salida'] = str(fecha_inicio_salida)
-
-            if fecha_fin_salida != '':
-                if len(fecha_fin_salida) != 19:
-                    raise ValueError('Error, La cantidad de caracteres no corresponde al formato de fecha')
-                parametros['fecha_fin_salida'] = str(fecha_fin_salida)
-
-            if 'fecha_inicio_salida' in parametros and 'fecha_fin_salida' in parametros:
-                if parametros['fecha_inicio_salida'] > parametros['fecha_fin_salida']:
                     raise ValueError("La fecha de inicio debe ser menor o igual que la fecha final.")
             ##########################################################################################################
 
@@ -187,20 +167,13 @@ class EntradasController:
                 if parametros['ingreso_menor'] > parametros['ingreso_mayor']:
                     raise ValueError("El ingreso menor debe de ser menor al ingreso mayor.")
             ##########################################################################################################
-
-            ##########################################################################################################
-            if promocion != '': parametros['promocion'] = str(promocion)
-
-            if tipo_promocion != []: parametros['tipo_promocion'] = tuple(tipo_promocion)
-            ##########################################################################################################
-
-            print (parametros)
+            #print(parametros)
             # Validar que se hayan proporcionado parámetros para la consulta
             if parametros == {}:raise ValueError('Los campos están vacíos')
 
             # Realizar la consulta y devolver la lista de registros obtenidos
             registros = self.query.hacer_consulta_sql_entradas(parametros)
-            return registros
+            return registros, parametros
 
 
         except ValueError as e:
@@ -209,7 +182,7 @@ class EntradasController:
             messagebox.showwarning('Error', f'Error: {e}\nEl dato ingresado no es válido')
 
 
-    def realizar_reporte(self, registros):
+    def realizar_reporte(self, registros, parametros):
         """
         Realiza un reporte de los registros obtenidos en una consulta y lo guarda en un archivo de Excel.
 
@@ -222,28 +195,120 @@ class EntradasController:
             exceptions.FileCreateError: Si el archivo de Excel no se puede crear.
         """
         self.registros = registros
+        self.parametros = parametros
+        print(self.parametros)
+
+        # Obtener las columnas de la tabla
+        #columnas = self.query.obtener_campos_tabla()
+        columnas = ['N° boleto', 'Entrada', 'Salida', 'Tiempo', 'Importe', 'N° Corte', 'Placas', 'Tarifa']
+
 
         try:
             # Verificar que se haya realizado una consulta antes de generar un reporte
             if self.registros is None: raise TypeError('Primero genera una consulta antes de generar un reporte')
-            if len(self.registros) == 0: raise ValueError('La consulta esta vacia y no se puede generar un reporte')
+            # if len(self.registros) == 0: raise ValueError('La consulta esta vacia y no se puede generar un reporte')
 
             # Obtener la ruta y el nombre del archivo donde se guardará el reporte
             ruta_archivo = filedialog.asksaveasfilename(defaultextension='.xlsx', initialfile=f'reporte_')
 
             # Crear un archivo de Excel y escribir los registros
             workbook = xlsxwriter.Workbook(ruta_archivo, {'remove_timezone': True})
-            worksheet = workbook.add_worksheet()
+            worksheet = workbook.add_worksheet('Reporte')
+            worksheet.set_landscape()
 
-            # Obtener las columnas de la tabla
-            columnas = self.query.obtener_campos_tabla()
 
-            # Establecer el nombre de las columnas en la primera fila
-            for i in range(len(columnas)):
-                worksheet.write(0, i, columnas[i])
-            
-            formato_moneda = workbook.add_format({'num_format': '$#,##0.00'})
-            
+
+            # Agregar la imagen en la esquina superior izquierda de la hoja de Excel
+            imagen_path = self.tools_instance.read_path_config_file('images', 'logo_pase')
+            imagen = PIL.Image.open(imagen_path)
+            imagen_width, imagen_height = imagen.size
+
+            worksheet.insert_image(0, 0, imagen_path, {'x_offset': 0, 'y_offset': 0, 'x_scale': 1, 'y_scale': 1})
+
+            formato_columnas = workbook.add_format({'bold': True, 'align':'left', 'valign':'vcenter', 'text_wrap':True, 'border':1, 'pattern':1, 'bg_color':'#D9D9D9'})
+            formato_columnas_blanco = workbook.add_format({'bold': True, 'align':'left', 'valign':'vcenter', 'text_wrap':True, 'border':1, 'pattern':1, 'bg_color':'white'})
+            formato_celdas_texto = workbook.add_format({'bold': False, 'align':'right', 'valign':'vcenter', 'text_wrap':True, 'border':1, 'pattern':1, 'bg_color':'white'})
+
+            formato_celdas_moneda = workbook.add_format({'num_format': '$#,##0.00', 'bold': True, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white'})
+            formato_celdas_tiempo = workbook.add_format({'num_format': 'h]:mm:ss', 'bold': False, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white'})
+
+            formato_celdas_total_ingreso= workbook.add_format({'num_format': '$#,##0.00', 'bold': True, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white', 'bg_color':'#D9D9D9'})
+            formato_titulo = workbook.add_format({'bold': True, 'font_size': 14, 'align': 'center'})
+            formato_subtitulo = workbook.add_format({'bold': True, 'font_size': 12, 'align': 'center', 'bg_color':'#D9D9D9'})
+
+
+            # Agregar título en CE - E3
+            titulo = "REPORTE"
+            worksheet.merge_range('A3:J3', titulo, formato_titulo)
+
+            subtitulo = "Datos del periodo"
+            worksheet.merge_range('D5:I5', subtitulo, formato_subtitulo)
+
+
+
+            # Define un diccionario con los nuevos nombres de clave
+            nuevos_nombres = {
+                'id': 'N° boleto',
+                'tarifa': 'Promocion',
+                'tarifa_preferente': 'Promociones',
+                'fecha_inicio_entrada': 'Fecha de entrada inicio',
+                'fecha_fin_entrada': 'Fecha de entrada final',
+                'fecha_inicio_salida': 'Fecha de salida inicio',
+                'fecha_fin_salida': 'Fecha de salida final',
+                'tiempo_dentro': 'Tiempo dentro',
+                'tiempo_dentro_inicio': 'Tiempo dentro inicio',
+                'tiempo_dentro_fin': 'Tiempo dentro final',
+                'corte_numero': 'N° Corte',
+                'corte_numero_inicio': 'N° Corte inicio',
+                'corte_numero_fin': 'N° Corte final',
+                'ingreso': 'Importe',
+                'ingreso_mayor': 'Importe final',
+                'ingreso_menor': 'Importe inicio',
+            }
+
+            # Escribe los parámetros en la hoja de cálculo con los nuevos nombres
+            ultima_fila = 5
+            for i, (clave, valor) in enumerate(self.parametros.items()):
+                fila = i + 6
+                nuevo_nombre = nuevos_nombres.get(clave, valor)
+                worksheet.merge_range(fila, 3, fila, 5, nuevo_nombre, formato_columnas)
+
+                if isinstance(valor, tuple):
+                    valor = ','.join(str(elem) for elem in valor)
+                    worksheet.merge_range(fila, 6, fila, 8, valor, formato_celdas_texto)
+                else:
+                    if nuevo_nombre in ['Importe', 'Importe inicio', 'Importe final']:
+                        worksheet.merge_range(fila, 6, fila, 8, valor, formato_celdas_moneda)
+
+                    # if nuevo_nombre in ['Tiempo dentro', 'Tiempo dentro inicio', 'Tiempo dentro final']:
+                    #     worksheet.merge_range(fila, 6, fila, 8, valor, formato_celdas_tiempo)
+                    else:
+                        worksheet.merge_range(fila, 6, fila, 8, valor, formato_celdas_texto)
+                ultima_fila = fila
+
+            # Guarda el número de la última fila después de haber escrito los parámetros
+            ultima_fila = worksheet.dim_rowmax
+
+            # Calcula la suma de la columna importe
+            suma_importe = sum(registro[columnas.index('Importe')] for registro in self.registros)
+
+            # Escribe la suma en la hoja de cálculo
+            worksheet.merge_range(ultima_fila + 2, 3, ultima_fila + 2, 5, 'Total de ingresos:', formato_columnas_blanco)
+            worksheet.merge_range(ultima_fila + 2, 6, ultima_fila + 2, 8, suma_importe, formato_celdas_total_ingreso)
+
+
+            FILA_INICIO = ultima_fila + 7
+
+            # Establecer el nombre y ancho de las columnas en función del contenido
+            for i, columna in enumerate(columnas):
+                worksheet.write(FILA_INICIO - 1, i, columnas[i], formato_columnas)
+                max_longitud = max([len(str(registro[i])) for registro in self.registros] + [len(columna)]) + 1
+                worksheet.set_column(i, i, max_longitud)
+
+            #Establece el tamaño del campo tiempo a 8
+            worksheet.set_column(3, 3, 8)
+
+
             # Escribir los registros
             for i, registro in enumerate(self.registros):
                 for j, valor in enumerate(registro):
@@ -251,45 +316,38 @@ class EntradasController:
                     if columnas[j] == 'Entrada' or columnas[j] == 'Salida':
                         fecha_hora = datetime.strptime(valor.strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
                         fecha_hora_str = datetime.strftime(fecha_hora, '%Y-%m-%d %H:%M:%S')
-                        worksheet.write(i+1, j, fecha_hora_str)
+
+                        worksheet.write(i + FILA_INICIO, j, fecha_hora_str, formato_celdas_texto)
+
                     # Si el campo es "Importe", aplicar el formato de moneda
                     elif columnas[j] == 'Importe':
-                        
-                        worksheet.write(i+1, j, valor, formato_moneda)
+                        worksheet.write(i + FILA_INICIO, j, valor, formato_celdas_moneda)
+
+                    elif columnas[j] == 'Tiempo':
+                        if isinstance(valor, str):
+                            valor = datetime.strptime(valor, '%H:%M:%S')
+                            tiempo = datetime.combine(datetime.min, valor.time()) - datetime.min
+                            tiempo_str = datetime.strftime(datetime(1, 1, 1) + tiempo, '%H:%M:%S')
+                        else:
+                            tiempo_base = datetime(1900, 1, 1)
+                            segundos = valor.total_seconds()
+                            tiempo = tiempo_base + timedelta(seconds=segundos)
+                            tiempo_str = datetime.strftime(tiempo, '%H:%M:%S')
+
+                        worksheet.write(i + FILA_INICIO, j, tiempo_str, formato_celdas_texto)
+
                     else:
-                        worksheet.write(i+1, j, valor)
+                        worksheet.write(i + FILA_INICIO, j, valor, formato_celdas_texto)
 
-
-            # Escribir la fórmula de suma
-            columna_importe = columnas.index('Importe')
-            ultima_fila = len(self.registros) + 1
-            num_registros = len(self.registros)
-            if num_registros > 0:
-                suma_importe = f'=SUM({xlsxwriter.utility.xl_rowcol_to_cell(1, columna_importe)}:{xlsxwriter.utility.xl_rowcol_to_cell(num_registros, columna_importe)})'
-                worksheet.write_formula(num_registros+4, columna_importe, suma_importe, cell_format=formato_moneda)
 
             # Cerrar el archivo de Excel
             workbook.close()
             os.chmod(ruta_archivo, 0o777)
+            #self.tools_instance.convert_excel_to_pdf(ruta_archivo, f'{ruta_archivo[:-5]}.pdf')
             messagebox.showinfo('Mensaje', 'El reporte fue generado con exito')
+
 
         #Manejo de errores
         except TypeError as e:messagebox.showerror('Error', f'Error: {e}\nPara realizar un reporte primero tiene que realizar una consulta')
         except ValueError as e:messagebox.showerror('Error', f'Error: {e}\nPara realizar un reporte primero tiene que realizar una consulta que contenga registros')
         except exceptions.FileCreateError as e:messagebox.showerror('Error', f'Error: El reporte no se puede generar, seleccione el directorio para guardar el reporte y vuelva a intentar')
-
-
-    def format_datetime(self, hour, minute):
-        """
-        Función que da formato a hora seleccionada.
-
-        Args:
-            hour (int): Hora seleccionada en formato de 24 horas.
-            minute (int): Minutos seleccionados.
-            second (int): Segundos seleccionados.
-
-        Returns:
-            str: Cadena que representa hora seleccionada en formato HH:MM:SS.
-        """
-        time_str = f"{hour:01}:{minute:02}:00"
-        return time_str
