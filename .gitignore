@@ -113,5 +113,3 @@ cython_debug/
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
-Archivos_Referencia/Sistema-Parqueadero/TENAYUCA/192.168.1.121-ENTRADA/VKP80_CUPSDrv-200-PKG/py3o.template-master/py3o/template/tests/templates/py3o_access_parent_variable_in_nested_loop_with_attribute.odt
-Archivos_Referencia/Sistema-Parqueadero/TENAYUCA/192.168.1.121-ENTRADA/VKP80_CUPSDrv-200-PKG/py3o.template-master/py3o/template/tests/templates/py3o_iterator_with_attribute_and_in_loop_variable_with_attribute.odt
