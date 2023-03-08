@@ -89,7 +89,6 @@ class Queries:
         ############################################################################################################################
 
         ############################################################################################################################
-        if 'tarifa' in parametros:where.append(f"TarifaPreferente = '{parametros['tarifa']}'")
         # Si existe el parámetro 'tarifa_preferente' en el diccionario de parámetros,
         # se agrega una condición a la lista de condiciones a evaluar.
         if 'tarifa_preferente' in parametros:
