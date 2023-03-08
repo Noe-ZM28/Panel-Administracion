@@ -8,10 +8,6 @@ sys.path.append(proyecto_dir)
 
 from Views.view_panel_entradas import Panel_Entradas
 
-<<<<<<< HEAD
-#Ejemplo para correr el panel
-app = Panel_Entradas()
-=======
 theme_aquativo = 'aquativo'
 theme_arc = 'arc'
 theme_black = 'black'
@@ -31,5 +27,3 @@ theme_winxpblue = 'winxpblue'
 
 #Ejemplo para correr el panel
 app = Panel_Entradas('black')
-
->>>>>>> new_panel
