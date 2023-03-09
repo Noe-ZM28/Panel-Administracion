@@ -62,7 +62,6 @@ class Queries:
         :return: Todos los registros de la tabla.
         """
         query = f"SELECT id, Entrada, Salida, TiempoTotal, Importe, CorteInc, Placas, TarifaPreferente FROM Entradas;"
-        print(query)
         registros = self.data_base.execute_query(query)
         return registros
 
@@ -185,12 +184,19 @@ class Queries:
         ############################################################################################################################
         
         # Devolvemos la consulta SQL completa
-        query =  f"SELECT id, Entrada, Salida, TiempoTotal, Importe, CorteInc, Placas, TarifaPreferente FROM Entradas {where_clause};"
-        print(query)
-        registros = self.data_base.execute_query(query)
+        query_registros =  f"SELECT id, Entrada, Salida, TiempoTotal, Importe, CorteInc, Placas, TarifaPreferente FROM Entradas {where_clause};"
+        print(f'Query Registros: {query_registros}')
+        registros = self.data_base.execute_query(query_registros)
 
         if len(registros) == 0:
             messagebox.showinfo('Info', 'No hay registros que correspondan a la consulta establecida.')
-        return registros
+
+        query_promociones = f'SELECT TarifaPreferente, Count(TarifaPreferente), sum(Importe) as ImporteTot FROM Entradas {where_clause} GROUP BY TarifaPreferente ORDER BY ImporteTot DESC'
+        
+        promociones = self.data_base.execute_query(query_promociones)
+
+
+
+        return registros, promociones
 
 

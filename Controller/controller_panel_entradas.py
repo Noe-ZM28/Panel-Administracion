@@ -164,13 +164,12 @@ class EntradasController:
                 if parametros['ingreso_menor'] > parametros['ingreso_mayor']:
                     raise ValueError("El ingreso menor debe de ser menor al ingreso mayor.")
             ##########################################################################################################
-            #print(parametros)
             # Validar que se hayan proporcionado parámetros para la consulta
             if parametros == {}:raise ValueError('Los campos están vacíos')
 
             # Realizar la consulta y devolver la lista de registros obtenidos
-            registros = self.query.hacer_consulta_sql_entradas(parametros)
-            return registros, parametros
+            registros, promociones = self.query.hacer_consulta_sql_entradas(parametros)
+            return registros, parametros, promociones
 
 
         except ValueError as e:
@@ -179,7 +178,7 @@ class EntradasController:
             messagebox.showwarning('Error', f'Error: {e}\nEl dato ingresado no es válido')
 
 
-    def realizar_reporte(self, registros, parametros):
+    def realizar_reporte(self, registros, parametros, promociones):
         """
         Realiza un reporte de los registros obtenidos en una consulta y lo guarda en un archivo de Excel.
 
@@ -192,13 +191,14 @@ class EntradasController:
             exceptions.FileCreateError: Si el archivo de Excel no se puede crear.
         """
         self.registros = registros
+        self.promociones = promociones
+
         self.parametros = parametros
         print(self.parametros)
 
         # Obtener las columnas de la tabla
         #columnas = self.query.obtener_campos_tabla()
         columnas = ['N° boleto', 'Entrada', 'Salida', 'Tiempo', 'Importe', 'N° Corte', 'Placas', 'Promociones']
-
 
         try:
             # Verificar que se haya realizado una consulta antes de generar un reporte
@@ -213,35 +213,30 @@ class EntradasController:
             worksheet = workbook.add_worksheet('Reporte')
             worksheet.set_landscape()
 
-
-
             # Agregar la imagen en la esquina superior izquierda de la hoja de Excel
             imagen_path = self.tools_instance.read_path_config_file('images', 'logo_pase')
             imagen = PIL.Image.open(imagen_path)
             imagen_width, imagen_height = imagen.size
 
-            worksheet.insert_image(0, 0, imagen_path, {'x_offset': 0, 'y_offset': 0, 'x_scale': 1, 'y_scale': 1})
-
-            formato_columnas = workbook.add_format({'bold': True, 'align':'left', 'valign':'vcenter', 'text_wrap':True, 'border':1, 'pattern':1, 'bg_color':'#D9D9D9'})
-            formato_columnas_blanco = workbook.add_format({'bold': True, 'align':'left', 'valign':'vcenter', 'text_wrap':True, 'border':1, 'pattern':1, 'bg_color':'white'})
+            formato_columnas_informacion = workbook.add_format({'bold': True, 'align':'left', 'valign':'vcenter', 'text_wrap':True, 'border':1, 'pattern':1, 'bg_color':'#D9D9D9'})
+            formato_columnas = workbook.add_format({'bold': True, 'align':'center', 'valign':'vcenter', 'text_wrap':True, 'border':1, 'pattern':1, 'bg_color':'#D9D9D9'})
+            formato_columnas_blanco = workbook.add_format({'bold': True, 'align':'center', 'valign':'vcenter', 'text_wrap':True, 'border':1, 'pattern':1, 'bg_color':'white'})
             formato_celdas_texto = workbook.add_format({'bold': False, 'align':'right', 'valign':'vcenter', 'text_wrap':True, 'border':1, 'pattern':1, 'bg_color':'white'})
-
-            formato_celdas_moneda = workbook.add_format({'num_format': '$#,##0.00', 'bold': True, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white'})
+            formato_celdas_moneda = workbook.add_format({'num_format': '$#,##0.00', 'bold': True, 'valign':'vcenter', 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white'})
             formato_celdas_tiempo = workbook.add_format({'num_format': 'h]:mm:ss', 'bold': False, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white'})
-
             formato_celdas_total_ingreso= workbook.add_format({'num_format': '$#,##0.00', 'bold': True, 'text_wrap':True, 'border':1, 'pattern':1,'bg_color':'white', 'bg_color':'#D9D9D9'})
             formato_titulo = workbook.add_format({'bold': True, 'font_size': 14, 'align': 'center'})
             formato_subtitulo = workbook.add_format({'bold': True, 'font_size': 12, 'align': 'center', 'bg_color':'#D9D9D9'})
 
+
+            worksheet.insert_image(0, 0, imagen_path, {'x_offset': 0, 'y_offset': 0, 'x_scale': 1, 'y_scale': 1})
 
             # Agregar título en CE - E3
             titulo = "REPORTE"
             worksheet.merge_range('A3:J3', titulo, formato_titulo)
 
             subtitulo = "Datos del periodo"
-            worksheet.merge_range('D5:I5', subtitulo, formato_subtitulo)
-
-
+            worksheet.merge_range('A7:C7', subtitulo, formato_subtitulo)
 
             # Define un diccionario con los nuevos nombres de clave
             nuevos_nombres = {
@@ -265,44 +260,79 @@ class EntradasController:
             # Escribe los parámetros en la hoja de cálculo con los nuevos nombres
             ultima_fila = 5
             for i, (clave, valor) in enumerate(self.parametros.items()):
-                fila = i + 6
+                fila = i + 8
+                #columna 
                 nuevo_nombre = nuevos_nombres.get(clave, valor)
-                worksheet.merge_range(fila, 3, fila, 5, nuevo_nombre, formato_columnas)
+                columna_A = 0
+                columna_B = 1
+                worksheet.merge_range(fila, columna_A, fila, columna_B, nuevo_nombre, formato_columnas_informacion)
 
+                columna = 2 #C
                 if isinstance(valor, tuple):
                     valor = ','.join(str(elem) for elem in valor)
-                    worksheet.merge_range(fila, 6, fila, 8, valor, formato_celdas_texto)
+                    worksheet.write(fila, columna, valor ,formato_celdas_texto)
+
                 else:
                     if nuevo_nombre in ['Importe', 'Importe inicio', 'Importe final']:
-                        worksheet.merge_range(fila, 6, fila, 8, valor, formato_celdas_moneda)
+                        worksheet.write(fila, columna, valor ,formato_celdas_moneda)
 
                     # if nuevo_nombre in ['Tiempo dentro', 'Tiempo dentro inicio', 'Tiempo dentro final']:
                     #     worksheet.merge_range(fila, 6, fila, 8, valor, formato_celdas_tiempo)
                     else:
-                        worksheet.merge_range(fila, 6, fila, 8, valor, formato_celdas_texto)
-                ultima_fila = fila
+                        worksheet.write(fila, columna, valor ,formato_celdas_texto)
+
+
 
             # Guarda el número de la última fila después de haber escrito los parámetros
-            ultima_fila = worksheet.dim_rowmax
+            ultima_fila = worksheet.dim_rowmax + 1
 
             # Calcula la suma de la columna importe
             suma_importe = sum(registro[columnas.index('Importe')] for registro in self.registros)
 
             # Escribe la suma en la hoja de cálculo
-            worksheet.merge_range(ultima_fila + 2, 3, ultima_fila + 2, 5, 'Total de ingresos:', formato_columnas_blanco)
-            worksheet.merge_range(ultima_fila + 2, 6, ultima_fila + 2, 8, suma_importe, formato_celdas_total_ingreso)
+            worksheet.merge_range(ultima_fila, 0, ultima_fila, 1, 'Total de ingresos:', formato_columnas_blanco)
+            worksheet.write(ultima_fila, 2, suma_importe ,formato_celdas_total_ingreso)
+
+            fila = ultima_fila
 
 
-            FILA_INICIO = ultima_fila + 7
+            subtitulo = "Promociones"
+            worksheet.merge_range('F7:H7', subtitulo, formato_subtitulo)
+
+
+            worksheet.write('F9', 'Promocion', formato_columnas)
+            worksheet.write('G9', 'Cantidad', formato_columnas)
+            worksheet.write('H9', 'Total', formato_columnas)
+            
+            row = 9
+            col = 5
+            total = 0
+            for promocion in self.promociones:
+                worksheet.write(row, col,   promocion[0], formato_celdas_texto) #Nombre de la Promocion
+                worksheet.write(row, col + 1, promocion[1], formato_celdas_texto) #Numero de Folios por Promocion
+                worksheet.write(row, col + 2, promocion[2], formato_celdas_moneda) #Monto Total por Promocion
+                row = row + 1
+                total = total + promocion[2]
+            row + 3
+
+            worksheet.merge_range(row, col, row, col + 1, 'Total', formato_columnas)
+            worksheet.write(row, col + 2, total, formato_celdas_moneda) #Monto Total por Promocion
+
+
+            FILA_INICIO_REGISTRO = worksheet.dim_rowmax + 4
 
             # Establecer el nombre y ancho de las columnas en función del contenido
             for i, columna in enumerate(columnas):
-                worksheet.write(FILA_INICIO - 1, i, columnas[i], formato_columnas)
+                worksheet.write(FILA_INICIO_REGISTRO - 1, i, columnas[i], formato_columnas)
                 max_longitud = max([len(str(registro[i])) for registro in self.registros] + [len(columna)]) + 1
                 worksheet.set_column(i, i, max_longitud)
 
             #Establece el tamaño del campo tiempo a 8
             worksheet.set_column(3, 3, 8)
+
+            worksheet.set_column(5, 5, 10)
+            worksheet.set_column(6, 6, 10)
+            worksheet.set_column(6, 6, 10)
 
 
             # Escribir los registros
@@ -313,11 +343,11 @@ class EntradasController:
                         fecha_hora = datetime.strptime(valor.strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
                         fecha_hora_str = datetime.strftime(fecha_hora, '%Y-%m-%d %H:%M:%S')
 
-                        worksheet.write(i + FILA_INICIO, j, fecha_hora_str, formato_celdas_texto)
+                        worksheet.write(i + FILA_INICIO_REGISTRO, j, fecha_hora_str, formato_celdas_texto)
 
                     # Si el campo es "Importe", aplicar el formato de moneda
                     elif columnas[j] == 'Importe':
-                        worksheet.write(i + FILA_INICIO, j, valor, formato_celdas_moneda)
+                        worksheet.write(i + FILA_INICIO_REGISTRO, j, valor, formato_celdas_moneda)
 
                     elif columnas[j] == 'Tiempo':
                         if isinstance(valor, str):
@@ -330,10 +360,10 @@ class EntradasController:
                             tiempo = tiempo_base + timedelta(seconds=segundos)
                             tiempo_str = datetime.strftime(tiempo, '%H:%M:%S')
 
-                        worksheet.write(i + FILA_INICIO, j, tiempo_str, formato_celdas_texto)
+                        worksheet.write(i + FILA_INICIO_REGISTRO, j, tiempo_str, formato_celdas_texto)
 
                     else:
-                        worksheet.write(i + FILA_INICIO, j, valor, formato_celdas_texto)
+                        worksheet.write(i + FILA_INICIO_REGISTRO, j, valor, formato_celdas_texto)
 
 
             # Cerrar el archivo de Excel

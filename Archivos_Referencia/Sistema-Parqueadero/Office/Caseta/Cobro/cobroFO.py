@@ -19,12 +19,12 @@ import xlsxwriter
 from PIL import ImageTk, Image
 import os
 import serial
-import RPi.GPIO as io
-out1 = 17
-io.setmode(io.BCM)              # modo in/out pin del micro
-io.setwarnings(False)           # no señala advertencias de pin ya usados
-io.setup(out1,io.OUT)           # configura en el micro las salidas
-io.output(out1,1)
+#import RPi.GPIO as io
+# out1 = 17
+# io.setmode(io.BCM)              # modo in/out pin del micro
+# io.setwarnings(False)           # no señala advertencias de pin ya usados
+# io.setup(out1,io.OUT)           # configura en el micro las salidas
+# io.output(out1,1)
 TipoPromocion = 1
 class FormularioOperacion:
     def __init__(self):
@@ -1179,7 +1179,7 @@ class FormularioOperacion:
                         mb.showwarning("IMPORTANTE", " Debe ser un numero positivo mayor a cero")
                         return False
                     else :
-                        Libro = '/home/pi/Documents/Cobro/XlsxCorte/Rpte Corte '+ str(mes)+'-'+str(Ano)+'  '+str(datetime.now().date())+'.xlsx' #+'/' '/home/pi/Documents/electrofloculacion/belen/Prueba/RPTCORTE.xlsx'
+                        Libro = 'Archivos_Referencia/Sistema-Parqueadero/Rpte Corte '+ str(mes)+'-'+str(Ano)+'  '+str(datetime.now().date())+'.xlsx' #+'/' '/home/pi/Documents/electrofloculacion/belen/Prueba/RPTCORTE.xlsx'
                         #Libro = '/media/pi/rootfs/home/pi/Documents/Cobro/REPORTE/Rpte Corte '+ str(mes)+'-'+str(Ano)+'  '+str(datetime.now().date())+'.xlsx' #+
                         #mb.showinfo("msj uno",mes)
                         #mb.showinfo("msj dos",Ano)
@@ -1223,7 +1223,7 @@ class FormularioOperacion:
                         worksheet = workbook.add_worksheet('CORTE')
                         #Definimos Encabezado Principal
                         #Obtnemos imagen del Encabezado
-                        worksheet.insert_image('A3', '/home/pi/Documents/Cobro/XlsxCorte/LOGO.jpg',{'x_scale': 0.95, 'y_scale': 0.95}) #Insert de Logo (imagen.png)
+                        worksheet.insert_image('A3', 'C:/Users/brink/Downloads/#Z/WORKSPACE/Panel-Administracion/Archivos_Referencia/Sistema-Parqueadero/Office/Caseta/Cobro/LOGO.png',{'x_scale': 0.95, 'y_scale': 0.95}) #Insert de Logo (imagen.png)
                         #Definimos Formatos de celda del encabezado
                         cell_format0 = workbook.add_format()
                         cell_format0 = workbook.add_format({'bold': True,'align':'right'})
