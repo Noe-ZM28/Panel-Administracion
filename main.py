@@ -7,6 +7,8 @@ proyecto_dir = os.getcwd()
 sys.path.append(proyecto_dir)
 
 from Views.view_panel_entradas import Panel_Entradas
+from Views.view_select_conection import Conect
+
 
 theme_aquativo = 'aquativo'
 theme_arc = 'arc'
@@ -26,4 +28,6 @@ theme_ubuntu = 'ubuntu'
 theme_winxpblue = 'winxpblue'
 
 #Ejemplo para correr el panel
-app = Panel_Entradas()
+#app = Panel_Entradas()
+
+app = Conect()
