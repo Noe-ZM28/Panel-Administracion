@@ -131,13 +131,13 @@ class EntradasController:
             ##########################################################################################################
 
             ##########################################################################################################
-            if tiempo_dentro != '' and tiempo_dentro != '0:0:00':
+            if tiempo_dentro != '' and tiempo_dentro != '0:00:00':
                 parametros['tiempo_dentro'] = str(tiempo_dentro)
 
-            if tiempo_dentro_inicio != '' and tiempo_dentro_inicio != '0:0:00':
+            if tiempo_dentro_inicio != '' and tiempo_dentro_inicio != '0:00:00':
                 parametros['tiempo_dentro_inicio'] = str(tiempo_dentro_inicio)
 
-            if tiempo_dentro_fin != '' and tiempo_dentro_fin != '0:0:00':
+            if tiempo_dentro_fin != '' and tiempo_dentro_fin != '0:00:00':
                 parametros['tiempo_dentro_fin'] = str(tiempo_dentro_fin)
 
             if 'tiempo_dentro_inicio' in parametros and 'tiempo_dentro_fin' in parametros:

@@ -78,7 +78,7 @@ class Queries:
         Returns:
         str: consulta SQL.
         """
-
+        print(parametros)
         # Creamos una lista vacía para agregar las cláusulas WHERE a nuestra consulta
         where = []
         ############################################################################################################################
