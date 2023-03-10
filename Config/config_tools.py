@@ -64,7 +64,7 @@ class tools:
             print(f'El archivo "{json_path}" no se pudo abrir.')
             return None
 
-    def convert_excel_to_pdf(excel_file: str, pdf_file: str):
+    def convert_excel_to_pdf(self, excel_file: str, pdf_file: str):
         """
         Convierte un archivo de Excel a PDF.
 

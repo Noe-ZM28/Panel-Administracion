@@ -370,6 +370,7 @@ class EntradasController:
             # Cerrar el archivo de Excel
             workbook.close()
             os.chmod(ruta_archivo, 0o777)
+
             self.tools_instance.convert_excel_to_pdf(excel_file = ruta_archivo, pdf_file = f'{ruta_archivo[:-5]}.pdf')
             messagebox.showinfo('Mensaje', 'El reporte fue generado con exito')
 
