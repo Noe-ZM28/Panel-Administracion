@@ -1,6 +1,9 @@
 import os
 import json
 
+import platform
+import subprocess
+
 class tools:
     '''
     Clase que proporciona herramientas útiles para el proyecto.
@@ -60,3 +63,43 @@ class tools:
         except FileNotFoundError:
             print(f'El archivo "{json_path}" no se pudo abrir.')
             return None
+
+    def convert_excel_to_pdf(excel_file: str, pdf_file: str):
+        """
+        Convierte un archivo de Excel a PDF.
+
+        Args:
+            excel_file (str): Ruta al archivo de Excel que se desea convertir.
+            pdf_file (str): Ruta al archivo PDF que se desea crear.
+
+        Raises:
+            OSError: Si el sistema operativo no es compatible.
+        """
+        # Detecta el sistema operativo
+        if platform.system() == "Windows":
+            # Importa el módulo win32com.client para trabajar con Excel en Windows
+            import win32com.client
+            # Crea una instancia de Excel
+            excel = win32com.client.Dispatch("Excel.Application")
+            # Hace que Excel no sea visible para el usuario
+            excel.Visible = False
+            # Abre el archivo de Excel
+            workbook = excel.Workbooks.Open(os.path.abspath(excel_file))
+            # Exporta el archivo a PDF
+            workbook.ExportAsFixedFormat(0, os.path.abspath(pdf_file))
+            # Cierra el archivo sin guardar cambios
+            workbook.Close(False)
+            # Cierra Excel
+            excel.Quit()
+
+        elif platform.system() == "Linux":
+            # Define el comando para convertir el archivo de Excel a PDF utilizando LibreOffice
+            command = ['libreoffice', '--headless', '--convert-to', 'pdf', excel_file, '--outdir', os.path.dirname(pdf_file)]
+            # Ejecuta el comando
+            subprocess.call(command)
+
+        else:
+            # Si el sistema operativo no es compatible, genera una excepción
+            raise OSError(f"sistema operativo no soportado {platform.system()}")
+
+

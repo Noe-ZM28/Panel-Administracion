@@ -27,7 +27,6 @@ class EntradasController:
         self.tools_instance = tools()
         self.theme = theme
 
-
     def actualizar_fecha(self, calendario, fecha, variable, campo_texto):
         """
         Actualiza la fecha y hora de inicio para la búsqueda de registros en la base de datos. 
@@ -50,7 +49,6 @@ class EntradasController:
 
         # Inserta el nuevo valor en la caja de texto
         campo_texto.config(text=fecha)
-
 
     def hacer_consulta_entrada(self, id:int,  tarifa_preferente:str, fecha_inicio_entrada:str, fecha_fin_entrada:str, tiempo_dentro:str, tiempo_dentro_inicio:str, tiempo_dentro_fin:str, corte_numero:int, corte_numero_inicio:int, corte_numero_fin:int, ingreso:str, ingreso_mayor:str, ingreso_menor:str) -> list:
         """
@@ -177,7 +175,6 @@ class EntradasController:
         except TypeError as e:
             messagebox.showwarning('Error', f'Error: {e}\nEl dato ingresado no es válido')
 
-
     def realizar_reporte(self, registros, parametros, promociones):
         """
         Realiza un reporte de los registros obtenidos en una consulta y lo guarda en un archivo de Excel.
@@ -233,7 +230,7 @@ class EntradasController:
 
             # Agregar título en CE - E3
             titulo = "REPORTE"
-            worksheet.merge_range('A3:J3', titulo, formato_titulo)
+            worksheet.merge_range('A3:H3', titulo, formato_titulo)
 
             subtitulo = "Datos del periodo"
             worksheet.merge_range('A7:C7', subtitulo, formato_subtitulo)
@@ -306,17 +303,21 @@ class EntradasController:
             
             row = 9
             col = 5
-            total = 0
+            total_promocion = 0
+            total_boletos = 0
             for promocion in self.promociones:
                 worksheet.write(row, col,   promocion[0], formato_celdas_texto) #Nombre de la Promocion
                 worksheet.write(row, col + 1, promocion[1], formato_celdas_texto) #Numero de Folios por Promocion
                 worksheet.write(row, col + 2, promocion[2], formato_celdas_moneda) #Monto Total por Promocion
+
                 row = row + 1
-                total = total + promocion[2]
+                total_promocion = total_promocion + promocion[2]
+                total_boletos = total_boletos + promocion[1]
             row + 3
 
-            worksheet.merge_range(row, col, row, col + 1, 'Total', formato_columnas)
-            worksheet.write(row, col + 2, total, formato_celdas_moneda) #Monto Total por Promocion
+            worksheet.write(row, col, 'Total', formato_columnas)
+            worksheet.write(row, col + 1, total_boletos, formato_columnas)
+            worksheet.write(row, col + 2, total_promocion, formato_celdas_moneda) #Monto Total por Promocion
 
 
             FILA_INICIO_REGISTRO = worksheet.dim_rowmax + 4
@@ -369,7 +370,7 @@ class EntradasController:
             # Cerrar el archivo de Excel
             workbook.close()
             os.chmod(ruta_archivo, 0o777)
-            #self.tools_instance.convert_excel_to_pdf(ruta_archivo, f'{ruta_archivo[:-5]}.pdf')
+            self.tools_instance.convert_excel_to_pdf(excel_file = ruta_archivo, pdf_file = f'{ruta_archivo[:-5]}.pdf')
             messagebox.showinfo('Mensaje', 'El reporte fue generado con exito')
 
 
@@ -377,3 +378,4 @@ class EntradasController:
         except TypeError as e:messagebox.showerror('Error', f'Error: {e}\nPara realizar un reporte primero tiene que realizar una consulta')
         except ValueError as e:messagebox.showerror('Error', f'Error: {e}\nPara realizar un reporte primero tiene que realizar una consulta que contenga registros')
         except exceptions.FileCreateError as e:messagebox.showerror('Error', f'Error: El reporte no se puede generar, seleccione el directorio para guardar el reporte y vuelva a intentar')
+
