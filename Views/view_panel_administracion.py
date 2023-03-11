@@ -16,7 +16,7 @@ from Controller.controller_panel_entradas import EntradasController
 #from Views.view_select_conection import Conect
 
 
-class Panel_Entradas:
+class Panel_Administrador:
     '''Clase principal que maneja la interfaz gráfica del usuario.'''
 
     def __init__(self, theme=None):

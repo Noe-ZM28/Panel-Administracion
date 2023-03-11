@@ -90,7 +90,7 @@ class Conect:
                                 'Pino Suarez', 
                                 'Tenayuca']
 
-        self.lista_desplegable_opciones = ttk.Combobox(seccion_conecion, values=opciones_conexiones, textvariable=self.variable_estacionamiento, state='readonly', width = 20, height = 5)
+        self.lista_desplegable_opciones = ttk.Combobox(seccion_conecion, values=opciones_conexiones, textvariable=self.variable_estacionamiento, state='readonly', width = 25, height = 5)
         self.lista_desplegable_opciones.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
         self.lista_desplegable_opciones.configure(foreground="black")
 
