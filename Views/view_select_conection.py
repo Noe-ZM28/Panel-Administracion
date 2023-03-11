@@ -83,7 +83,7 @@ class Conect:
         seccion_conecion.grid(row=1, column=0, sticky=tk.NSEW)
 
         opciones_conexiones = [
-                                'Oficina Chiapas', 
+                                'conexion prueba', 
                                 'Ciudad Mendoza', 
                                 'Durango', 
                                 'Monterrey', 

@@ -53,7 +53,6 @@ class database_connection:
         # Si ocurre un error al conectarse a la base de datos, se muestra un mensaje de error en la consola
         except pymysql.err.OperationalError as e:
             messagebox.showwarning("Error",f"Error al conectarse a la base de datos, por favor asegusere de que introdujo un Host valido o que el Host al que se intenta conectar se encuentra activo.")
-            raise SystemExit
 
 
     def close_connection(self):

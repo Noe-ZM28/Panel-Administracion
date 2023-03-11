@@ -1,22 +1,45 @@
 {
     "settings": [
-        {
-            "name_config": "Configuracion 1",
+        {   "name_config": "Configuracion prueba-1",
             "host": "localhost",
             "user": "root",
             "password": "",
             "database": "db"
         },
-        {
-            "name_config": "Configuracion 2",
-            "host": "192.168.1.133",
+        {   "name_config": "Configuracion prueba-2",
+            "host": "localhost",
             "user": "Aurelio",
             "password": "RG980320",
             "database": "Parqueadero1"
         },
-        {
-            "name_config": "Configuracion 3",
+
+
+        {   "name_config": "Configuracion CiudadMendoza",
+            "host": "localhost",
+            "user": "Aurelio",
+            "password": "RG980320",
+            "database": "Parqueadero1"
+        },
+        {   "name_config": "Configuracion Durango",
+            "host": "XXX.XXX.XXX.XXX",
+            "user": "Aurelio",
+            "password": "RG980320",
+            "database": "Parqueadero1"
+        },
+        {   "name_config": "Configuracion Monterrey",
+            "host": "XXX.XXX.XXX.XXX",
+            "user": "Aurelio",
+            "password": "RG980320",
+            "database": "Parqueadero1"
+        },
+        {   "name_config": "Configuracion PinoSuarez",
             "host": "189.130.215.31",
+            "user": "Aurelio",
+            "password": "RG980320",
+            "database": "Parqueadero1"
+        },
+        {   "name_config": "Configuracion Tenayuca",
+            "host": "XXX.XXX.XXX.XXX",
             "user": "Aurelio",
             "password": "RG980320",
             "database": "Parqueadero1"

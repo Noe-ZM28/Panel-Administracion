@@ -12,6 +12,7 @@ from PIL import ImageTk, Image
 
 from Config.config_tools import tools
 from Models.queries import Queries
+from Models.database import database_connection
 from Controller.controller_panel_administracion import Controller_Panel_Administracion
 #from Views.view_select_conection import Conect
 
@@ -111,6 +112,8 @@ class View_Panel_Administracion:
         self.parametros = ''
         self.promociones = ''
         self.query = Queries(estacionamiento = self.estacionamiento)
+        self.db = database_connection(estacionamiento = self.estacionamiento)
+
         self.controlador_entrada = Controller_Panel_Administracion(theme = self.theme, estacionamiento = self.estacionamiento)
         self.message = None
         self.tabla = None
@@ -877,24 +880,19 @@ class View_Panel_Administracion:
                 print(e)
 
     def desconectar(self):
-        self.salir()
-        #app = Conect()
-
-    def salir(self):
-        """
-        Muestra un cuadro de diálogo para informar al usuario que se está cerrando la aplicación y destruye el panel principal.
-        """
-        #vaciar los campos antes de salir
-        self.vaciar_campos()
-        #vaciar la tabla antes de salir
-        self.vaciar_tabla()
-
+        self.db.close_connection()
         # Muestra un cuadro de diálogo con el mensaje "Hasta pronto"
         messagebox.showinfo('Salida', 'Hasta pronto.')
         
         #detener el loop principal
         self.panel.quit()
-
         # Destruye el panel principal
         self.panel.destroy()
+
+    def salir(self):
+        """
+        Muestra un cuadro de diálogo para informar al usuario que se está cerrando la aplicación y destruye el panel principal.
+        """
+        self.desconectar()
+        raise SystemExit
 
