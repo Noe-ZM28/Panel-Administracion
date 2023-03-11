@@ -1,4 +1,5 @@
 from Models.database import database_connection
+from Views.view_panel_entradas import Panel_Entradas
 
 class SelectController:
     pass
@@ -7,6 +8,8 @@ class SelectController:
 
     def conectar(self, estacionamiento):
         self.estacionamiento = estacionamiento
+        Panel_Entradas()
+
         print(f'#{self.estacionamiento}#')
 
 

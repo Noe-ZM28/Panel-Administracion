@@ -28,5 +28,5 @@ theme_ubuntu = 'ubuntu'
 theme_winxpblue = 'winxpblue'
 
 #Ejemplo para correr el panel
-#app = Panel_Entradas()
-app = Conect()
+#Panel_Entradas()
+Conect()

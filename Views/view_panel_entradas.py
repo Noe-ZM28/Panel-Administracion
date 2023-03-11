@@ -891,8 +891,9 @@ class Panel_Entradas:
         # Muestra un cuadro de diálogo con el mensaje "Hasta pronto"
         messagebox.showinfo('Salida', 'Hasta pronto.')
         
-        #detener el loop principal
-        self.panel.quit()
+        # #detener el loop principal
+        # self.panel.quit()
+
         # Destruye el panel principal
         self.panel.destroy()
 

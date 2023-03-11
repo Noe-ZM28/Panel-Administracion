@@ -13,20 +13,17 @@ class database_connection:
     Incluye métodos para conectarse a la base de datos, cerrar la conexión y ejecutar consultas en la base de datos.
     """
 
-    def __init__ (self, config_db = None):
+    def __init__ (self):
         """
         Inicializa una instancia de la clase `database_connection`.
-
-        :param config_db: Una instancia de la clase `DatabaseConfig`. Si no se proporciona, se crea una nueva instancia de la clase `DatabaseConfig`.
         """
-        # Si no se proporciona una instancia de la clase `DatabaseConfig`, se crea una nueva instancia
-        if config_db is None:
-            self.config_db = DatabaseConfig()
-        else:
-            self.config_db = config_db
+        # Iinstancia de la clase DatabaseConfig
+        self.config_db = DatabaseConfig()
 
         # Inicializa el objeto de conexión a la base de datos
         self.connection = None
+
+        # Inicializa el objeto del cursor de la conexion
         self.cursor = None
 
         # Establece la conexión a la base de datos
@@ -51,9 +48,7 @@ class database_connection:
                 database=configuracion["database"]
             )
 
-            # Crea un objeto cursor para ejecutar la consulta
-
-            # Si ocurre un error al conectarse a la base de datos, se muestra un mensaje de error en la consola
+        # Si ocurre un error al conectarse a la base de datos, se muestra un mensaje de error en la consola
         except pymysql.err.OperationalError as e:
             messagebox.showwarning("Error",f"Error al conectarse a la base de datos, por favor asegusere de que introdujo un Host valido o que el Host al que se intenta conectar se encuentra activo.")
             raise SystemExit
