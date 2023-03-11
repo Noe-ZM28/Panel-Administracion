@@ -207,11 +207,11 @@ class Panel_Entradas:
 
             # Crear el boton para el calendario entrada inicio
             boton_calendario_inicio_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
-                                                    command=lambda: self.controlador_entrada.actualizar_fecha(
-                                                                                            calendario=self.calendario_fecha_inicio_entrada,
-                                                                                            fecha=self.fecha_hora_inicio_entrada,
-                                                                                            variable=self.variable_fecha_inicio_entrada,
-                                                                                            campo_texto=self.campo_texto_entrada_fecha_inicio_simple))
+                command=lambda: self.controlador_entrada.actualizar_fecha(
+                                                        calendario=self.calendario_fecha_inicio_entrada,
+                                                        fecha=self.fecha_hora_inicio_entrada,
+                                                        variable=self.variable_fecha_inicio_entrada,
+                                                        campo_texto=self.campo_texto_entrada_fecha_inicio_simple))
             boton_calendario_inicio_entrada.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
 
             # Crear las leyendas para los campos de texto de las entradas
@@ -233,11 +233,11 @@ class Panel_Entradas:
             ##########################
             # Crear el boton para el calendario entrada fin
             boton_calendario_fin_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
-                                                    command=lambda:self.controlador_entrada.actualizar_fecha(
-                                                                                            calendario=self.calendario_fecha_fin_entrada,
-                                                                                            fecha=self.fecha_hora_fin_entrada,
-                                                                                            variable=self.variable_fecha_fin_entrada,
-                                                                                            campo_texto=self.campo_texto_entrada_fecha_fin_simple))
+                command=lambda:self.controlador_entrada.actualizar_fecha(
+                                                        calendario=self.calendario_fecha_fin_entrada,
+                                                        fecha=self.fecha_hora_fin_entrada,
+                                                        variable=self.variable_fecha_fin_entrada,
+                                                        campo_texto=self.campo_texto_entrada_fecha_fin_simple))
             boton_calendario_fin_entrada.grid(row=1, column=0, padx=5,pady=5, sticky=tk.W)
 
             # Crear las leyendas para los campos de texto de las entradas
@@ -313,7 +313,7 @@ class Panel_Entradas:
             etiqueta_folio = ttk.Label(seccion_n_boleto,  text='N° de boleto: ')
             etiqueta_folio.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
 
-            opciones = self.query.obtener_lista_de('id')
+            opciones = self.query.obtener_lista_de('id', 'D')
             # Crear la lista desplegable
             self.lista_desplegable_boleto = ttk.Combobox(seccion_n_boleto,  values=opciones, textvariable=self.variable_folio, state='readonly', height=5)
             self.lista_desplegable_boleto.grid(row=0, column=1, padx=5, pady=5)
@@ -344,11 +344,11 @@ class Panel_Entradas:
 
             # Crear el boton para el calendario entrada inicio
             boton_calendario_inicio_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
-                                                    command=lambda: self.controlador_entrada.actualizar_fecha(
-                                                                                            calendario=self.calendario_fecha_inicio_entrada,
-                                                                                            fecha=self.fecha_hora_inicio_entrada,
-                                                                                            variable=self.variable_fecha_inicio_entrada,
-                                                                                            campo_texto=self.campo_texto_entrada_fecha_inicio_avanzado))
+                command=lambda: self.controlador_entrada.actualizar_fecha(
+                                                        calendario=self.calendario_fecha_inicio_entrada,
+                                                        fecha=self.fecha_hora_inicio_entrada,
+                                                        variable=self.variable_fecha_inicio_entrada,
+                                                        campo_texto=self.campo_texto_entrada_fecha_inicio_avanzado))
             boton_calendario_inicio_entrada.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
 
             # Crear las leyendas para los campos de texto de las entradas
@@ -370,11 +370,11 @@ class Panel_Entradas:
             ##########################
             # Crear el boton para el calendario entrada fin
             boton_calendario_fin_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
-                                                    command=lambda:self.controlador_entrada.actualizar_fecha(
-                                                                                            calendario=self.calendario_fecha_fin_entrada,
-                                                                                            fecha=self.fecha_hora_fin_entrada,
-                                                                                            variable=self.variable_fecha_fin_entrada,
-                                                                                            campo_texto=self.campo_texto_entrada_fecha_fin_avanzado))
+                command=lambda:self.controlador_entrada.actualizar_fecha(
+                                                        calendario=self.calendario_fecha_fin_entrada,
+                                                        fecha=self.fecha_hora_fin_entrada,
+                                                        variable=self.variable_fecha_fin_entrada,
+                                                        campo_texto=self.campo_texto_entrada_fecha_fin_avanzado))
             boton_calendario_fin_entrada.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
 
             # Crear las leyendas para los campos de texto de las entradas
@@ -450,7 +450,7 @@ class Panel_Entradas:
             etiqueta_folio = ttk.Label(seccion_n_boleto,  text='N° de boleto: ')
             etiqueta_folio.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
 
-            opciones = self.query.obtener_lista_de('id')
+            opciones = self.query.obtener_lista_de('id', 'D')
             # Crear la lista desplegable
             self.lista_desplegable_boleto = ttk.Combobox(seccion_n_boleto,  values=opciones, textvariable=self.variable_folio, state='readonly', height=5)
             self.lista_desplegable_boleto.grid(row=0, column=1, padx=5, pady=5)
@@ -877,9 +877,7 @@ class Panel_Entradas:
 
     def desconectar(self):
         self.salir()
-#        app = Conect()
-
-
+        #app = Conect()
 
     def salir(self):
         """

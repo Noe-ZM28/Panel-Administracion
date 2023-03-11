@@ -19,7 +19,6 @@ from ttkthemes import ThemedStyle
 
 class Conect:
     '''Clase principal que maneja la interfaz gráfica del usuario para seleccionar la conexion.'''
-
     def __init__(self, theme=None):
         '''
         Constructor de la clase. Crea la ventana principal
@@ -64,9 +63,6 @@ class Conect:
         # Inicia el loop principal de la ventana
         self.panel_connect.mainloop()
 
-
-
-
     def interface(self):
         #Label frame principal
         seccion_superior = ttk.LabelFrame(self.panel_connect, text='')
@@ -75,10 +71,10 @@ class Conect:
         seccion_superior.grid(row=0, column=0, sticky=tk.NSEW)
 
         seccion_logo = ttk.LabelFrame(seccion_superior, text='')
-        seccion_logo.grid(row=0, column=0, sticky=tk.NW)
+        seccion_logo.grid(row=0, column=0, sticky=tk.NSEW)
 
         etiqueta_logo = tk.Label(seccion_logo, image=self.logo_pase)
-        etiqueta_logo.grid(row=0, column=0, sticky=tk.NW)
+        etiqueta_logo.grid(row=0, column=0, sticky=tk.NSEW)
 
         seccion_conecion = ttk.LabelFrame(self.panel_connect, text='Selecciona la conexión')
         seccion_conecion.columnconfigure(1, weight=1)
@@ -94,22 +90,36 @@ class Conect:
                                 'Pino Suarez', 
                                 'Tenayuca']
 
-        self.lista_desplegable_opciones = ttk.Combobox(seccion_conecion, values=opciones_conexiones, textvariable=self.variable_estacionamiento, state='readonly', width = 35, height = 5)
+        self.lista_desplegable_opciones = ttk.Combobox(seccion_conecion, values=opciones_conexiones, textvariable=self.variable_estacionamiento, state='readonly', width = 20, height = 5)
         self.lista_desplegable_opciones.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
         self.lista_desplegable_opciones.configure(foreground="black")
+
+        seccion_botones = ttk.LabelFrame(self.panel_connect, text='')
+        seccion_botones.grid(row=2, column=0, sticky=tk.NSEW)
+
     
-        boton_seleccionar = ttk.Button(seccion_conecion, text='CONECTAR', 
+        boton_seleccionar = ttk.Button(seccion_botones, text='CONECTAR', 
             command = lambda: {
                 self.select_controller.conectar(str(self.variable_estacionamiento.get()))
             })
         boton_seleccionar.grid(row=1, column=0, padx=5, pady=5, sticky=tk.NSEW)
 
-
+        boton_salir = ttk.Button(seccion_botones, text='SALIR', command = self.salir)
+        boton_salir.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NSEW)
 
     def desconectar(self):
         pass
 
     def salir(self):
-        pass
+        """
+        Muestra un cuadro de diálogo para informar al usuario que se está cerrando la aplicación y destruye el panel principal.
+        """
+        # Muestra un cuadro de diálogo con el mensaje "Hasta pronto"
+        messagebox.showinfo('Salida', 'Hasta pronto.')
+        
+        #detener el loop principal
+        self.panel_connect.quit()
+        # Destruye el panel principal
+        self.panel_connect.destroy()
 
 
