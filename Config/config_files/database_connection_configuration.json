@@ -9,14 +9,14 @@
         },
         {
             "name_config": "Configuracion 2",
-            "host": "localhost",
+            "host": "192.168.1.133",
             "user": "Aurelio",
             "password": "RG980320",
             "database": "Parqueadero1"
         },
         {
             "name_config": "Configuracion 3",
-            "host": "187.170.220.44",
+            "host": "189.130.215.31",
             "user": "Aurelio",
             "password": "RG980320",
             "database": "Parqueadero1"
