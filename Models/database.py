@@ -61,38 +61,34 @@ class database_connection:
         """
         self.connection.close()
 
-    def execute_query(self, query: str, values=None):
+    def execute_query(self, query: str):
         """
         Ejecuta una consulta en la base de datos.
-
         :param query: La consulta SQL a ejecutar.
         :type query: str
-        :param values: Valores a ser utilizados en la consulta. Por defecto es `None`.
-        :type values: Any
         :return: Una lista con los resultados de la consulta.
         :return type: list
         """
         try:
             # Crea un objeto cursor para ejecutar la consulta
             self.cursor = self.connection.cursor()
-            # Si se pasaron valores, se ejecuta la consulta con esos valores
-            if values is not None:
-                self.cursor.execute(query, values)
-            # Si no se pasaron valores, se ejecuta la consulta sin ellos
-            else:
+
+            if self.cursor != None:
+
+                # Se ejecuta la consulta
                 self.cursor.execute(query)
 
-            # Obtiene los resultados de la consulta
-            result = self.cursor.fetchall()
+                # Obtiene los resultados de la consulta
+                result = self.cursor.fetchall()
 
-            # Confirma los cambios en la base de datos
-            self.connection.commit()
+                # Confirma los cambios en la base de datos
+                self.connection.commit()
 
-            # Cierra el cursor
-            self.cursor.close()
+                # Cierra el cursor
+                self.cursor.close()
 
-            # Retorna los resultados de la consulta
-            return result
+                # Retorna los resultados de la consulta
+                return result
 
         except err.ProgrammingError:
             messagebox.showwarning("Error", f"Has ingresado un valor invalido para realizar la consulta, favor de revisar")
