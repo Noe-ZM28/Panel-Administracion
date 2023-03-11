@@ -8,8 +8,9 @@ class Queries:
     Esta clase contiene métodos para ejecutar consultas a una base de datos mediante una conexión establecida con la clase
     `database_connection`.
     """
-    def __init__ (self, data_base = None):
-        self.data_base = database_connection()
+    def __init__ (self, estacionamiento):
+        self.estacionamiento = estacionamiento
+        self.data_base = database_connection(estacionamiento = self.estacionamiento)
 
     def obtener_campos_tabla(self):
         """

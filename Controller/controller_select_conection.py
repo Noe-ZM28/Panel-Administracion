@@ -1,21 +1,19 @@
 from Models.database import database_connection
-from Views.view_panel_administracion import Panel_Administrador
+from Views.view_panel_administracion import View_Panel_Administracion
 
-class SelectController:
+class Controller_Select_Conection:
     pass
     def __init__(self) -> None:
-        self.conection_database = database_connection()
+        pass
 
     def conectar(self, estacionamiento):
         self.estacionamiento = estacionamiento
-        Panel_Administrador()
 
-        print(f'#{self.estacionamiento}#')
+        if self.estacionamiento == 'Oficina Chiapas': 
+            #self.conection_database.connect('Configuracion 3')
+            View_Panel_Administracion(estacionamiento = 'Configuracion 1')
 
-
-        # if self.estacionamiento == 'Oficina Chiapas': 
-        #     self.conection_database.connect('Configuracion 3')
-
+            print(f'#{self.estacionamiento}#')
 
         # elif self.estacionamiento == 'Ciudad Mendoza': pass
         # elif self.estacionamiento == 'Durango': pass

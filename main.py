@@ -6,7 +6,7 @@ proyecto_dir = os.getcwd()
 # Agregar el directorio raíz del proyecto al path de Python
 sys.path.append(proyecto_dir)
 
-from Views.view_panel_administracion import Panel_Administrador
+from Views.view_panel_administracion import View_Panel_Administracion
 from Views.view_select_conection import Conect
 
 
@@ -28,5 +28,5 @@ theme_ubuntu = 'ubuntu'
 theme_winxpblue = 'winxpblue'
 
 #Ejemplo para correr el panel
-Panel_Administrador()
-#Conect()
+#Panel_Administrador()
+Conect()

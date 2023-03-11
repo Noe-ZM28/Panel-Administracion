@@ -1,4 +1,4 @@
-from Controller.controller_select_conection import SelectController
+from Controller.controller_select_conection import Controller_Select_Conection
 
 import tkinter as tk
 from tkinter import ttk
@@ -49,7 +49,7 @@ class Conect:
         self.panel_connect.columnconfigure(0, weight=1)
 
         self.tools_instance = tools()
-        self.select_controller = SelectController()
+        self.select_controller = Controller_Select_Conection()
         # Crea las variables para los iconos e imagenes
         logo = self.tools_instance.read_path_config_file('images', 'logo_pase')
         logo_pase = Image.open(logo)

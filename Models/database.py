@@ -13,10 +13,12 @@ class database_connection:
     Incluye métodos para conectarse a la base de datos, cerrar la conexión y ejecutar consultas en la base de datos.
     """
 
-    def __init__ (self):
+    def __init__ (self, estacionamiento):
         """
         Inicializa una instancia de la clase `database_connection`.
         """
+        self.estacionamiento = estacionamiento
+
         # Iinstancia de la clase DatabaseConfig
         self.config_db = DatabaseConfig()
 
@@ -27,17 +29,17 @@ class database_connection:
         self.cursor = None
 
         # Establece la conexión a la base de datos
-        self.connect()
+        self.connect(name_config = self.estacionamiento)
 
-    def connect(self, name_config="Configuracion 1"):
+    def connect(self, name_config):
         """
         Realiza la conexión a la base de datos de MySQL con los parámetros especificados en el archivo de configuración.
         Asigna el objeto de conexión a una variable de instancia `connection`.
 
-        :param name_config: El nombre de la configuración a utilizar. Por defecto es "Configuracion 1".
+        :param name_config: El nombre de la configuración a utilizar.
         """
         # Obtiene la configuración de la base de datos desde el archivo de configuración
-        configuracion = self.config_db.obtener_configuracion(name_config = name_config)
+        configuracion = self.config_db.obtener_configuracion(name_config)
 
         try:
             # Realiza la conexión a la base de datos

@@ -12,17 +12,18 @@ from PIL import ImageTk, Image
 
 from Config.config_tools import tools
 from Models.queries import Queries
-from Controller.controller_panel_entradas import EntradasController
+from Controller.controller_panel_administracion import Controller_Panel_Administracion
 #from Views.view_select_conection import Conect
 
 
-class Panel_Administrador:
+class View_Panel_Administracion:
     '''Clase principal que maneja la interfaz gráfica del usuario.'''
 
-    def __init__(self, theme=None):
+    def __init__(self, theme=None, estacionamiento = None):
         '''
         Constructor de la clase. Crea la ventana principal, la tabla y los campos de consulta.
         '''
+        self.estacionamiento = estacionamiento
         # Establece la tabla que se visualizará por defecto
         self.ver_tabla = 'Entradas'
 
@@ -109,8 +110,8 @@ class Panel_Administrador:
         self.registros = None
         self.parametros = ''
         self.promociones = ''
-        self.query = Queries()
-        self.controlador_entrada = EntradasController(self.theme)
+        self.query = Queries(estacionamiento = self.estacionamiento)
+        self.controlador_entrada = Controller_Panel_Administracion(theme = self.theme, estacionamiento = self.estacionamiento)
         self.message = None
         self.tabla = None
 
@@ -891,8 +892,8 @@ class Panel_Administrador:
         # Muestra un cuadro de diálogo con el mensaje "Hasta pronto"
         messagebox.showinfo('Salida', 'Hasta pronto.')
         
-        # #detener el loop principal
-        # self.panel.quit()
+        #detener el loop principal
+        self.panel.quit()
 
         # Destruye el panel principal
         self.panel.destroy()
