@@ -6,18 +6,14 @@ from tkinter import IntVar
 from tkinter import PhotoImage
 from tkinter import Spinbox
 
-from PIL import ImageTk, Image
+from ttkthemes import ThemedStyle
 
+from PIL import ImageTk, Image
 
 from Config.config_tools import tools
 from Models.queries import Queries
-
-
-from ttkthemes import ThemedStyle
-
-
 from Controller.controller_panel_entradas import EntradasController
-
+#from Views.view_select_conection import Conect
 
 
 class Panel_Entradas:
@@ -31,7 +27,7 @@ class Panel_Entradas:
         self.ver_tabla = 'Entradas'
 
         # Crea la ventana principal
-        self.panel = tk.Tk()
+        self.panel = tk.Toplevel()
 
         self.theme = theme
         if self.theme != None:
@@ -880,7 +876,10 @@ class Panel_Entradas:
                 print(e)
 
     def desconectar(self):
-        pass
+        self.salir()
+#        app = Conect()
+
+
 
     def salir(self):
         """

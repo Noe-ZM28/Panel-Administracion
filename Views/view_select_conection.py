@@ -12,14 +12,13 @@ from PIL import ImageTk, Image
 
 
 from Config.config_tools import tools
-from Models.queries import Queries
 
 
 from ttkthemes import ThemedStyle
 
 
 class Conect:
-    '''Clase principal que maneja la interfaz gráfica del usuario.'''
+    '''Clase principal que maneja la interfaz gráfica del usuario para seleccionar la conexion.'''
 
     def __init__(self, theme=None):
         '''
@@ -101,7 +100,7 @@ class Conect:
     
         boton_seleccionar = ttk.Button(seccion_conecion, text='CONECTAR', 
             command = lambda: {
-                self.select_controller.conectar(self.variable_estacionamiento.get())
+                self.select_controller.conectar(str(self.variable_estacionamiento.get()))
             })
         boton_seleccionar.grid(row=1, column=0, padx=5, pady=5, sticky=tk.NSEW)
 

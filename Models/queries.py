@@ -3,7 +3,6 @@ from tkinter import messagebox
 from Models.database import database_connection
 
 
-
 class Queries:
     """
     Esta clase contiene métodos para ejecutar consultas a una base de datos mediante una conexión establecida con la clase
