@@ -7,10 +7,10 @@
             "database": "db"
         },
         {   "name_config": "Configuracion prueba-2",
-            "host": "localhost",
+            "host": "187.131.36.35",
             "user": "Aurelio",
             "password": "RG980320",
-            "database": "Parqueadero1"
+            "database": "db_actual"
         },
 
 
