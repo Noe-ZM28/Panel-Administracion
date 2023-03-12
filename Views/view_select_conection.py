@@ -88,7 +88,7 @@ class Conect:
 
         # Se definen las opciones de conexión y se crea una ComboBox para seleccionar una opción
         opciones_conexiones = [
-                                'Conexion Prueba'
+                                'Conexion Prueba',
                                 # 'Ciudad Mendoza',
                                 # 'Durango',
                                 # 'Monterrey',
@@ -104,25 +104,22 @@ class Conect:
         seccion_botones.grid(row=2, column=0)
 
         # Se crea un botón para salir de la aplicación
-        boton_salir = ttk.Button(seccion_botones, text='SALIR', command = self.salir)
-        boton_salir.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NSEW)
+        self.boton_salir = ttk.Button(seccion_botones, text='SALIR', command = self.salir)
+        self.boton_salir.grid(row=1, column=1, padx=5, pady=5, sticky=tk.NSEW)
 
         # Se crea un botón para conectarse a la opción seleccionada
-        boton_seleccionar = ttk.Button(seccion_botones, text='CONECTAR', 
+        self.boton_seleccionar = ttk.Button(seccion_botones, text='CONECTAR', 
             command = lambda: {
                 # Se deshabilitan los botones mientras se realiza la conexión
-                boton_seleccionar.config(state="disable"),
-                boton_salir.config(state="disable"),
+                self.desactivar_botones(),
 
                 # Se llama al método conectar del objeto select_controller con la opción seleccionada
                 self.select_controller.conectar(str(self.variable_estacionamiento.get())),
-
                 # Se habilitan de nuevo los botones
-                boton_seleccionar.config(state="normal"),
-                boton_salir.config(state="normal")
+                self.activar_botones(),
             })
 
-        boton_seleccionar.grid(row=1, column=0, padx=5, pady=5, sticky=tk.NSEW)
+        self.boton_seleccionar.grid(row=1, column=0, padx=5, pady=5, sticky=tk.NSEW)
 
 
 
@@ -141,3 +138,11 @@ class Conect:
         raise SystemExit
 
 
+    def desactivar_botones(self):
+        self.boton_seleccionar.config(state="disable")
+        self.boton_salir.config(state="disable")
+
+
+    def activar_botones(self):
+        self.boton_seleccionar.config(state="normal")
+        self.boton_salir.config(state="normal")
