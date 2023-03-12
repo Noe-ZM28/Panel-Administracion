@@ -8,7 +8,8 @@ sys.path.append(proyecto_dir)
 
 from Views.view_panel_administracion import View_Panel_Administracion
 from Views.view_select_conection import Conect
-
+from Views.view_login import Login
+from Views.view_calendar import Calendar
 
 theme_aquativo = 'aquativo'
 theme_arc = 'arc'
@@ -28,5 +29,7 @@ theme_ubuntu = 'ubuntu'
 theme_winxpblue = 'winxpblue'
 
 #Ejemplo para correr el panel
-#Panel_Administrador()
+#View_Panel_Administracion(estacionamiento = 'Configuracion prueba-1')
+
 Conect()
+
