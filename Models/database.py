@@ -39,9 +39,9 @@ class database_connection:
         :param name_config: El nombre de la configuración a utilizar.
         """
         # Obtiene la configuración de la base de datos desde el archivo de configuración
-        configuracion = self.config_db.obtener_configuracion(name_config)
-
+        
         try:
+            configuracion = self.config_db.obtener_configuracion(name_config)
             # Realiza la conexión a la base de datos
             self.connection = pymysql.connect(
                 host=configuracion["host"],

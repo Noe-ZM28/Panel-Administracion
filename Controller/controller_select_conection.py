@@ -9,7 +9,7 @@ class Controller_Select_Conection:
     def conectar(self, estacionamiento):
         self.estacionamiento = estacionamiento
 
-        if self.estacionamiento == 'conexion prueba':self.conexion = 'Configuracion prueba'
+        if self.estacionamiento == 'Conexion Prueba':self.conexion = 'Configuracion prueba-1'
 
         elif self.estacionamiento == 'Ciudad Mendoza':self.conexion = 'Configuracion CiudadMendoza'
         elif self.estacionamiento == 'Durango':self.conexion = 'Configuracion Durango'

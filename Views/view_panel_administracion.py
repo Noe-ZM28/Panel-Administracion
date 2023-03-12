@@ -14,7 +14,6 @@ from Config.config_tools import tools
 from Models.queries import Queries
 from Models.database import database_connection
 from Controller.controller_panel_administracion import Controller_Panel_Administracion
-#from Views.view_select_conection import Conect
 
 
 class View_Panel_Administracion:
@@ -30,6 +29,10 @@ class View_Panel_Administracion:
 
         # Crea la ventana principal
         self.panel = tk.Toplevel()
+        # se elimina la funcinalidad del boton de cerrar
+        self.panel.protocol("WM_DELETE_WINDOW", lambda: None)
+        # deshabilita los botones de minimizar y maximizar
+        #self.panel.attributes('-toolwindow', True)
 
         self.theme = theme
         if self.theme != None:
@@ -42,8 +45,10 @@ class View_Panel_Administracion:
         self.panel.wm_maxsize(ancho_max, alto_max)
 
         # Establece el tamaño de la ventana y su título
-        self.panel.geometry()
-        #self.panel.resizable(False, False)
+        pos_x = int(ancho_max/3)
+        pos_y = 10
+        self.panel.geometry(f"+{pos_x}+{pos_y}")
+        self.panel.resizable(False, False)
 
         self.panel.title(f'Panel de administración reporte general - Cortes')
 
@@ -211,11 +216,15 @@ class View_Panel_Administracion:
 
             # Crear el boton para el calendario entrada inicio
             boton_calendario_inicio_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
-                command=lambda: self.controlador_entrada.actualizar_fecha(
+                command=lambda: {
+                    boton_calendario_inicio_entrada.config(state="disable"),
+                    self.controlador_entrada.actualizar_fecha(
                                                         calendario=self.calendario_fecha_inicio_entrada,
                                                         fecha=self.fecha_hora_inicio_entrada,
                                                         variable=self.variable_fecha_inicio_entrada,
-                                                        campo_texto=self.campo_texto_entrada_fecha_inicio_simple))
+                                                        campo_texto=self.campo_texto_entrada_fecha_inicio_simple),
+                    boton_calendario_inicio_entrada.config(state="normal")
+                })
             boton_calendario_inicio_entrada.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
 
             # Crear las leyendas para los campos de texto de las entradas
@@ -237,11 +246,15 @@ class View_Panel_Administracion:
             ##########################
             # Crear el boton para el calendario entrada fin
             boton_calendario_fin_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
-                command=lambda:self.controlador_entrada.actualizar_fecha(
+                command=lambda: {
+                    boton_calendario_fin_entrada.config(state="disable"),
+                    self.controlador_entrada.actualizar_fecha(
                                                         calendario=self.calendario_fecha_fin_entrada,
                                                         fecha=self.fecha_hora_fin_entrada,
                                                         variable=self.variable_fecha_fin_entrada,
-                                                        campo_texto=self.campo_texto_entrada_fecha_fin_simple))
+                                                        campo_texto=self.campo_texto_entrada_fecha_fin_simple),
+                    boton_calendario_fin_entrada.config(state="normal")
+                })
             boton_calendario_fin_entrada.grid(row=1, column=0, padx=5,pady=5, sticky=tk.W)
 
             # Crear las leyendas para los campos de texto de las entradas
@@ -348,11 +361,16 @@ class View_Panel_Administracion:
 
             # Crear el boton para el calendario entrada inicio
             boton_calendario_inicio_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
-                command=lambda: self.controlador_entrada.actualizar_fecha(
+                command=lambda:
+                    {
+                        boton_calendario_inicio_entrada.config(state="disable"),
+                        self.controlador_entrada.actualizar_fecha(
                                                         calendario=self.calendario_fecha_inicio_entrada,
                                                         fecha=self.fecha_hora_inicio_entrada,
                                                         variable=self.variable_fecha_inicio_entrada,
-                                                        campo_texto=self.campo_texto_entrada_fecha_inicio_avanzado))
+                                                        campo_texto=self.campo_texto_entrada_fecha_inicio_avanzado),
+                        boton_calendario_inicio_entrada.config(state="normal")})
+
             boton_calendario_inicio_entrada.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
 
             # Crear las leyendas para los campos de texto de las entradas
@@ -374,11 +392,15 @@ class View_Panel_Administracion:
             ##########################
             # Crear el boton para el calendario entrada fin
             boton_calendario_fin_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
-                command=lambda:self.controlador_entrada.actualizar_fecha(
+                command=lambda:{
+                                boton_calendario_fin_entrada.config(state="disable"),
+                                self.controlador_entrada.actualizar_fecha(
                                                         calendario=self.calendario_fecha_fin_entrada,
                                                         fecha=self.fecha_hora_fin_entrada,
                                                         variable=self.variable_fecha_fin_entrada,
-                                                        campo_texto=self.campo_texto_entrada_fecha_fin_avanzado))
+                                                        campo_texto=self.campo_texto_entrada_fecha_fin_avanzado),
+                                boton_calendario_fin_entrada.config(state="normal")})
+
             boton_calendario_fin_entrada.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
 
             # Crear las leyendas para los campos de texto de las entradas
