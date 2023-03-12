@@ -6,32 +6,33 @@ from tkinter import IntVar
 from tkinter import PhotoImage
 from tkinter import Spinbox
 
-from PIL import ImageTk, Image
+from ttkthemes import ThemedStyle
 
+from PIL import ImageTk, Image
 
 from Config.config_tools import tools
 from Models.queries import Queries
+from Models.database import database_connection
+from Controller.controller_panel_administracion import Controller_Panel_Administracion
 
 
-from ttkthemes import ThemedStyle
-
-
-from Controller.controller_panel_entradas import EntradasController
-
-
-
-class Panel_Entradas:
+class View_Panel_Administracion:
     '''Clase principal que maneja la interfaz gráfica del usuario.'''
 
-    def __init__(self, theme=None):
+    def __init__(self, theme=None, estacionamiento = None):
         '''
         Constructor de la clase. Crea la ventana principal, la tabla y los campos de consulta.
         '''
+        self.estacionamiento = estacionamiento
         # Establece la tabla que se visualizará por defecto
         self.ver_tabla = 'Entradas'
 
         # Crea la ventana principal
-        self.panel = tk.Tk()
+        self.panel = tk.Toplevel()
+        # se elimina la funcinalidad del boton de cerrar
+        self.panel.protocol("WM_DELETE_WINDOW", lambda: None)
+        # deshabilita los botones de minimizar y maximizar
+        #self.panel.attributes('-toolwindow', True)
 
         self.theme = theme
         if self.theme != None:
@@ -44,8 +45,10 @@ class Panel_Entradas:
         self.panel.wm_maxsize(ancho_max, alto_max)
 
         # Establece el tamaño de la ventana y su título
-        self.panel.geometry()
-        #self.panel.resizable(False, False)
+        pos_x = int(ancho_max/3)
+        pos_y = 10
+        self.panel.geometry(f"+{pos_x}+{pos_y}")
+        self.panel.resizable(False, False)
 
         self.panel.title(f'Panel de administración reporte general - Cortes')
 
@@ -113,8 +116,10 @@ class Panel_Entradas:
         self.registros = None
         self.parametros = ''
         self.promociones = ''
-        self.query = Queries()
-        self.controlador_entrada = EntradasController(self.theme)
+        self.query = Queries(estacionamiento = self.estacionamiento)
+        self.db = database_connection(estacionamiento = self.estacionamiento)
+
+        self.controlador_entrada = Controller_Panel_Administracion(theme = self.theme, estacionamiento = self.estacionamiento)
         self.message = None
         self.tabla = None
 
@@ -211,11 +216,15 @@ class Panel_Entradas:
 
             # Crear el boton para el calendario entrada inicio
             boton_calendario_inicio_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
-                                                    command=lambda: self.controlador_entrada.actualizar_fecha(
-                                                                                            calendario=self.calendario_fecha_inicio_entrada,
-                                                                                            fecha=self.fecha_hora_inicio_entrada,
-                                                                                            variable=self.variable_fecha_inicio_entrada,
-                                                                                            campo_texto=self.campo_texto_entrada_fecha_inicio_simple))
+                command=lambda: {
+                    boton_calendario_inicio_entrada.config(state="disable"),
+                    self.controlador_entrada.actualizar_fecha(
+                                                        calendario=self.calendario_fecha_inicio_entrada,
+                                                        fecha=self.fecha_hora_inicio_entrada,
+                                                        variable=self.variable_fecha_inicio_entrada,
+                                                        campo_texto=self.campo_texto_entrada_fecha_inicio_simple),
+                    boton_calendario_inicio_entrada.config(state="normal")
+                })
             boton_calendario_inicio_entrada.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
 
             # Crear las leyendas para los campos de texto de las entradas
@@ -237,11 +246,15 @@ class Panel_Entradas:
             ##########################
             # Crear el boton para el calendario entrada fin
             boton_calendario_fin_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
-                                                    command=lambda:self.controlador_entrada.actualizar_fecha(
-                                                                                            calendario=self.calendario_fecha_fin_entrada,
-                                                                                            fecha=self.fecha_hora_fin_entrada,
-                                                                                            variable=self.variable_fecha_fin_entrada,
-                                                                                            campo_texto=self.campo_texto_entrada_fecha_fin_simple))
+                command=lambda: {
+                    boton_calendario_fin_entrada.config(state="disable"),
+                    self.controlador_entrada.actualizar_fecha(
+                                                        calendario=self.calendario_fecha_fin_entrada,
+                                                        fecha=self.fecha_hora_fin_entrada,
+                                                        variable=self.variable_fecha_fin_entrada,
+                                                        campo_texto=self.campo_texto_entrada_fecha_fin_simple),
+                    boton_calendario_fin_entrada.config(state="normal")
+                })
             boton_calendario_fin_entrada.grid(row=1, column=0, padx=5,pady=5, sticky=tk.W)
 
             # Crear las leyendas para los campos de texto de las entradas
@@ -317,7 +330,7 @@ class Panel_Entradas:
             etiqueta_folio = ttk.Label(seccion_n_boleto,  text='N° de boleto: ')
             etiqueta_folio.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
 
-            opciones = self.query.obtener_lista_de('id')
+            opciones = self.query.obtener_lista_de('id', 'D')
             # Crear la lista desplegable
             self.lista_desplegable_boleto = ttk.Combobox(seccion_n_boleto,  values=opciones, textvariable=self.variable_folio, state='readonly', height=5)
             self.lista_desplegable_boleto.grid(row=0, column=1, padx=5, pady=5)
@@ -348,11 +361,16 @@ class Panel_Entradas:
 
             # Crear el boton para el calendario entrada inicio
             boton_calendario_inicio_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
-                                                    command=lambda: self.controlador_entrada.actualizar_fecha(
-                                                                                            calendario=self.calendario_fecha_inicio_entrada,
-                                                                                            fecha=self.fecha_hora_inicio_entrada,
-                                                                                            variable=self.variable_fecha_inicio_entrada,
-                                                                                            campo_texto=self.campo_texto_entrada_fecha_inicio_avanzado))
+                command=lambda:
+                    {
+                        boton_calendario_inicio_entrada.config(state="disable"),
+                        self.controlador_entrada.actualizar_fecha(
+                                                        calendario=self.calendario_fecha_inicio_entrada,
+                                                        fecha=self.fecha_hora_inicio_entrada,
+                                                        variable=self.variable_fecha_inicio_entrada,
+                                                        campo_texto=self.campo_texto_entrada_fecha_inicio_avanzado),
+                        boton_calendario_inicio_entrada.config(state="normal")})
+
             boton_calendario_inicio_entrada.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
 
             # Crear las leyendas para los campos de texto de las entradas
@@ -374,11 +392,15 @@ class Panel_Entradas:
             ##########################
             # Crear el boton para el calendario entrada fin
             boton_calendario_fin_entrada = ttk.Button(seccion_entrada, image=self.icono_calendario, 
-                                                    command=lambda:self.controlador_entrada.actualizar_fecha(
-                                                                                            calendario=self.calendario_fecha_fin_entrada,
-                                                                                            fecha=self.fecha_hora_fin_entrada,
-                                                                                            variable=self.variable_fecha_fin_entrada,
-                                                                                            campo_texto=self.campo_texto_entrada_fecha_fin_avanzado))
+                command=lambda:{
+                                boton_calendario_fin_entrada.config(state="disable"),
+                                self.controlador_entrada.actualizar_fecha(
+                                                        calendario=self.calendario_fecha_fin_entrada,
+                                                        fecha=self.fecha_hora_fin_entrada,
+                                                        variable=self.variable_fecha_fin_entrada,
+                                                        campo_texto=self.campo_texto_entrada_fecha_fin_avanzado),
+                                boton_calendario_fin_entrada.config(state="normal")})
+
             boton_calendario_fin_entrada.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
 
             # Crear las leyendas para los campos de texto de las entradas
@@ -454,7 +476,7 @@ class Panel_Entradas:
             etiqueta_folio = ttk.Label(seccion_n_boleto,  text='N° de boleto: ')
             etiqueta_folio.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
 
-            opciones = self.query.obtener_lista_de('id')
+            opciones = self.query.obtener_lista_de('id', 'D')
             # Crear la lista desplegable
             self.lista_desplegable_boleto = ttk.Combobox(seccion_n_boleto,  values=opciones, textvariable=self.variable_folio, state='readonly', height=5)
             self.lista_desplegable_boleto.grid(row=0, column=1, padx=5, pady=5)
@@ -880,17 +902,7 @@ class Panel_Entradas:
                 print(e)
 
     def desconectar(self):
-        pass
-
-    def salir(self):
-        """
-        Muestra un cuadro de diálogo para informar al usuario que se está cerrando la aplicación y destruye el panel principal.
-        """
-        #vaciar los campos antes de salir
-        self.vaciar_campos()
-        #vaciar la tabla antes de salir
-        self.vaciar_tabla()
-
+        self.db.close_connection()
         # Muestra un cuadro de diálogo con el mensaje "Hasta pronto"
         messagebox.showinfo('Salida', 'Hasta pronto.')
         
@@ -898,4 +910,11 @@ class Panel_Entradas:
         self.panel.quit()
         # Destruye el panel principal
         self.panel.destroy()
+
+    def salir(self):
+        """
+        Muestra un cuadro de diálogo para informar al usuario que se está cerrando la aplicación y destruye el panel principal.
+        """
+        self.desconectar()
+        raise SystemExit
 

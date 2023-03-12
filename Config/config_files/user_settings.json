@@ -1,22 +1,18 @@
 {
     "usuarios": [
         {
-            "UserName": "juanito",
-            "Name": "Juan Pérez",
-            "Password": "password1",
-            "Permits": "admin"
+            "UserName": "UserAdmin",
+            "Name": "Jhon Doe",
+            "Password": "123456789",
+            "Permits": "admin",
+            "DefaultConection": "None"
         },
         {
-            "UserName": "pedrito",
-            "Nombre": "Pedro García",
-            "Contraseña": "password2",
-            "Permits": "usuario"
-        },
-        {
-            "UserName": "mariat",
-            "Nombre": "María Torres",
-            "Contraseña": "password3",
-            "Permits": "usuario"
+            "UserName": "User",
+            "Nombre": "Jane Doe",
+            "Contraseña": "123456789",
+            "Permits": "usuario",
+            "DefaultConection": "Configuracion prueba-1"
         }
     ]
 }

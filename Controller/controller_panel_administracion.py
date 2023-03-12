@@ -1,4 +1,4 @@
-from Views.views_tools import Calendar_date
+from Views.view_calendar import Calendar_date
 from Models.queries import Queries
 from Config.config_tools import tools
 
@@ -18,12 +18,13 @@ from datetime import timedelta
 import os
 
 
-class EntradasController:
-    def __init__(self, theme = None):
+class Controller_Panel_Administracion:
+    def __init__(self, theme = None, estacionamiento = None):
         '''
         Constructor de la clase. Crea la ventana principal, la tabla y los campos de consulta.
         '''
-        self.query = Queries()
+        self.estacionamiento = estacionamiento
+        self.query = Queries(self.estacionamiento)
         self.tools_instance = tools()
         self.theme = theme
 
