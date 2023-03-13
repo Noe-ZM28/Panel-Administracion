@@ -38,7 +38,7 @@ class Login:
         self.user = tk.StringVar()
         self.password = tk.StringVar()
         self.theme = tk.StringVar()
-        self.true_theme = tk.StringVar()
+        self.true_theme = None
 
         # Crea instancias de otras clases
         tools_instance = tools()
@@ -77,7 +77,7 @@ class Login:
         etiqueta_user.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
 
         # Crea el campo de entrada de texto para el nombre de usuario
-        campo_user = tk.Entry(self.seccion_formulario, textvariable=self.user)
+        campo_user = ttk.Entry(self.seccion_formulario, textvariable=self.user)
         campo_user.grid(row=0, column=1, padx=5, pady=5)
 
         # Crea la etiqueta para el campo de entrada de texto de la contraseña
@@ -85,13 +85,13 @@ class Login:
         etiqueta_password.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
 
         # Crea el campo de entrada de texto para la contraseña
-        campo_password = tk.Entry(self.seccion_formulario, textvariable=self.password)
+        campo_password = ttk.Entry(self.seccion_formulario, textvariable=self.password)
         campo_password.grid(row=1, column=1, padx=5, pady=5)
 
         # Crea el botón para ingresar los datos del usuario y llama al método get_data del controlador para procesar los datos
         boton_entrar = ttk.Button(self.seccion_formulario, text='Entrar',
             command=lambda:self.controller_login.get_data(
-                                                                theme = self.true_theme.get(),
+                                                                theme = self.true_theme,
                                                                 user = self.user.get(),
                                                                 password = self.password.get()))
         boton_entrar.grid(row=0, column=2, padx=5, pady=5)
@@ -151,11 +151,13 @@ class Login:
         Args:
             theme (str, opcional): El nombre del tema a utilizar en la GUI.
         """
-        self.style.theme_use(theme)
+        if theme:
+            self.style.theme_use(theme)
 
     def seleccionar_tema(self):
         """
         Esta función establece el valor del tema seleccionado en la variable "true_theme",
         que se utiliza para determinar qué tema debe usarse en la GUI.
         """
-        self.true_theme.set(self.theme.get())
+        if self.theme != '':
+            self.true_theme = self.theme.get()

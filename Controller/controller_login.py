@@ -1,5 +1,10 @@
 from Config.config_tools import tools
+from Views.view_panel_administracion import View_Panel_Administracion
+from Views.view_select_conection import Conect
+
+
 import tkinter as tk
+
 import json
 
 
@@ -27,23 +32,31 @@ class ControllerLogin:
                 raise TypeError('El campo Usuario o Contraseña está vacío, no deje campos en blanco.')
 
             user_data = self.obtener_configuracion(UserName = self.user)
-            self.compobar_usuario(user_data)
+            self.comprobar_usuario(user_data)
 
         except TypeError as e:
             # Si se lanza una excepción TypeError, muestra un mensaje de error en una ventana de diálogo
             tk.messagebox.showerror('Error', f'Error: {e}')
 
 
-    def compobar_usuario(self, user_data = None):
+    def comprobar_usuario(self, user_data = None):
         try:
             if user_data:
                 if self.user == user_data['UserName'] and self.password == user_data['Password']:
                     print(f"Dentro!: {user_data['Name']} ")
-                else: raise KeyError("El nombre de usuario o contraseña son incorrectos")
 
-        except KeyError as e:
-            # Si se lanza una excepción TypeError, muestra un mensaje de error en una ventana de diálogo
-            tk.messagebox.showerror('Error', f"Error: {e}")
+                    if user_data['Permits'] == 'normal':View_Panel_Administracion(theme = self.theme, estacionamiento = user_data['DefaultConection'])
+                    elif user_data['Permits'] == 'admin':Conect(theme = self.theme)
+
+
+
+
+                    else:raise TypeError("Tipo de permiso desconocido")
+                else:raise KeyError("El nombre de usuario o contraseña son incorrectos")
+
+        # Si se lanza una excepción TypeError, muestra un mensaje de error en una ventana de diálogo
+        except KeyError as e:tk.messagebox.showerror('Error', f"Error: {e}")
+        except TypeError as e:tk.messagebox.showerror('Error', f"Error: {e}")
 
 
     def obtener_configuracion(self, UserName):

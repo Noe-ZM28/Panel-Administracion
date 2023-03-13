@@ -35,7 +35,7 @@ class View_Panel_Administracion:
         #self.panel.attributes('-toolwindow', True)
 
         self.theme = theme
-        if self.theme != None:
+        if self.theme != '':
             #temas xd
             style = ThemedStyle(self.panel)
             style.theme_use(self.theme)
@@ -48,7 +48,7 @@ class View_Panel_Administracion:
         pos_x = int(ancho_max/3)
         pos_y = 10
         self.panel.geometry(f"+{pos_x}+{pos_y}")
-        self.panel.resizable(False, False)
+        self.panel.resizable(False, True)
 
         self.panel.title(f'Panel de administración reporte general - Cortes')
 
@@ -79,6 +79,9 @@ class View_Panel_Administracion:
         self.variable_importe = StringVar()
         self.variable_importe_inicio = StringVar()
         self.variable_importe_final = StringVar()
+
+        self.max_size_x = None
+        self.max_size_y = None
 
 
         #instancia de la clase de herramientas
@@ -343,6 +346,8 @@ class View_Panel_Administracion:
             boton_borrar_folio.grid(row=0, column=2, padx=5, pady=5, sticky=tk.NW)
             #####################################################
             ##########################################################################################################
+            self.max_size_x = seccion_reporte_simple.winfo_width()
+            self.max_size_y = seccion_reporte_simple.winfo_height()
         reporte_general_simple()
 
 
@@ -727,7 +732,8 @@ class View_Panel_Administracion:
         # Empaqueta el Treeview en la ventana
         self.tabla.grid(row=0, column=0, sticky='NESW', padx=5, pady=5, ipadx=5, ipady=5, columnspan=2, rowspan=2)
 
-
+        seccion_tabla.grid_propagate(False)
+        seccion_tabla.grid_rowconfigure(0, weight=1, minsize=0, maxsize=self.max_size_x)
     def ver_tabla_completa(self):
         '''Método para visualizar la tabla completa sin restricciones.'''
         #Advierte sobre la cantidad de registros

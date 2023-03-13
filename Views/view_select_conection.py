@@ -23,7 +23,7 @@ class Conect:
         Al cerrar la ventana se muestra un mensaje de despedida al usuario.
         '''
         #Crea la ventana principal
-        self.panel_connect = tk.Tk()
+        self.panel_connect = tk.Toplevel()
 
         #Si hay un tema seleccionado, se establece
         self.theme = theme
@@ -32,15 +32,14 @@ class Conect:
             style.theme_use(self.theme)
 
         #Establece el tamaño de la ventana y su título
-        height = 220
-        width = 210
+
 
         #Calcula la posición de la ventana en la pantalla
-        pos_x = int(self.panel_connect.winfo_screenwidth()/2 - width/2)
-        pos_y = int(self.panel_connect.winfo_screenheight()/2 - height/2)
+        pos_x = int(self.panel_connect.winfo_screenwidth()/2)
+        pos_y = int(self.panel_connect.winfo_screenheight()/2)
 
         #Establece la geometría de la ventana con su posición y tamaño
-        self.panel_connect.geometry(f"{height}x{width}+{pos_x}+{pos_y}")
+        self.panel_connect.geometry(f"+{pos_x}+{pos_y}")
         self.panel_connect.resizable(False, False)
         self.panel_connect.title(f'Selecciona la conexión')
 
@@ -70,7 +69,7 @@ class Conect:
         seccion_superior = ttk.LabelFrame(self.panel_connect, text='')
         seccion_superior.columnconfigure(1, weight=1)
         seccion_superior.propagate(True)
-        seccion_superior.grid(row=0, column=0)
+        seccion_superior.grid(row=0, column=0, sticky="nsew")
 
         # Se crea otro Label Frame para la sección del logo dentro del Label Frame principal
         seccion_logo = ttk.LabelFrame(seccion_superior, text='')
@@ -101,7 +100,7 @@ class Conect:
 
         # Se crea un Label Frame para la sección de los botones
         seccion_botones = ttk.LabelFrame(self.panel_connect, text='')
-        seccion_botones.grid(row=2, column=0)
+        seccion_botones.grid(row=2, column=0, sticky="nsew")
 
         # Se crea un botón para salir de la aplicación
         self.boton_salir = ttk.Button(seccion_botones, text='SALIR', command = self.salir)
