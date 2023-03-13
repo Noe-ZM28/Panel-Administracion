@@ -56,7 +56,6 @@ class Login:
         # Inicia el loop principal de la ventana
         self.window_login.mainloop()
 
-
     def interface(self):
         '''
             Define la interfaz gráfica de usuario.
