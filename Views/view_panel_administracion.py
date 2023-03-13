@@ -335,7 +335,7 @@ class View_Panel_Administracion:
 
             opciones = self.query.obtener_lista_de('id', 'D')
             # Crear la lista desplegable
-            self.lista_desplegable_boleto = ttk.Combobox(seccion_n_boleto,  values=opciones, textvariable=self.variable_folio, state='readonly', height=5)
+            self.lista_desplegable_boleto = ttk.Combobox(seccion_n_boleto,  values=opciones, textvariable=self.variable_folio, state='readonly',width= 7, height=5)
             self.lista_desplegable_boleto.grid(row=0, column=1, padx=5, pady=5)
 
             boton_borrar_folio = ttk.Button(seccion_n_boleto, image=self.icono_borrar,
@@ -483,7 +483,7 @@ class View_Panel_Administracion:
 
             opciones = self.query.obtener_lista_de('id', 'D')
             # Crear la lista desplegable
-            self.lista_desplegable_boleto = ttk.Combobox(seccion_n_boleto,  values=opciones, textvariable=self.variable_folio, state='readonly', height=5)
+            self.lista_desplegable_boleto = ttk.Combobox(seccion_n_boleto,  values=opciones, textvariable=self.variable_folio, state='readonly', width= 7, height=5)
             self.lista_desplegable_boleto.grid(row=0, column=1, padx=5, pady=5)
 
             boton_borrar_folio = ttk.Button(seccion_n_boleto, image=self.icono_borrar,

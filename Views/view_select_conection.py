@@ -5,9 +5,6 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import StringVar
-from tkinter import IntVar
-from tkinter import PhotoImage
-from tkinter import Spinbox
 
 from ttkthemes import ThemedStyle
 
@@ -65,6 +62,9 @@ class Conect:
         self.panel_connect.mainloop()
 
     def interface(self):
+        """
+        Crea toda la interface para cambiar de conexion
+        """
         # Se crea un Label Frame principal para la sección superior
         seccion_superior = ttk.LabelFrame(self.panel_connect, text='')
         seccion_superior.columnconfigure(1, weight=1)
@@ -138,10 +138,16 @@ class Conect:
 
 
     def desactivar_botones(self):
+        """
+        Desactiva los botones de la interface
+        """
         self.boton_seleccionar.config(state="disable")
         self.boton_salir.config(state="disable")
 
 
     def activar_botones(self):
+        """
+        Activa los botones de la interface
+        """
         self.boton_seleccionar.config(state="normal")
         self.boton_salir.config(state="normal")

@@ -11,6 +11,6 @@ from Views.view_select_conection import Conect
 from Views.view_login import Login
 from Views.view_calendar import Calendar
 
-View_Panel_Administracion(estacionamiento = 'Configuracion prueba-1')
-#Conect()
+#View_Panel_Administracion(estacionamiento = 'Configuracion prueba-1')
+Conect()
 #Login()

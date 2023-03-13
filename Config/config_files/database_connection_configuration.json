@@ -12,6 +12,13 @@
             "password": "RG980320",
             "database": "db_actual"
         },
+        {   "name_config": "Configuracion prueba-3",
+            "host": "",
+            "user": "",
+            "password": "",
+            "database": ""
+        },
+
 
 
         {   "name_config": "Configuracion CiudadMendoza",
