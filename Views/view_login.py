@@ -92,7 +92,7 @@ class Login:
         boton_entrar = ttk.Button(self.seccion_formulario, text='Entrar',
             command=lambda:self.controller_login.get_data(
                                                                 theme = self.true_theme.get(),
-                                                                usser = self.user.get(),
+                                                                user = self.user.get(),
                                                                 password = self.password.get()))
         boton_entrar.grid(row=0, column=2, padx=5, pady=5)
 

@@ -1,5 +1,7 @@
 import json
 from Config.config_tools import tools
+import tkinter as tk
+
 
 class DatabaseConfig:
     """
@@ -67,17 +69,22 @@ class DatabaseConfig:
         Raises:
             ValueError: si no se encuentra la configuración especificada.
         """
-        with open(self.database_config_file, "r") as f:
-            data = json.load(f)
+        try:
+            with open(self.database_config_file, "r") as f:
+                data = json.load(f)
 
-        # Obtiene la configuración seleccionada
-        configuracion = None
-        for config in data["settings"]:
-            if config["name_config"] == name_config:
-                configuracion = config
-                break
+            # Obtiene la configuración seleccionada
+            configuracion = None
+            for config in data["settings"]:
+                if config["name_config"] == name_config:
+                    configuracion = config
+                    break
 
-        if configuracion is None:
-            raise ValueError("No se encontró la configuración especificada.")
+            if configuracion is None:
+                raise ValueError("No se encontró la configuración especificada.")
 
-        return configuracion
+            return configuracion
+        
+        except ValueError as e:
+            # Si se lanza una excepción TypeError, muestra un mensaje de error en una ventana de diálogo
+            tk.messagebox.showerror('Error', f'Error: {e}')

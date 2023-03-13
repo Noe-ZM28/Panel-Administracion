@@ -1,5 +1,5 @@
 {
-    "usuarios": [
+    "ussers": [
         {
             "UserName": "UserAdmin",
             "Name": "Jhon Doe",
@@ -9,9 +9,9 @@
         },
         {
             "UserName": "User",
-            "Nombre": "Jane Doe",
-            "Contraseña": "123456789",
-            "Permits": "usuario",
+            "Name": "Jane Doe",
+            "Password": "123456789",
+            "Permits": "normal",
             "DefaultConection": "Configuracion prueba-1"
         }
     ]
