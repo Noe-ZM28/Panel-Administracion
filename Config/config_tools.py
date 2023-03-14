@@ -2,7 +2,6 @@ import os
 import json
 
 import platform
-import subprocess
 
 class tools:
     '''
@@ -93,6 +92,8 @@ class tools:
             excel.Quit()
 
         elif platform.system() == "Linux":
+            # Importa el módulo subprocess para trabajar con Excel en Linux
+            import subprocess
             # Define el comando para convertir el archivo de Excel a PDF utilizando LibreOffice
             command = ['libreoffice', '--headless', '--convert-to', 'pdf', excel_file, '--outdir', os.path.dirname(pdf_file)]
             # Ejecuta el comando

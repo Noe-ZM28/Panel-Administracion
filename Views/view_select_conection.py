@@ -12,13 +12,14 @@ from PIL import ImageTk, Image
 
 
 class Conect:
-    def __init__(self, theme=None):
+    def __init__(self, theme=None, user_name = None):
         '''
         La clase Conect se encarga de crear una ventana para seleccionar una conexión.
         Permite al usuario seleccionar una conexión de una lista desplegable y conectarla mediante un botón.
         La ventana se ajusta al centro de la pantalla y contiene un logo de la empresa.
         Al cerrar la ventana se muestra un mensaje de despedida al usuario.
         '''
+        self.user_name = user_name
         #Crea la ventana principal
         self.panel_connect = tk.Toplevel()
 
@@ -86,6 +87,8 @@ class Conect:
         seccion_conecion.grid(row=1, column=0)
 
         # Se definen las opciones de conexión y se crea una ComboBox para seleccionar una opción
+        etiqueta_bienvenida = ttk.Label(seccion_conecion, text=f'Bienvenido/a: {self.user_name}')
+        etiqueta_bienvenida.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
         opciones_conexiones = [
                                 'Conexion Prueba',
                                 # 'Ciudad Mendoza',
@@ -95,7 +98,7 @@ class Conect:
                                 # 'Tenayuca'
                                 ]
         self.lista_desplegable_opciones = ttk.Combobox(seccion_conecion, values=opciones_conexiones, textvariable=self.variable_estacionamiento, state='readonly', width = 30, height = 5)
-        self.lista_desplegable_opciones.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
+        self.lista_desplegable_opciones.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
         self.lista_desplegable_opciones.configure(foreground="black")
 
         # Se crea un Label Frame para la sección de los botones

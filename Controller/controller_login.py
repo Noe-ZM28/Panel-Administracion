@@ -46,7 +46,7 @@ class ControllerLogin:
                     print(f"Dentro!: {user_data['Name']} ")
 
                     if user_data['Permits'] == 'normal':View_Panel_Administracion(theme = self.theme, estacionamiento = user_data['DefaultConection'])
-                    elif user_data['Permits'] == 'admin':Conect(theme = self.theme)
+                    elif user_data['Permits'] == 'admin':Conect(theme = self.theme, user_name = user_data['Name'])
 
 
 
@@ -56,7 +56,7 @@ class ControllerLogin:
 
         # Si se lanza una excepción TypeError, muestra un mensaje de error en una ventana de diálogo
         except KeyError as e:tk.messagebox.showerror('Error', f"Error: {e}")
-        except TypeError as e:tk.messagebox.showerror('Error', f"Error: {e}")
+        except TypeError as e:tk.messagebox.showerror('Error', f"Error: {e}.\nContactar con un administrador")
 
 
     def obtener_configuracion(self, UserName):

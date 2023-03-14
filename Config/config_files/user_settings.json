@@ -16,7 +16,7 @@
         },
 
 
-        
+
         {
             "UserName": "NoeZM",
             "Name": "Noé Zuñiga Morales",
@@ -32,11 +32,11 @@
             "DefaultConection": ""
         },
         {
-            "UserName": "User",
+            "UserName": "BetoPASE",
             "Name": "Jane Doe",
             "Password": "123456789",
-            "Permits": "normal",
-            "DefaultConection": "Configuracion prueba-1"
+            "Permits": "admin",
+            "DefaultConection": ""
         },
         {
             "UserName": "Salvador",
