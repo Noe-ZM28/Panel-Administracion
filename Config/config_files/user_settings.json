@@ -13,6 +13,37 @@
             "Password": "123456789",
             "Permits": "normal",
             "DefaultConection": "Configuracion prueba-1"
+        },
+
+
+        
+        {
+            "UserName": "NoeZM",
+            "Name": "Noé Zuñiga Morales",
+            "Password": "KrilerGod34",
+            "Permits": "admin",
+            "DefaultConection": ""
+        },
+        {
+            "UserName": "Aurelio",
+            "Name": "Aurelio Guarneros",
+            "Password": "RG980320",
+            "Permits": "admin",
+            "DefaultConection": ""
+        },
+        {
+            "UserName": "User",
+            "Name": "Jane Doe",
+            "Password": "123456789",
+            "Permits": "normal",
+            "DefaultConection": "Configuracion prueba-1"
+        },
+        {
+            "UserName": "Salvador",
+            "Name": "Salvador",
+            "Password": "PASE_S_PN",
+            "Permits": "normal",
+            "DefaultConection": "Configuracion PinoSuarez"
         }
     ]
 }

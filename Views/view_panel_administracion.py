@@ -734,6 +734,7 @@ class View_Panel_Administracion:
 
         seccion_tabla.grid_propagate(False)
         seccion_tabla.grid_rowconfigure(0, weight=1, minsize=0, maxsize=self.max_size_x)
+
     def ver_tabla_completa(self):
         '''Método para visualizar la tabla completa sin restricciones.'''
         #Advierte sobre la cantidad de registros
@@ -749,13 +750,14 @@ class View_Panel_Administracion:
 
         Parameters:
         registros: list
-            Una lista de tuplas que representan los registros obtenidos de la base de datos.
+            Un conjunto de tuplas que representan los registros obtenidos de la base de datos.
         '''
         # Limpia la tabla antes de llenarla con nuevos registros
         self.vaciar_tabla()
 
         if self.registros:
             for registro in registros:
+                # Pasa los valores del registro como tupla
                 self.tabla.insert('', 'end', values=registro)
 
     def vaciar_tabla(self):

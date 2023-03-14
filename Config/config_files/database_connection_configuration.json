@@ -4,7 +4,7 @@
             "host": "localhost",
             "user": "root",
             "password": "",
-            "database": "db"
+            "database": "db-prueba"
         },
         {   "name_config": "Configuracion prueba-2",
             "host": "187.131.36.35",
