@@ -31,7 +31,7 @@ class ControllerLogin:
             if user == '' or password == '':
                 raise TypeError('El campo Usuario o Contraseña está vacío, no deje campos en blanco.')
 
-            user_data = self.obtener_configuracion(UserName = self.user)
+            user_data = self.obtener_user_data(UserName = self.user)
             self.comprobar_usuario(user_data)
 
         except TypeError as e:
@@ -61,7 +61,7 @@ class ControllerLogin:
         except TypeError as e:tk.messagebox.showerror('Error', f"Error: {e}.\nContactar con un administrador")
 
 
-    def obtener_configuracion(self, UserName):
+    def obtener_user_data(self, UserName):
         """
         Obtiene los datos del usuario a partir de su nombre.
 
@@ -72,7 +72,7 @@ class ControllerLogin:
         Raises: ValueError: si no se encuentra el usuario especificado.
         """
         try:
-            with open(self.user_settings_file, "r") as f:
+            with open(self.user_settings_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
 
             # Obtiene la configuración seleccionada

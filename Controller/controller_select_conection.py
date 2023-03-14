@@ -28,11 +28,11 @@ class Controller_Select_Conection:
             # Asigna la configuración de conexión correspondiente según el estacionamiento seleccionado
             if self.estacionamiento == 'Conexion Prueba':self.conexion = 'Configuracion prueba-1'
 
-            elif self.estacionamiento == 'Ciudad Mendoza':self.conexion = 'Configuracion CiudadMendoza'
-            elif self.estacionamiento == 'Durango': self.conexion = 'Configuracion Durango'
-            elif self.estacionamiento == 'Monterrey':self.conexion = 'Configuracion Monterrey'
-            elif self.estacionamiento == 'Pino Suarez':self.conexion = 'Configuracion PinoSuarez'
-            elif self.estacionamiento == 'Tenayuca':self.conexion = 'Configuracion Tenayuca'
+            elif self.estacionamiento == 'Ciudad Mendoza':self.conexion = 'CiudadMendoza'
+            elif self.estacionamiento == 'Durango': self.conexion = 'Durango'
+            elif self.estacionamiento == 'Monterrey':self.conexion = 'Monterrey'
+            elif self.estacionamiento == 'Pino Suarez':self.conexion = 'PinoSuarez'
+            elif self.estacionamiento == 'Tenayuca':self.conexion = 'Tenayuca'
 
             # Si el estacionamiento seleccionado no es válido, lanza una excepción TypeError
             else:raise TypeError(f'Conexión desconocida: {self.estacionamiento}.')

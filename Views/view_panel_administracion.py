@@ -2,9 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import StringVar
-from tkinter import IntVar
 from tkinter import PhotoImage
-from tkinter import Spinbox
 
 from ttkthemes import ThemedStyle
 
@@ -151,16 +149,52 @@ class View_Panel_Administracion:
         # self.opciones_minutos = [0, 1, 2, 3, 4, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]
         # self.opciones_horas = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
 
+
+
         ##########################################################################################################
         seccion_logo = ttk.LabelFrame(seccion_superior, text='')
-        seccion_logo.grid(row=0, column=0, sticky=tk.NW)
+        seccion_logo.grid(row=0, column=0, padx=5, sticky=tk.W)
 
         etiqueta_logo = tk.Label(seccion_logo, image=self.logo_pase)
-        etiqueta_logo.grid(row=0, column=0, sticky=tk.NW)
+        etiqueta_logo.grid(row=0, column=0, padx=5, pady=5, sticky=tk.NW)
+
+        seccion_informacion = ttk.LabelFrame(seccion_superior, text='Información')
+        seccion_informacion.grid(row=0, column=1, padx=5, sticky=tk.W)
+
+        etiqueta_bienvenida = ttk.Label(seccion_informacion, text = f'Nombre: {self.user_name}', font=("Times", 12))
+        etiqueta_bienvenida.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
+
+        etiqueta_bienvenida = ttk.Label(seccion_informacion, text = f'Estacionamiento: {self.estacionamiento}', font=("Times", 12))
+        etiqueta_bienvenida.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
+
+
+        # Crea un LabelFrame para los botones de desconectar y salir
+        seccion_botones_consulta = ttk.LabelFrame(seccion_superior , text='Botones consulta', width=16)
+        seccion_botones_consulta.grid(row=0, column=2, padx=5, sticky=tk.NW)
+
+        # Crea un botón y lo empaqueta en la seccion_botones_consulta
+        boton_consulta = ttk.Button(seccion_botones_consulta, text='Realizar consulta', command=self.consulta_entrada, width=16)
+        boton_consulta.grid(row=0, column=0, padx=5, pady=5)
+
+        # Crea un botón y lo empaqueta en la seccion_botones_consulta
+        boton_generar_reporte = ttk.Button(seccion_botones_consulta, text='Generar reporte', compound='left', width=16,
+            command = lambda:
+                            {
+                                self.controlador_entrada.realizar_reporte(registros = self.registros, parametros = self.parametros, promociones = self.promociones),
+                            })
+        boton_generar_reporte.grid(row=0, column=1, padx=5, pady=5)
+
+        # Crea un botón y lo empaqueta en la seccion_botones_consulta
+        boton_limpiar_campos = ttk.Button(seccion_botones_consulta,  text='Limpiar campos', command = self.vaciar_campos, width=16)
+        boton_limpiar_campos.grid(row=1, column=0, padx=5, pady=5)
+
+        # Crea un botón y lo empaqueta en la seccion_botones_consulta
+        boton_limpiar_campos = ttk.Button(seccion_botones_consulta,  text='Vaciar tabla', command = self.limpiar_registros, width=16)
+        boton_limpiar_campos.grid(row=1, column=1, padx=5, pady=5)
 
         # Crea un LabelFrame para los botones de desconectar y salir
         seccion_botones_salir = ttk.LabelFrame(seccion_superior, text='Salir')
-        seccion_botones_salir.grid(row=0, column=3, padx=5, pady=5, sticky='NW')
+        seccion_botones_salir.grid(row=0, column=3, padx=5, sticky='NW')
 
         # Crea un botón y lo empaqueta en la seccion_botones_salir
         boton_desconectar = ttk.Button(seccion_botones_salir, text='Desconectar', command=self.desconectar,  image=self.icono_desconectar)
@@ -169,30 +203,6 @@ class View_Panel_Administracion:
         # Crea un botón y lo empaqueta en la seccion_botones_salir
         boton_salir = ttk.Button(seccion_botones_salir, text='Salir', command=self.salir, image=self.icono_salir)
         boton_salir.grid(row=0, column=1, padx=5, pady=5)
-
-        # Crea un LabelFrame para los botones de desconectar y salir
-        seccion_botones_consulta = ttk.LabelFrame(seccion_superior , text='Botones consulta')
-        seccion_botones_consulta.grid(row=0, column=1, padx=5, pady=5, sticky=tk.W)
-
-        # Crea un botón y lo empaqueta en la seccion_botones_consulta
-        boton_consulta = ttk.Button(seccion_botones_consulta, text='Realizar consulta', command=self.consulta_entrada, width=16)
-        boton_consulta.grid(row=0, column=0, padx=5, pady=5)
-
-        # Crea un botón y lo empaqueta en la seccion_botones_consulta
-        boton_limpiar_campos = ttk.Button(seccion_botones_consulta,  text='Limpiar campos', command = self.vaciar_campos, width=16)
-        boton_limpiar_campos.grid(row=0, column=1, padx=5, pady=5)
-
-        # Crea un botón y lo empaqueta en la seccion_botones_consulta
-        boton_limpiar_campos = ttk.Button(seccion_botones_consulta,  text='Vaciar tabla', command = self.limpiar_registros, width=16)
-        boton_limpiar_campos.grid(row=0, column=2, padx=5, pady=5)
-
-        # Crea un botón y lo empaqueta en la seccion_botones_consulta
-        boton_generar_reporte = ttk.Button(seccion_botones_consulta, text='Generar reporte', compound='left',
-            command = lambda:
-                            {
-                                self.controlador_entrada.realizar_reporte(registros = self.registros, parametros = self.parametros, promociones = self.promociones),
-                            })
-        boton_generar_reporte.grid(row=0, column=3, padx=5, pady=5)
         ##########################################################################################################
 
 

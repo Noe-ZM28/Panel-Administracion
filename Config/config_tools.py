@@ -56,7 +56,7 @@ class tools:
         '''
         json_path = r'Config/config_files/path_files_settings.json'
         try:
-            with open(json_path) as f:
+            with open(json_path, encoding='utf-8') as f:
                 data = json.load(f)
                 return data['path_files'][0][type_file][0][file_path]
         except FileNotFoundError:

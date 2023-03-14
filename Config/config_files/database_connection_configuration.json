@@ -21,31 +21,31 @@
 
 
 
-        {   "name_config": "Configuracion CiudadMendoza",
+        {   "name_config": "CiudadMendoza",
             "host": "localhost",
             "user": "Aurelio",
             "password": "RG980320",
             "database": "Parqueadero1"
         },
-        {   "name_config": "Configuracion Durango",
+        {   "name_config": "Durango",
             "host": "XXX.XXX.XXX.XXX",
             "user": "Aurelio",
             "password": "RG980320",
             "database": "Parqueadero1"
         },
-        {   "name_config": "Configuracion Monterrey",
+        {   "name_config": "Monterrey",
             "host": "XXX.XXX.XXX.XXX",
             "user": "Aurelio",
             "password": "RG980320",
             "database": "Parqueadero1"
         },
-        {   "name_config": "Configuracion PinoSuarez",
+        {   "name_config": "PinoSuarez",
             "host": "189.130.215.31",
             "user": "Aurelio",
             "password": "RG980320",
             "database": "Parqueadero1"
         },
-        {   "name_config": "Configuracion Tenayuca",
+        {   "name_config": "Tenayuca",
             "host": "XXX.XXX.XXX.XXX",
             "user": "Aurelio",
             "password": "RG980320",

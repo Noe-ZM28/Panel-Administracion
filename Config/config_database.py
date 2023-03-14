@@ -44,7 +44,7 @@ class DatabaseConfig:
 
         try:
             # Intenta abrir el archivo de configuración existente
-            with open(self.database_config_file, "r") as f:
+            with open(self.database_config_file, "r", encoding='utf-8') as f:
                 settings = json.load(f)
         except FileNotFoundError:
             settings = {"settings": []}
@@ -53,7 +53,7 @@ class DatabaseConfig:
         settings['settings'].append(configuracion)
 
         # Guarda el diccionario de configuraciones en el archivo JSON
-        with open(self.database_config_file, "w") as f:
+        with open(self.database_config_file, "w", encoding='utf-8') as f:
             json.dump(settings, f, indent=4)
 
     def obtener_configuracion(self, name_config):
@@ -70,7 +70,7 @@ class DatabaseConfig:
             ValueError: si no se encuentra la configuración especificada.
         """
         try:
-            with open(self.database_config_file, "r") as f:
+            with open(self.database_config_file, "r", encoding='utf-8') as f:
                 data = json.load(f)
 
             # Obtiene la configuración seleccionada
