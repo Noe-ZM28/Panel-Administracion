@@ -88,11 +88,11 @@ class Conect:
 
         # Se definen las opciones de conexión y se crea una ComboBox para seleccionar una opción
         opciones_conexiones = [
-                                'Conexion Prueba',
+                                #'Conexion Prueba',
                                 # 'Ciudad Mendoza',
                                 # 'Durango',
                                 # 'Monterrey',
-                                # 'Pino Suarez',
+                                'Pino Suarez',
                                 # 'Tenayuca'
                                 ]
         self.lista_desplegable_opciones = ttk.Combobox(seccion_conecion, values=opciones_conexiones, textvariable=self.variable_estacionamiento, state='readonly', width = 30, height = 5)
