@@ -10,7 +10,7 @@ class Controller_Select_Conection:
         #Inicializa la variable de conexión a una cadena vacía.
         self.conexion = ''
 
-    def conectar(self, estacionamiento):
+    def conectar(self, estacionamiento, user_name):
         """
         Conecta con la base de datos correspondiente según la opción seleccionada por el usuario.
 
@@ -23,6 +23,7 @@ class Controller_Select_Conection:
         try:
             # Asigna el valor de estacionamiento a la variable correspondiente
             self.estacionamiento = estacionamiento
+            self.user_name = user_name
 
             # Asigna la configuración de conexión correspondiente según el estacionamiento seleccionado
             if self.estacionamiento == 'Conexion Prueba':self.conexion = 'Configuracion prueba-1'
@@ -37,7 +38,9 @@ class Controller_Select_Conection:
             else:raise TypeError(f'Conexión desconocida: {self.estacionamiento}.')
 
             # Crea una instancia de View_Panel_Administracion con la configuración de conexión correspondiente
-            self.panel_administracion = View_Panel_Administracion(estacionamiento=self.conexion)
+            self.panel_administracion = View_Panel_Administracion(
+                                                                    estacionamiento=self.conexion,
+                                                                    user_name= self.user_name)
             print(f'Conectado a -> {self.estacionamiento}')
 
         except TypeError as e:

@@ -19,10 +19,11 @@ from Controller.controller_panel_administracion import Controller_Panel_Administ
 class View_Panel_Administracion:
     '''Clase principal que maneja la interfaz gráfica del usuario.'''
 
-    def __init__(self, theme=None, estacionamiento = None):
+    def __init__(self, theme=None, user_name = None, estacionamiento = None):
         '''
         Constructor de la clase. Crea la ventana principal, la tabla y los campos de consulta.
         '''
+        self.user_name = user_name
         self.estacionamiento = estacionamiento
         # Establece la tabla que se visualizará por defecto
         self.ver_tabla = 'Entradas'

@@ -91,9 +91,9 @@ class Login:
         # Crea el botón para ingresar los datos del usuario y llama al método get_data del controlador para procesar los datos
         boton_entrar = ttk.Button(self.seccion_formulario, text='Entrar',
             command=lambda:self.controller_login.get_data(
-                                                                theme = self.true_theme,
-                                                                user = self.user.get(),
-                                                                password = self.password.get()))
+                                                            theme = self.true_theme,
+                                                            user = self.user.get(),
+                                                            password = self.password.get()))
         boton_entrar.grid(row=0, column=2, padx=5, pady=5)
 
         # Crea un frame para la sección del tema

@@ -45,11 +45,13 @@ class ControllerLogin:
                 if self.user == user_data['UserName'] and self.password == user_data['Password']:
                     print(f"Dentro!: {user_data['Name']} ")
 
-                    if user_data['Permits'] == 'normal':View_Panel_Administracion(theme = self.theme, estacionamiento = user_data['DefaultConection'])
-                    elif user_data['Permits'] == 'admin':Conect(theme = self.theme, user_name = user_data['Name'])
-
-
-
+                    if user_data['Permits'] == 'normal':View_Panel_Administracion(
+                                                                                theme = self.theme, 
+                                                                                user_name = user_data['Name'],
+                                                                                estacionamiento = user_data['DefaultConection'])
+                    elif user_data['Permits'] == 'admin':Conect(
+                                                                theme = self.theme,
+                                                                user_name = user_data['Name'])
 
                     else:raise TypeError("Tipo de permiso desconocido")
                 else:raise KeyError("El nombre de usuario o contraseña son incorrectos")

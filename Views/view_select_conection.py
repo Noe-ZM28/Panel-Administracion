@@ -94,7 +94,7 @@ class Conect:
                                 # 'Ciudad Mendoza',
                                 # 'Durango',
                                 # 'Monterrey',
-                                # 'Pino Suarez',
+                                'Pino Suarez',
                                 # 'Tenayuca'
                                 ]
         self.lista_desplegable_opciones = ttk.Combobox(seccion_conecion, values=opciones_conexiones, textvariable=self.variable_estacionamiento, state='readonly', width = 30, height = 5)
@@ -116,7 +116,7 @@ class Conect:
                 self.desactivar_botones(),
 
                 # Se llama al método conectar del objeto select_controller con la opción seleccionada
-                self.select_controller.conectar(str(self.variable_estacionamiento.get())),
+                self.select_controller.conectar(estacionamiento= str(self.variable_estacionamiento.get()), user_name = self.user_name),
                 # Se habilitan de nuevo los botones
                 self.activar_botones(),
             })
